@@ -1,0 +1,14 @@
+@import "@/app/styles/variables.module.scss";
+
+.primaryBtn {
+  background-color: $primary-color;
+  color: $color-white;
+  padding: 10px 20px;
+  font-size: 15px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+}
