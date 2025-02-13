@@ -2,50 +2,30 @@
 import Link from "next/link";
 import styles from "./page.module.scss";
 import { Add, Delete, Edit } from "@mui/icons-material";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { format } from "date-fns";
+import { fetchData } from "@/utils/fetchData";
+import { handleDelete } from "@/utils/handleDelete";
 
 export default function Sells() {
   const [sells, setSells] = useState([]);
-
-  const handleDelete = async (id) => {
-    await axios
-      .delete(`http://localhost:5000/api/sells/${id}`)
-      .then((res) => {
-        setSells(sells.filter((supplier) => supplier._id !== id));
-        toast.success(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
-      });
-  };
+  const [products, setProducts] = useState([]);
+  const [custumers, setCustumers] = useState([]);
 
   useEffect(() => {
-    const fetchsells = async () => {
-      await axios
-        .get("http://localhost:5000/api/sells")
-        .then((res) => {
-          setSells(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-
-    fetchsells();
+    fetchData("/sells", setSells);
+    fetchData("/products", setProducts);
+    fetchData("/custumers", setCustumers);
   }, []);
 
   return (
     <div className={styles.products}>
-      <h1>Поставщики</h1>
+      <h1>Продажи</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все поставщики</h1>
-          <Link href="/sells/add-supplier">
+          <h1>Все продажи</h1>
+          <Link href="/sells/add-sell">
             <Add />
             Создать новый
           </Link>
@@ -54,52 +34,48 @@ export default function Sells() {
         <table>
           <thead>
             <tr>
-              <td>Название поставщика</td>
-              <td>Номер телефона</td>
-              <td>Адрес</td>
-              <td>Кто добавил</td>
-              <td>Кто изменился последним</td>
-              <td>Дата создания</td>
-              <td>Дата изменения</td>
+              <td>Название продукта</td>
+              <td>Клиент</td>
+              <td>Количество</td>
+              <td>Цена</td>
+              <td>Дата добавления</td>
               <td>Движение</td>
             </tr>
           </thead>
           <tbody>
-            {sells.map((supplier) => (
-              <tr key={supplier._id}>
-                <td>{supplier.title}</td>
-                <td>{supplier.phone}</td>
-                <td>{supplier.address}</td>
-                <td>admin</td>
-                <td>admin</td>
+            {sells.map((sell) => (
+              <tr key={sell._id}>
                 <td>
-                  {format(
-                    new Date(supplier.createdAt),
-                    "dd.MM.yyyy / HH:mm:ss"
+                  {products?.map(
+                    (product) => product._id === sell.productId && product.title
                   )}
                 </td>
                 <td>
-                  {format(
-                    new Date(supplier.updatedAt),
-                    "dd.MM.yyyy / HH:mm:ss"
+                  {custumers?.map(
+                    (custumer) =>
+                      custumer._id === sell.custumerId && custumer.fullname
                   )}
                 </td>
+                <td>{sell.amount}</td>
+                <td>{sell.price}</td>
+                <td>{format(sell.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link
                     href={{
                       pathname: "/sells/edit-supplier",
                       query: {
-                        id: supplier._id,
-                        title: supplier.title,
-                        phone: supplier.phone,
-                        address: supplier.address,
+                        sellId: sell._id,
                       },
                     }}
                   >
                     <Edit />
                   </Link>
 
-                  <button onClick={() => handleDelete(supplier._id)}>
+                  <button
+                    onClick={() =>
+                      handleDelete("/sells", sell._id, sells, setSells)
+                    }
+                  >
                     <Delete />
                   </button>
                 </td>

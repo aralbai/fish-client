@@ -3,112 +3,36 @@ import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "@/components/input/Input";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { handleSubmit } from "@/utils/handleSubmit";
+import { fetchData } from "@/utils/fetchData";
+import { useRouter } from "next/navigation";
 
 export default function EditSupplier() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const supplierId = searchParams.get("id");
-  const supplierTitle = searchParams.get("title");
-  const supplierPhone = searchParams.get("phone");
-  const supplierAddress = searchParams.get("address");
+  const supplierId = searchParams.get("supplierId");
 
   const [changedSupplier, setChangedSupplier] = useState({
-    title: supplierTitle,
-    phone: supplierPhone,
-    address: supplierAddress,
-  });
-
-  const [inputErr, setInputErr] = useState({
     title: "",
     phone: "",
     address: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    // Example validation: Check if the input is empty
-    const errorMessage =
-      value.trim() === "" ? "Обязательное поле для ввода" : "";
-
-    setChangedSupplier((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-
-    setInputErr((prevData) => ({
-      ...prevData,
-      [name]: errorMessage,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
-    let countErr = 0;
 
-    if (changedSupplier.title === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        title: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
+    const { _id, _v, updatedAt, createdAt, ...data } = changedSupplier;
 
-    if (changedSupplier.phone === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        phone: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
+    handleSubmit(e, supplierId, "suppliers", data, setChangedSupplier);
 
-    if (changedSupplier.address === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        address: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
-
-    if (
-      changedSupplier.title === supplierTitle &&
-      changedSupplier.phone === supplierPhone &&
-      changedSupplier.address === supplierAddress
-    ) {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        title: "Ничего не изменилось",
-      }));
-      countErr += 1;
-    }
-
-    if (countErr > 0) {
-      return;
-    }
-
-    await axios
-      .put(`http://localhost:5000/api/suppliers/${supplierId}`, changedSupplier)
-      .then((res) => {
-        toast.success(res.data);
-        setChangedSupplier({
-          title: "",
-          phone: "",
-          address: "",
-        });
-        setInputErr({
-          title: "",
-          phone: "",
-          address: "",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
-      });
+    router.push("/suppliers");
   };
+
+  useEffect(() => {
+    fetchData(`/suppliers/${supplierId}`, setChangedSupplier);
+  }, []);
 
   return (
     <div className={styles.editProduct}>
@@ -128,30 +52,27 @@ export default function EditSupplier() {
           </PrimaryBtn>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={pageHandleSubmit}>
           <Input
             type="text"
             name="title"
             placeholder="Название поставщика"
             value={changedSupplier.title}
-            handleChange={handleChange}
-            err={inputErr.title}
+            setData={setChangedSupplier}
           />
           <Input
             type="text"
             name="phone"
             placeholder="Номер телефона"
             value={changedSupplier.phone}
-            handleChange={handleChange}
-            err={inputErr.phone}
+            setData={setChangedSupplier}
           />
           <Input
             type="text"
             name="address"
             placeholder="Адрес"
             value={changedSupplier.address}
-            handleChange={handleChange}
-            err={inputErr.address}
+            setData={setChangedSupplier}
           />
 
           <PrimaryBtn type="button">Сохранять</PrimaryBtn>

@@ -30,7 +30,7 @@ export default function Products() {
           <thead>
             <tr>
               <td>Название продукта</td>
-              <td>Движение</td>
+              <td>Действие</td>
             </tr>
           </thead>
           <tbody>

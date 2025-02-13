@@ -1,12 +1,12 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export const handleSubmit = async (e, reqType, data, setData) => {
+export const handleSubmit = async (e, reqType, route, data, setData) => {
   e.preventDefault();
 
   if (reqType === "create") {
     await axios
-      .post("http://localhost:5000/api/products", data)
+      .post(`http://localhost:5000/api/${route}`, data)
       .then((res) => {
         // Showing toast success message
         toast.success(res.data);
@@ -23,9 +23,8 @@ export const handleSubmit = async (e, reqType, data, setData) => {
         console.log(err);
       });
   } else {
-    console.log(reqType);
     await axios
-      .put(`http://localhost:5000/api/products/${reqType}`, data)
+      .put(`http://localhost:5000/api/${route}/${reqType}`, data)
       .then((res) => {
         // Showing toast success message
         toast.success(res.data);

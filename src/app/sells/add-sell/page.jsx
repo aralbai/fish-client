@@ -2,101 +2,43 @@
 import styles from "./page.module.scss";
 import { KeyboardBackspace } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import axios from "axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 import Input from "@/components/input/Input";
+import Select from "@/components/select/Select";
+import DatePick from "@/components/datePicker/DatePicker";
+import { fetchData } from "@/utils/fetchData";
+import { handleSubmit } from "@/utils/handleSubmit";
 
-export default function AddSupplier() {
-  const [supplier, setSupplier] = useState({
-    title: "",
-    phone: "",
-    address: "",
+export default function AddSell() {
+  const [products, setProducts] = useState([]);
+  const [custumers, setCustumers] = useState([]);
+  const [sell, setSell] = useState({
+    productId: "",
+    custumerId: "",
+    amount: "",
+    price: "",
+    addedDate: new Date(),
   });
 
-  const [inputErr, setInputErr] = useState({
-    title: "",
-    phone: "",
-    address: "",
-  });
+  useEffect(() => {
+    fetchData("/products", setProducts);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+    fetchData("/custumers", setCustumers);
+  }, []);
 
-    // Example validation: Check if the input is empty
-    const errorMessage =
-      value.trim() === "" ? "Обязательное поле для ввода" : "";
-
-    setSupplier((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-
-    setInputErr((prevData) => ({
-      ...prevData,
-      [name]: errorMessage,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let countErr = 0;
-
-    if (supplier.title === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        title: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
-
-    if (supplier.phone === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        phone: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
-
-    if (supplier.address === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        address: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
-
-    if (countErr > 0) {
-      return;
-    }
-
-    await axios
-      .post("http://localhost:5000/api/suppliers", supplier)
-      .then((res) => {
-        toast.success(res.data);
-        setSupplier({
-          title: "",
-          phone: "",
-          address: "",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
-      });
-  };
+  console.log(sell);
 
   return (
     <div className={styles.addProduct}>
-      <h1>Поставщики</h1>
+      <h1>Продажи</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
+          <h1>Добавить новую продажу</h1>
           <PrimaryBtn
             type="link"
             title="Вернуться к списку"
-            url="/suppliers"
+            url="/purchases"
             icon={<KeyboardBackspace />}
           >
             <KeyboardBackspace />
@@ -104,31 +46,42 @@ export default function AddSupplier() {
           </PrimaryBtn>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            name="title"
-            placeholder="Название поставщика"
-            value={supplier.title}
-            handleChange={handleChange}
-            err={inputErr.title}
-          />
-          <Input
-            type="text"
-            name="phone"
-            placeholder="Номер телефона"
-            value={supplier.phone}
-            handleChange={handleChange}
-            err={inputErr.phone}
-          />
-          <Input
-            type="text"
-            name="address"
-            placeholder="Адрес"
-            value={supplier.address}
-            handleChange={handleChange}
-            err={inputErr.address}
-          />
+        <form
+          onSubmit={(e) => handleSubmit(e, "create", "sells", sell, setSell)}
+        >
+          <div className={styles.inputGroup}>
+            <Select
+              name="productId"
+              mapData={products}
+              text="title"
+              defValue="Выберите продукт"
+              setData={setSell}
+            />
+            <Select
+              name="custumerId"
+              mapData={custumers}
+              text="fullname"
+              defValue="Выберите клиента"
+              setData={setSell}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <Input
+              type="number"
+              name="amount"
+              placeholder="Количество"
+              value={sell.amount}
+              setData={setSell}
+            />
+            <Input
+              type="number"
+              name="price"
+              placeholder="Цена"
+              value={sell.price}
+              setData={setSell}
+            />
+            <DatePick defDate={sell.addedDate} setDate={setSell} />
+          </div>
 
           <PrimaryBtn type="button">Сохранять</PrimaryBtn>
         </form>

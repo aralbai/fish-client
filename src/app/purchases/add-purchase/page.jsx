@@ -5,10 +5,9 @@ import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useEffect, useState } from "react";
 import Input from "@/components/input/Input";
 import Select from "@/components/select/Select";
-import { handleSubmit } from "./handleSubmit";
-import { fetchData } from "./fetchData";
-
 import DatePick from "@/components/datePicker/DatePicker";
+import { fetchData } from "@/utils/fetchData";
+import { handleSubmit } from "@/utils/handleSubmit";
 
 export default function AddPurchase() {
   const [products, setProducts] = useState([]);
@@ -22,22 +21,11 @@ export default function AddPurchase() {
     addedDate: new Date(),
   });
 
-  const [inputErr, setInputErr] = useState({
-    productId: "",
-    supplierId: "",
-    carNumber: "",
-    amount: "",
-    price: "",
-    addedDate: "",
-  });
-
   useEffect(() => {
-    fetchData("products", setProducts);
+    fetchData("/products", setProducts);
 
-    fetchData("suppliers", setSuppliers);
+    fetchData("/suppliers", setSuppliers);
   }, []);
-
-  console.log(purchase);
 
   return (
     <div className={styles.addProduct}>
@@ -59,45 +47,39 @@ export default function AddPurchase() {
 
         <form
           onSubmit={(e) =>
-            handleSubmit(e, purchase, inputErr, setPurchase, setInputErr)
+            handleSubmit(e, "create", "purchases", purchase, setPurchase)
           }
         >
           <div className={styles.inputGroup}>
             <Select
               name="productId"
               mapData={products}
-              err={inputErr.productId}
-              setData={setPurchase}
-              setErr={setInputErr}
+              text="title"
               defValue="Выберите продукт"
+              setData={setPurchase}
             />
             <Select
               name="supplierId"
               mapData={suppliers}
-              err={inputErr.supplierId}
-              setData={setPurchase}
-              setErr={setInputErr}
+              text="title"
               defValue="Выберите поставщика"
+              setData={setPurchase}
             />
           </div>
           <div className={styles.inputGroup}>
             <Input
               type="number"
-              name="amout"
+              name="amount"
               placeholder="Количество"
               value={purchase.amount}
-              err={inputErr.amount}
               setData={setPurchase}
-              setError={setInputErr}
             />
             <Input
               type="number"
-              name="supplierId"
+              name="price"
               placeholder="Цена"
               value={purchase.price}
-              err={inputErr.price}
               setData={setPurchase}
-              setError={setInputErr}
             />
           </div>
 
@@ -107,9 +89,7 @@ export default function AddPurchase() {
               name="carNumber"
               placeholder="Номер автомобиля"
               value={purchase.carNumber}
-              err={inputErr.carNumber}
               setData={setPurchase}
-              setError={setInputErr}
             />
             <DatePick defDate={purchase.addedDate} setDate={setPurchase} />
           </div>

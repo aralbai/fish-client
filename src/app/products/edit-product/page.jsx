@@ -1,10 +1,10 @@
 "use client";
-import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
+import Input from "@/components/input/Input";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
+import { KeyboardBackspace } from "@mui/icons-material";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Input from "@/components/input/Input";
 import { fetchData } from "@/utils/fetchData";
 import { handleSubmit } from "@/utils/handleSubmit";
 import { useRouter } from "next/navigation";
@@ -26,12 +26,10 @@ export default function EditProduct() {
 
     const { _id, _v, updatedAt, createdAt, ...data } = changedProduct;
 
-    handleSubmit(e, changedProduct._id, data, setChangedProduct);
+    handleSubmit(e, productId, "products", data, setChangedProduct);
 
     router.push("/products");
   };
-
-  console.log(changedProduct);
 
   return (
     <div className={styles.editProduct}>

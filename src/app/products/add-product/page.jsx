@@ -29,7 +29,11 @@ export default function AddProduct() {
           </PrimaryBtn>
         </div>
 
-        <form onSubmit={(e) => handleSubmit(e, product, setProduct)}>
+        <form
+          onSubmit={(e) =>
+            handleSubmit(e, "create", "products", product, setProduct)
+          }
+        >
           <Input
             type="text"
             name="title"

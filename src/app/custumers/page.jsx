@@ -2,39 +2,15 @@
 import Link from "next/link";
 import styles from "./page.module.scss";
 import { Add, Delete, Edit } from "@mui/icons-material";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { fetchData } from "@/utils/fetchData";
+import { handleDelete } from "@/utils/handleDelete";
 
 export default function Custumers() {
   const [custumers, setCustumers] = useState([]);
 
-  const handleDelete = async (id) => {
-    await axios
-      .delete(`http://localhost:5000/api/custumers/${id}`)
-      .then((res) => {
-        setCustumers(custumers.filter((custumer) => custumer._id !== id));
-        toast.success(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
-      });
-  };
-
   useEffect(() => {
-    const fetchcustumers = async () => {
-      await axios
-        .get("http://localhost:5000/api/custumers")
-        .then((res) => {
-          setCustumers(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-
-    fetchcustumers();
+    fetchData("/custumers", setCustumers);
   }, []);
 
   return (
@@ -57,11 +33,11 @@ export default function Custumers() {
               <td>Номер телефона</td>
               <td>Адрес</td>
               <td>Лимит</td>
-              <td>Движение</td>
+              <td>Действие</td>
             </tr>
           </thead>
           <tbody>
-            {custumers.map((custumer) => (
+            {custumers?.map((custumer) => (
               <tr key={custumer._id}>
                 <td>{custumer.fullname}</td>
                 <td>{custumer.phone}</td>
@@ -73,18 +49,22 @@ export default function Custumers() {
                   <Link
                     href={{
                       pathname: "/custumers/edit-custumer",
-                      query: {
-                        id: custumer._id,
-                        fullname: custumer.fullname,
-                        phone: custumer.phone,
-                        address: custumer.address,
-                      },
+                      query: { custumerId: custumer._id },
                     }}
                   >
                     <Edit />
                   </Link>
 
-                  <button onClick={() => handleDelete(custumer._id)}>
+                  <button
+                    onClick={() =>
+                      handleDelete(
+                        "/custumers",
+                        custumer._id,
+                        custumers,
+                        setCustumers
+                      )
+                    }
+                  >
                     <Delete />
                   </button>
                 </td>
