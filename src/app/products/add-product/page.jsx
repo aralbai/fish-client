@@ -1,40 +1,15 @@
 "use client";
 import styles from "./page.module.scss";
-import { KeyboardBackspace } from "@mui/icons-material";
-import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import axios from "axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
 import Input from "@/components/input/Input";
+import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
+import { KeyboardBackspace } from "@mui/icons-material";
+import { useState } from "react";
+import { handleSubmit } from "@/utils/handleSubmit";
 
 export default function AddProduct() {
-  const [title, setTitle] = useState("");
-  const [inputErr, setInputErr] = useState("");
-
-  const handleChange = (e) => {
-    setTitle(e.target.value);
-
-    setInputErr("");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (title.length <= 0) {
-      return setInputErr("Обязательное поле для ввода");
-    }
-
-    await axios
-      .post("http://localhost:5000/api/products", { title })
-      .then((res) => {
-        toast.success(res.data);
-        setTitle("");
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
-      });
-  };
+  const [product, setProduct] = useState({
+    title: "",
+  });
 
   return (
     <div className={styles.addProduct}>
@@ -54,13 +29,13 @@ export default function AddProduct() {
           </PrimaryBtn>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e, product, setProduct)}>
           <Input
             type="text"
-            placeholder="Название продукта"
-            value={title}
-            handleChange={handleChange}
-            err={inputErr}
+            name="title"
+            placeholder="Количество"
+            value={product.title}
+            setData={setProduct}
           />
 
           <PrimaryBtn type="button">Сохранять</PrimaryBtn>

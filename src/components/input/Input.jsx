@@ -1,42 +1,17 @@
+import { handleChange } from "@/utils/handleChange";
 import styles from "./Input.module.scss";
 
-export default function Input({
-  type,
-  name,
-  placeholder,
-  value,
-  err,
-  setData,
-  setError,
-}) {
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    // Example validation: Check if the input is empty
-    const errorMessage =
-      value.trim() === "" ? "Обязательное поле для ввода" : "";
-
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-
-    setError((prevData) => ({
-      ...prevData,
-      [name]: errorMessage,
-    }));
-  };
-
+export default function Input({ type, name, placeholder, value, setData }) {
   return (
     <div className={styles.input}>
       <input
-        name={name}
         type={type}
+        name={name}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => handleChange(e)}
+        onChange={(e) => handleChange(e, setData)}
+        required
       />
-      <p>{err}</p>
     </div>
   );
 }

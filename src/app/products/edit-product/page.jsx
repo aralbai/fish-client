@@ -3,49 +3,35 @@ import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "@/components/input/Input";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { fetchData } from "@/utils/fetchData";
+import { handleSubmit } from "@/utils/handleSubmit";
+import { useRouter } from "next/navigation";
 
 export default function EditProduct() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const productId = searchParams.get("id");
-  const productTitle = searchParams.get("title");
+  const productId = searchParams.get("productId");
+  const [changedProduct, setChangedProduct] = useState({
+    title: "",
+  });
 
-  const [changedTitle, setChangedTitle] = useState(productTitle);
-  const [inputErr, setInputErr] = useState("");
+  useEffect(() => {
+    fetchData(`/products/${productId}`, setChangedProduct);
+  }, []);
 
-  const handleChange = (e) => {
-    setChangedTitle(e.target.value);
-
-    setInputErr("");
-  };
-
-  const handleSubmit = async (e) => {
+  const pageHandleSubmit = (e) => {
     e.preventDefault();
 
-    if (productTitle === changedTitle) {
-      return setInputErr("Ничего не изменилось.");
-    }
+    const { _id, _v, updatedAt, createdAt, ...data } = changedProduct;
 
-    if (changedTitle <= 0) {
-      return setInputErr("Обязательное поле для ввода");
-    }
+    handleSubmit(e, changedProduct._id, data, setChangedProduct);
 
-    await axios
-      .put(`http://localhost:5000/api/products/${productId}`, {
-        title: changedTitle,
-      })
-      .then((res) => {
-        setChangedTitle("");
-        toast.success(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
-      });
+    router.push("/products");
   };
+
+  console.log(changedProduct);
 
   return (
     <div className={styles.editProduct}>
@@ -65,13 +51,13 @@ export default function EditProduct() {
           </PrimaryBtn>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={pageHandleSubmit}>
           <Input
             type="text"
-            placeholder="Название продукта"
-            value={changedTitle}
-            handleChange={handleChange}
-            err={inputErr}
+            name="title"
+            placeholder="Количество"
+            value={changedProduct.title}
+            setData={setChangedProduct}
           />
 
           <PrimaryBtn type="button">Сохранять</PrimaryBtn>
