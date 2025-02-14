@@ -26,8 +26,6 @@ export default function AddSell() {
     fetchData("/custumers", setCustumers);
   }, []);
 
-  console.log(sell);
-
   return (
     <div className={styles.addProduct}>
       <h1>Продажи</h1>

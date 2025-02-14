@@ -27,6 +27,19 @@ export default function AddPurchase() {
     fetchData("/suppliers", setSuppliers);
   }, []);
 
+  const pageHandleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      ...purchase,
+      remainingAmount: purchase.amount,
+    };
+
+    console.log(data);
+
+    handleSubmit(e, "create", "purchases", data, setPurchase);
+  };
+
   return (
     <div className={styles.addProduct}>
       <h1>Поставщики</h1>
@@ -45,11 +58,7 @@ export default function AddPurchase() {
           </PrimaryBtn>
         </div>
 
-        <form
-          onSubmit={(e) =>
-            handleSubmit(e, "create", "purchases", purchase, setPurchase)
-          }
-        >
+        <form onSubmit={pageHandleSubmit}>
           <div className={styles.inputGroup}>
             <Select
               name="productId"

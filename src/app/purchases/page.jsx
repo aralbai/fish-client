@@ -18,7 +18,6 @@ export default function Purchases() {
     fetchData("/suppliers", setSuppliers);
   }, []);
 
-  console.log(purchases);
   return (
     <div className={styles.products}>
       <h1>Покупки</h1>
