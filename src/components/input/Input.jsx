@@ -1,7 +1,14 @@
 import { handleChange } from "@/utils/handleChange";
 import styles from "./Input.module.scss";
 
-export default function Input({ type, name, placeholder, value, setData }) {
+export default function Input({
+  type,
+  name,
+  placeholder,
+  value,
+  setData,
+  required,
+}) {
   return (
     <div className={styles.input}>
       <input
@@ -10,7 +17,7 @@ export default function Input({ type, name, placeholder, value, setData }) {
         placeholder={placeholder}
         value={value}
         onChange={(e) => handleChange(e, setData)}
-        required
+        required={required}
       />
     </div>
   );

@@ -34,10 +34,61 @@
       padding: 20px;
 
       .inputGroup {
-        width: 80%;
+        width: 100%;
         margin-bottom: 20px;
         display: flex;
+        align-items: center;
         gap: 20px;
+
+        .client {
+          width: 50%;
+          display: flex;
+          gap: 10px;
+
+          .formInput {
+            width: 100%;
+          }
+        }
+
+        .formInput {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          width: 30%;
+
+          &:last-child,
+          &:nth-child(2) {
+            width: max-content;
+          }
+
+          .addClient {
+            width: 100%;
+            background-color: #ffaf38;
+            border: none;
+            border-radius: 5px;
+            padding: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+
+      .bottom {
+        .checkBox {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+
+        .calc {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
       }
     }
   }

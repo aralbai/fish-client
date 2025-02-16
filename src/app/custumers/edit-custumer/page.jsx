@@ -59,6 +59,7 @@ export default function EditCustumer() {
             placeholder="Название поставщика"
             value={changedCustumer.fullname}
             setData={setChangedCustumer}
+            required={true}
           />
           <Input
             type="text"
@@ -66,6 +67,7 @@ export default function EditCustumer() {
             placeholder="Номер телефона"
             value={changedCustumer.phone}
             setData={setChangedCustumer}
+            required={false}
           />
           <Input
             type="text"
@@ -73,6 +75,7 @@ export default function EditCustumer() {
             placeholder="Адрес"
             value={changedCustumer.address}
             setData={setChangedCustumer}
+            required={false}
           />
 
           <PrimaryBtn type="button">Сохранять</PrimaryBtn>

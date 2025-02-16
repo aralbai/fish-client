@@ -1,48 +1,49 @@
-"use client";
-import styles from "./page.module.scss";
-import { KeyboardBackspace } from "@mui/icons-material";
-import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
+import { Close } from "@mui/icons-material";
+import styles from "./SellModal.module.scss";
+import Input from "../input/Input";
+import PrimaryBtn from "../primaryBtn/PrimaryBtn";
 import { useState } from "react";
-import Input from "@/components/input/Input";
 import { handleSubmit } from "@/utils/handleSubmit";
+import { useRouter } from "next/navigation";
 
-export default function AddCustumer() {
+export default function SellModal({ isModalOpen, setIsModalOpen }) {
   const [custumer, setCustumer] = useState({
     fullname: "",
     phone: "",
     address: "",
   });
 
-  return (
-    <div className={styles.addProduct}>
-      <h1>Поставщики</h1>
+  const pageHandleSubmit = (e) => {
+    e.preventDefault();
 
-      <div className={styles.form}>
+    handleSubmit(e, "create", "custumers", custumer, setCustumer);
+
+    setIsModalOpen(false);
+  };
+
+  if (!isModalOpen) return null;
+
+  return (
+    <div className={styles.sellModal}>
+      <div className={styles.container}>
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
-          <PrimaryBtn
-            type="link"
-            fullname="Вернуться к списку"
-            url="/custumers"
-            icon={<KeyboardBackspace />}
+          <h2>Add new Client</h2>
+
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
           >
-            <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <Close />
+          </button>
         </div>
 
-        <form
-          onSubmit={(e) =>
-            handleSubmit(e, "create", "custumers", custumer, setCustumer)
-          }
-        >
+        <form className={styles.bottom} onSubmit={pageHandleSubmit}>
           <Input
             type="text"
             name="fullname"
             placeholder="Имя клиента"
             value={custumer.fullname}
             setData={setCustumer}
-            required={true}
           />
           <Input
             type="text"
@@ -50,7 +51,6 @@ export default function AddCustumer() {
             placeholder="Номер телефона"
             value={custumer.phone}
             setData={setCustumer}
-            required={false}
           />
           <Input
             type="text"
@@ -58,7 +58,6 @@ export default function AddCustumer() {
             placeholder="Адрес"
             value={custumer.address}
             setData={setCustumer}
-            required={false}
           />
 
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
