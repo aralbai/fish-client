@@ -1,8 +1,10 @@
 .layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: auto;
 
   .main {
+    margin-left: 17%;
     width: 83%;
     background-color: #fafafa;
   }

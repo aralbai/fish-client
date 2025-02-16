@@ -9,13 +9,9 @@ import { handleDelete } from "@/utils/handleDelete";
 
 export default function Sells() {
   const [sells, setSells] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [custumers, setCustumers] = useState([]);
 
   useEffect(() => {
     fetchData("/sells", setSells);
-    fetchData("/products", setProducts);
-    fetchData("/custumers", setCustumers);
   }, []);
 
   return (
@@ -37,6 +33,8 @@ export default function Sells() {
               <td>Название продукта</td>
               <td>Клиент</td>
               <td>Количество</td>
+              <td>Per kilo</td>
+              <td>Discount</td>
               <td>Цена</td>
               <td>Дата добавления</td>
               <td>Движение</td>
@@ -45,19 +43,24 @@ export default function Sells() {
           <tbody>
             {sells.map((sell) => (
               <tr key={sell._id}>
-                <td>
-                  {products?.map(
-                    (product) => product._id === sell.productId && product.title
-                  )}
-                </td>
-                <td>
-                  {custumers?.map(
-                    (custumer) =>
-                      custumer._id === sell.custumerId && custumer.fullname
-                  )}
-                </td>
+                <td>{sell.product.title}</td>
+                <td>{sell.custumer.fullname}</td>
                 <td>{sell.amount}</td>
-                <td>{sell.price}</td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format((sell.price + sell.discount) / sell.amount)
+                    .replace(/,/g, " ")}
+                </td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(sell.discount)
+                    .replace(/,/g, " ")}
+                </td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(sell.price)
+                    .replace(/,/g, " ")}{" "}
+                </td>
                 <td>{format(sell.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link

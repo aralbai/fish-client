@@ -4,6 +4,10 @@
   background-image: url("/sidebar-bg-dark.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  position: fixed;
+  height: 100vh;
+  z-index: 2;
+  
 
   .container {
     width: 100%;

@@ -1,14 +1,13 @@
 import { Close } from "@mui/icons-material";
-import styles from "./SellModal.module.scss";
+import styles from "./SupplierModal.module.scss";
 import Input from "../input/Input";
 import PrimaryBtn from "../primaryBtn/PrimaryBtn";
 import { useState } from "react";
 import { handleSubmit } from "@/utils/handleSubmit";
-import { useRouter } from "next/navigation";
 
-export default function SellModal({ isModalOpen, setIsModalOpen }) {
-  const [custumer, setCustumer] = useState({
-    fullname: "",
+export default function SupplierModal({ isModalOpen, setIsModalOpen }) {
+  const [supplier, setSupplier] = useState({
+    title: "",
     phone: "",
     address: "",
   });
@@ -16,7 +15,7 @@ export default function SellModal({ isModalOpen, setIsModalOpen }) {
   const pageHandleSubmit = (e) => {
     e.preventDefault();
 
-    handleSubmit(e, "create", "custumers", custumer, setCustumer);
+    handleSubmit(e, "create", "suppliers", supplier, setSupplier);
 
     setIsModalOpen(false);
   };
@@ -27,7 +26,7 @@ export default function SellModal({ isModalOpen, setIsModalOpen }) {
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Add new Client</h2>
+          <h2>Add new Supplier</h2>
 
           <button
             onClick={() => setIsModalOpen(false)}
@@ -40,24 +39,27 @@ export default function SellModal({ isModalOpen, setIsModalOpen }) {
         <form className={styles.bottom} onSubmit={pageHandleSubmit}>
           <Input
             type="text"
-            name="fullname"
-            placeholder="Имя клиента"
-            value={custumer.fullname}
-            setData={setCustumer}
+            name="title"
+            placeholder="Название поставщика"
+            value={supplier.title}
+            setData={setSupplier}
+            required={true}
           />
           <Input
             type="text"
             name="phone"
             placeholder="Номер телефона"
-            value={custumer.phone}
-            setData={setCustumer}
+            value={supplier.phone}
+            setData={setSupplier}
+            required={false}
           />
           <Input
             type="text"
             name="address"
             placeholder="Адрес"
-            value={custumer.address}
-            setData={setCustumer}
+            value={supplier.address}
+            setData={setSupplier}
+            required={false}
           />
 
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>

@@ -4,7 +4,12 @@ import styles from "./Select.module.scss";
 export default function Select({ name, mapData, text, defValue, setData }) {
   return (
     <div className={styles.input}>
-      <select name={name} onChange={(e) => handleChange(e, setData)}>
+      <select
+        value={defValue}
+        name={name}
+        onChange={(e) => handleChange(e, setData)}
+        required
+      >
         <option value="" hidden>
           {defValue}
         </option>

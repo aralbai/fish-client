@@ -39,6 +39,19 @@
         display: flex;
         gap: 20px;
       }
+
+      .bottom {
+        .discount {
+          width: 300px;
+          margin-bottom: 20px;
+        }
+
+        .calc {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+      }
     }
   }
 }

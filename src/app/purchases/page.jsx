@@ -9,13 +9,9 @@ import { format } from "date-fns";
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
     fetchData("/purchases", setPurchases);
-    fetchData("/products", setProducts);
-    fetchData("/suppliers", setSuppliers);
   }, []);
 
   return (
@@ -38,6 +34,8 @@ export default function Purchases() {
               <td>Поставщик</td>
               <td>Номер автомобиля</td>
               <td>Количество</td>
+              <td>Per kilo</td>
+              <td>Discount</td>
               <td>Цена</td>
               <td>Дата добавления</td>
               <td>Действие</td>
@@ -46,21 +44,27 @@ export default function Purchases() {
           <tbody>
             {purchases.map((purchase) => (
               <tr key={purchase._id}>
-                <td>
-                  {products?.map(
-                    (product) =>
-                      product._id === purchase.productId && product.title
-                  )}
-                </td>
-                <td>
-                  {suppliers?.map(
-                    (supplier) =>
-                      supplier._id === purchase.supplierId && supplier.title
-                  )}
-                </td>
-                <td>{purchase.amount}</td>
-                <td>{purchase.price}</td>
+                <td>{purchase.product.title}</td>
+                <td>{purchase.supplier.title}</td>
                 <td>{purchase.carNumber}</td>
+                <td>{purchase.amount}</td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(
+                      (purchase.price + purchase.discount) / purchase.amount
+                    )
+                    .replace(/,/g, " ")}
+                </td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(purchase.discount)
+                    .replace(/,/g, " ")}
+                </td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(purchase.price)
+                    .replace(/,/g, " ")}{" "}
+                </td>
                 <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link

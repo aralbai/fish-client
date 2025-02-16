@@ -98,7 +98,7 @@ export default function EditSupplier() {
             />
           </div>
 
-          <PrimaryBtn type="button">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>
     </div>

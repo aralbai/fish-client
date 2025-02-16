@@ -11,6 +11,13 @@ export default function AddProduct() {
     title: "",
   });
 
+  const pageHandleSubmit = (e) => {
+    handleSubmit(e, "create", "products", product, setProduct);
+
+    setProduct({
+      title: "",
+    });
+  };
   return (
     <div className={styles.addProduct}>
       <h1>Продукты</h1>
@@ -29,20 +36,17 @@ export default function AddProduct() {
           </PrimaryBtn>
         </div>
 
-        <form
-          onSubmit={(e) =>
-            handleSubmit(e, "create", "products", product, setProduct)
-          }
-        >
+        <form onSubmit={pageHandleSubmit}>
           <Input
             type="text"
             name="title"
             placeholder="Количество"
             value={product.title}
             setData={setProduct}
+            required={true}
           />
 
-          <PrimaryBtn type="button">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>
     </div>

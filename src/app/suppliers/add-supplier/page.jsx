@@ -13,6 +13,16 @@ export default function AddSupplier() {
     address: "",
   });
 
+  const pageHandleSubmit = (e) => {
+    handleSubmit(e, "create", "suppliers", supplier, setSupplier);
+
+    setSupplier({
+      title: "",
+      phone: "",
+      address: "",
+    });
+  };
+
   return (
     <div className={styles.addProduct}>
       <h1>Поставщики</h1>
@@ -31,17 +41,14 @@ export default function AddSupplier() {
           </PrimaryBtn>
         </div>
 
-        <form
-          onSubmit={(e) =>
-            handleSubmit(e, "create", "suppliers", supplier, setSupplier)
-          }
-        >
+        <form onSubmit={pageHandleSubmit}>
           <Input
             type="text"
             name="title"
             placeholder="Название поставщика"
             value={supplier.title}
             setData={setSupplier}
+            required={true}
           />
           <Input
             type="text"
@@ -49,6 +56,7 @@ export default function AddSupplier() {
             placeholder="Номер телефона"
             value={supplier.phone}
             setData={setSupplier}
+            required={false}
           />
           <Input
             type="text"
@@ -56,9 +64,10 @@ export default function AddSupplier() {
             placeholder="Адрес"
             value={supplier.address}
             setData={setSupplier}
+            required={false}
           />
 
-          <PrimaryBtn type="button">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>
     </div>

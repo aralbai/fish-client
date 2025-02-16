@@ -21,8 +21,6 @@ export default function EditCustumer() {
   });
 
   const pageHandleSubmit = async (e) => {
-    e.preventDefault();
-
     const { _id, _v, updatedAt, createdAt, ...data } = changedCustumer;
 
     handleSubmit(e, custumerId, "custumers", data, setChangedCustumer);
@@ -78,7 +76,7 @@ export default function EditCustumer() {
             required={false}
           />
 
-          <PrimaryBtn type="button">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>
     </div>

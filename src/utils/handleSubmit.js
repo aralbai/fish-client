@@ -12,12 +12,12 @@ export const handleSubmit = async (e, reqType, route, data, setData) => {
         toast.success(res.data);
 
         // Setting all values of object to empty string
-        Object.keys(data).forEach((key) => {
-          setData((prev) => ({
-            ...prev,
-            [key]: "",
-          }));
-        });
+        // Object.keys(data).forEach((key) => {
+        //   setData((prev) => ({
+        //     ...prev,
+        //     [key]: "",
+        //   }));
+        // });
       })
       .catch((err) => {
         console.log(err);

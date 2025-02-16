@@ -22,8 +22,6 @@ export default function EditProduct() {
   }, []);
 
   const pageHandleSubmit = (e) => {
-    e.preventDefault();
-
     const { _id, _v, updatedAt, createdAt, ...data } = changedProduct;
 
     handleSubmit(e, productId, "products", data, setChangedProduct);
@@ -58,7 +56,7 @@ export default function EditProduct() {
             setData={setChangedProduct}
           />
 
-          <PrimaryBtn type="button">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>
     </div>

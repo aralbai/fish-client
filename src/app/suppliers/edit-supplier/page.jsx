@@ -21,8 +21,6 @@ export default function EditSupplier() {
   });
 
   const pageHandleSubmit = async (e) => {
-    e.preventDefault();
-
     const { _id, _v, updatedAt, createdAt, ...data } = changedSupplier;
 
     handleSubmit(e, supplierId, "suppliers", data, setChangedSupplier);
@@ -75,7 +73,7 @@ export default function EditSupplier() {
             setData={setChangedSupplier}
           />
 
-          <PrimaryBtn type="button">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>
     </div>

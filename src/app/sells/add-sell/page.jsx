@@ -1,6 +1,6 @@
 "use client";
 import styles from "./page.module.scss";
-import { Add, KeyboardBackspace } from "@mui/icons-material";
+import { KeyboardBackspace } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useEffect, useState } from "react";
 import Input from "@/components/input/Input";
@@ -8,21 +8,21 @@ import Select from "@/components/select/Select";
 import DatePick from "@/components/datePicker/DatePicker";
 import { fetchData } from "@/utils/fetchData";
 import CheckBox from "@/components/checkBox/CheckBox";
-import SellModal from "@/components/sellModal/SellModal";
+import { handleSubmit } from "@/utils/handleSubmit";
+import CustumerModal from "@/components/custumerModal/CustumerModal";
 
 export default function AddSell() {
   const [products, setProducts] = useState([]);
   const [custumers, setCustumers] = useState([]);
   const [sell, setSell] = useState({
-    productId: "",
-    custumerId: "",
-    custumerTitle: "",
+    product: "Выберите продукт",
+    custumer: "Выберите клиента",
     amount: "",
     price: "",
+    discount: "",
     addedDate: new Date(),
   });
 
-  const [checkWholesale, setCheckWholesale] = useState(false);
   const [checkClient, setCheckClient] = useState(false);
   const [isModalOPen, setIsModalOpen] = useState(false);
 
@@ -30,19 +30,26 @@ export default function AddSell() {
     fetchData("/products", setProducts);
 
     fetchData("/custumers", setCustumers);
-  }, [isModalOPen]);
+  }, [isModalOPen, sell]);
 
   const pageHandleSubmit = (e) => {
     e.preventDefault();
 
     const data = {
       ...sell,
-      price: checkWholesale ? sell.price : sell.price * sell.amount,
+      price: sell.price * sell.amount - sell.discount,
     };
 
-    console.log(data);
+    handleSubmit(e, "create", "sells", data, setSell);
 
-    // handleSubmit(e, "create", "sells", sell, setSell);
+    setSell({
+      product: "Выберите продукт",
+      custumer: "Выберите клиента",
+      amount: "",
+      price: "",
+      discount: "",
+      addedDate: new Date(),
+    });
   };
 
   return (
@@ -55,7 +62,7 @@ export default function AddSell() {
           <PrimaryBtn
             type="link"
             title="Вернуться к списку"
-            url="/purchases"
+            url="/sells"
             icon={<KeyboardBackspace />}
           >
             <KeyboardBackspace />
@@ -67,10 +74,10 @@ export default function AddSell() {
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
               <Select
-                name="productId"
+                name="product"
                 mapData={products}
                 text="title"
-                defValue="Выберите продукт"
+                defValue={sell.product}
                 setData={setSell}
               />
             </div>
@@ -88,28 +95,30 @@ export default function AddSell() {
               <div>
                 <Input
                   type="text"
-                  name="amount"
-                  placeholder="Количество"
-                  value={sell.amount}
+                  name="custumer"
+                  placeholder={sell.custumer}
+                  value={sell.custumer}
                   setData={setSell}
+                  required={true}
                 />
               </div>
             ) : (
               <div className={styles.client}>
                 <div className={styles.formInput}>
                   <Select
-                    name="custumerId"
+                    name="custumer"
                     mapData={custumers}
                     text="fullname"
-                    defValue="Выберите клиента"
+                    defValue={sell.custumer}
                     setData={setSell}
                   />
                 </div>
 
-                <div className={styles.formInput}>
-                  <PrimaryBtn type="link" url="/custumers/add-custumer">
-                    +
-                  </PrimaryBtn>
+                <div
+                  className={styles.formInput}
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <PrimaryBtn type="button">+</PrimaryBtn>
                 </div>
               </div>
             )}
@@ -121,6 +130,7 @@ export default function AddSell() {
               placeholder="Количество"
               value={sell.amount}
               setData={setSell}
+              required={true}
             />
             <Input
               type="number"
@@ -128,29 +138,29 @@ export default function AddSell() {
               placeholder="Цена"
               value={sell.price}
               setData={setSell}
+              required={true}
             />
             <DatePick defDate={sell.addedDate} setDate={setSell} />
           </div>
 
           <div className={styles.bottom}>
-            <div className={styles.checkBox}>
-              <CheckBox
-                id="checkWholesale"
-                value={checkWholesale}
-                setData={setCheckWholesale}
+            <div className={styles.discount}>
+              <Input
+                type="number"
+                name="discount"
+                placeholder="Discount"
+                value={sell.discount}
+                setData={setSell}
+                required={false}
               />
-              <label htmlFor="checkWholesale">Рассчитать оптом</label>
             </div>
             <div className={styles.calc}>
               <p>Total:</p>
               <b>
-                {checkWholesale
-                  ? Intl.NumberFormat("uz-UZ")
-                      .format(sell.price)
-                      .replace(/,/g, " ")
-                  : Intl.NumberFormat("uz-UZ")
-                      .format(sell.amount * sell.price)
-                      .replace(/,/g, " ")}
+                {Intl.NumberFormat("uz-UZ")
+                  .format(sell.price * sell.amount - sell.discount)
+                  .replace(/,/g, " ")}
+
                 <b> SWM</b>
               </b>
             </div>
@@ -160,7 +170,10 @@ export default function AddSell() {
         </form>
       </div>
 
-      <SellModal isModalOpen={isModalOPen} setIsModalOpen={setIsModalOpen} />
+      <CustumerModal
+        isModalOpen={isModalOPen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </div>
   );
 }
