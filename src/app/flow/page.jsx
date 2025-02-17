@@ -3,25 +3,26 @@ import Link from "next/link";
 import styles from "./page.module.scss";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
 import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
+import { format } from "date-fns";
 
-export default function Sells() {
-  const [sells, setSells] = useState([]);
+export default function Flow() {
+  const [purchases, setPurchases] = useState([]);
 
   useEffect(() => {
-    fetchData("/sells", setSells);
+    fetchData("/purchases/active", setPurchases);
   }, []);
 
+  console.log(purchases);
   return (
     <div className={styles.products}>
-      <h1>Продажи</h1>
+      <h1>Покупки</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все продажи</h1>
-          <Link href="/sells/add-sell">
+          <h1>Все покупки</h1>
+          <Link href="/purchases/add-purchase">
             <Add />
             Создать новый
           </Link>
@@ -30,45 +31,49 @@ export default function Sells() {
         <table>
           <thead>
             <tr>
-              <td>Продукта</td>
-              <td>Клиент</td>
+              <td>Название</td>
+              <td>Поставщик</td>
+              <td>Номер</td>
               <td>Количество</td>
               <td>Per kilo</td>
               <td>Discount</td>
               <td>Цена</td>
+              <td>RA</td>
               <td>Дата</td>
-              <td>Движение</td>
+              <td>Действие</td>
             </tr>
           </thead>
           <tbody>
-            {sells.map((sell) => (
-              <tr key={sell._id}>
-                <td>{sell.product.title}</td>
-                <td>{sell.custumer.fullname}</td>
-                <td>{sell.amount}</td>
+            {purchases.map((purchase) => (
+              <tr key={purchase._id}>
+                <td>{purchase.product?.title}</td>
+                <td>{purchase.supplier?.title}</td>
+                <td>{purchase.carNumber}</td>
+                <td>{purchase.amount}</td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format((sell.price + sell.discount) / sell.amount)
+                    .format(
+                      (purchase.price + purchase.discount) / purchase.amount
+                    )
                     .replace(/,/g, " ")}
                 </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(sell.discount)
+                    .format(purchase.discount)
                     .replace(/,/g, " ")}
                 </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(sell.price)
+                    .format(purchase.price)
                     .replace(/,/g, " ")}{" "}
                 </td>
-                <td>{format(sell.addedDate, "dd.MM.yyyy")}</td>
+                <td>{purchase.remainingAmount}</td>
+                <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link
                     href={{
-                      pathname: "/sells/edit-supplier",
-                      query: {
-                        sellId: sell._id,
-                      },
+                      pathname: "/purchases/edit-purchase",
+                      query: { purchaseId: purchase._id },
                     }}
                   >
                     <Edit />
@@ -76,7 +81,12 @@ export default function Sells() {
 
                   <button
                     onClick={() =>
-                      handleDelete("/sells", sell._id, sells, setSells)
+                      handleDelete(
+                        "/purchases",
+                        purchase._id,
+                        purchases,
+                        setPurchases
+                      )
                     }
                   >
                     <Delete />

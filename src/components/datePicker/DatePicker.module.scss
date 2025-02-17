@@ -1,5 +1,16 @@
-.dateInput {
-  padding: 10px;
-  border-radius: 5px;
-  width: 300px;
+@import "../../app/styles/variables.module.scss";
+
+.datePick {
+  width: 100%;
+
+  .dateInput {
+    padding: 11px;
+    border-radius: 5px;
+    width: 100%;
+    border: 1px solid $input-border-color;
+  }
+
+  .wrappedDateInput {
+    width: 100%;
+  }
 }

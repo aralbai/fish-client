@@ -10,11 +10,14 @@ import { fetchData } from "@/utils/fetchData";
 import CheckBox from "@/components/checkBox/CheckBox";
 import { handleSubmit } from "@/utils/handleSubmit";
 import CustumerModal from "@/components/custumerModal/CustumerModal";
+import { format } from "date-fns";
 
 export default function AddSell() {
+  const [purchases, setPurchases] = useState([]);
   const [products, setProducts] = useState([]);
   const [custumers, setCustumers] = useState([]);
   const [sell, setSell] = useState({
+    purchase: "Выберите поток",
     product: "Выберите продукт",
     custumer: "Выберите клиента",
     amount: "",
@@ -30,6 +33,8 @@ export default function AddSell() {
     fetchData("/products", setProducts);
 
     fetchData("/custumers", setCustumers);
+
+    fetchData("/purchases", setPurchases);
   }, [isModalOPen, sell]);
 
   const pageHandleSubmit = (e) => {
@@ -38,11 +43,14 @@ export default function AddSell() {
     const data = {
       ...sell,
       price: sell.price * sell.amount - sell.discount,
+      discount: sell.discount === "" ? 0 : sell.discount,
     };
 
     handleSubmit(e, "create", "sells", data, setSell);
+    console.log(sell);
 
     setSell({
+      purchase: "Выберите поток",
       product: "Выберите продукт",
       custumer: "Выберите клиента",
       amount: "",
@@ -72,6 +80,34 @@ export default function AddSell() {
 
         <form onSubmit={pageHandleSubmit}>
           <div className={styles.inputGroup}>
+            <div className={styles.formInput} hidden>
+              <select
+                required
+                value={sell.purchaseId}
+                onChange={(e) =>
+                  setSell((prev) => ({
+                    ...prev,
+                    purchase: e.target.value,
+                  }))
+                }
+              >
+                <option value="" hidden>
+                  {sell.purchase}
+                </option>
+                {purchases.map((purchase) => (
+                  <option key={purchase._id} value={purchase._id}>
+                    {purchase.product.title +
+                      " " +
+                      purchase.supplier.title +
+                      " " +
+                      purchase.amount +
+                      "kg" +
+                      " " +
+                      format(purchase.addedDate, "dd.MM.yyyy")}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className={styles.formInput}>
               <Select
                 name="product"
@@ -81,8 +117,9 @@ export default function AddSell() {
                 setData={setSell}
               />
             </div>
-
-            <div className={styles.formInput}>
+          </div>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInputCheck}>
               <CheckBox
                 id="checkClient"
                 value={checkClient}
@@ -114,37 +151,40 @@ export default function AddSell() {
                   />
                 </div>
 
-                <div
-                  className={styles.formInput}
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <PrimaryBtn type="button">+</PrimaryBtn>
+                <div className={styles.formInput}>
+                  <div onClick={() => setIsModalOpen(true)}>
+                    <PrimaryBtn type="button">+</PrimaryBtn>
+                  </div>
                 </div>
               </div>
             )}
           </div>
+
           <div className={styles.inputGroup}>
-            <Input
-              type="number"
-              name="amount"
-              placeholder="Количество"
-              value={sell.amount}
-              setData={setSell}
-              required={true}
-            />
-            <Input
-              type="number"
-              name="price"
-              placeholder="Цена"
-              value={sell.price}
-              setData={setSell}
-              required={true}
-            />
-            <DatePick defDate={sell.addedDate} setDate={setSell} />
+            <div className={styles.formInput}>
+              <Input
+                type="number"
+                name="amount"
+                placeholder="Количество"
+                value={sell.amount}
+                setData={setSell}
+                required={true}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="number"
+                name="price"
+                placeholder="Цена"
+                value={sell.price}
+                setData={setSell}
+                required={true}
+              />
+            </div>
           </div>
 
-          <div className={styles.bottom}>
-            <div className={styles.discount}>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
               <Input
                 type="number"
                 name="discount"
@@ -154,6 +194,12 @@ export default function AddSell() {
                 required={false}
               />
             </div>
+            <div className={styles.formInput}>
+              <DatePick defDate={sell.addedDate} setDate={setSell} />
+            </div>
+          </div>
+
+          <div className={styles.bottom}>
             <div className={styles.calc}>
               <p>Total:</p>
               <b>

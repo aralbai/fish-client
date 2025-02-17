@@ -38,6 +38,7 @@ export default function AddPurchase() {
       ...purchase,
       remainingAmount: purchase.amount,
       price: purchase.price * purchase.amount - purchase.discount,
+      discount: purchase.discount === "" ? 0 : purchase.discount,
     };
 
     handleSubmit(e, "create", "purchases", data, setPurchase);

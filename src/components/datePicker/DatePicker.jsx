@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default function DatePick({ defDate, setDate }) {
   return (
-    <div>
+    <div className={styles.datePick}>
       <DatePicker
         selected={defDate}
         onChange={(date) =>
@@ -14,6 +14,7 @@ export default function DatePick({ defDate, setDate }) {
           }))
         }
         className={styles.dateInput}
+        wrapperClassName={styles.wrappedDateInput}
       />
     </div>
   );

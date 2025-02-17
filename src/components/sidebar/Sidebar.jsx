@@ -28,14 +28,7 @@ export default function Sidebar() {
                 <Dashboard /> Statistika
               </Link>
             </li>
-            <li>
-              <Link
-                href="/finance"
-                className={pathname === "/finance" ? styles.active : ""}
-              >
-                <Paid /> Finance
-              </Link>
-            </li>
+
             <li>
               <Link
                 href="/purchases"
@@ -76,6 +69,14 @@ export default function Sidebar() {
               >
                 <AccountBox />
                 Поставщики
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/finance"
+                className={pathname === "/finance" ? styles.active : ""}
+              >
+                <Paid /> Finance
               </Link>
             </li>
           </ul>

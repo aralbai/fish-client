@@ -14,6 +14,7 @@ export default function Purchases() {
     fetchData("/purchases", setPurchases);
   }, []);
 
+  console.log(purchases);
   return (
     <div className={styles.products}>
       <h1>Покупки</h1>
@@ -30,22 +31,23 @@ export default function Purchases() {
         <table>
           <thead>
             <tr>
-              <td>Название продукта</td>
+              <td>Продукта</td>
               <td>Поставщик</td>
-              <td>Номер автомобиля</td>
+              <td>Ном авто</td>
               <td>Количество</td>
               <td>Per kilo</td>
               <td>Discount</td>
               <td>Цена</td>
-              <td>Дата добавления</td>
+              <td>RA</td>
+              <td>Дата</td>
               <td>Действие</td>
             </tr>
           </thead>
           <tbody>
             {purchases.map((purchase) => (
               <tr key={purchase._id}>
-                <td>{purchase.product.title}</td>
-                <td>{purchase.supplier.title}</td>
+                <td>{purchase.product?.title}</td>
+                <td>{purchase.supplier?.title}</td>
                 <td>{purchase.carNumber}</td>
                 <td>{purchase.amount}</td>
                 <td>
@@ -65,6 +67,7 @@ export default function Purchases() {
                     .format(purchase.price)
                     .replace(/,/g, " ")}{" "}
                 </td>
+                <td>{purchase.remainingAmount}</td>
                 <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link
