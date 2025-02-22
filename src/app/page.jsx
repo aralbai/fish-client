@@ -2,7 +2,11 @@
 import Chart from "@/components/chart/Chart";
 import styles from "./page.module.scss";
 import React, { useEffect, useState } from "react";
-import { AssuredWorkload } from "@mui/icons-material";
+import {
+  AccountBalanceWallet,
+  AssuredWorkload,
+  Paid,
+} from "@mui/icons-material";
 import Link from "next/link";
 import { fetchData } from "@/utils/fetchData";
 
@@ -38,43 +42,41 @@ export default function Home() {
         {/* </div> */}
         <div className={styles.card}>
           <div className={styles.left}>
-            <AssuredWorkload />
+            <AccountBalanceWallet className={styles.icon} />
           </div>
           <div className={styles.right}>
-            <h2>1234</h2>
-            <p>Sklad</p>
+            <h2>{Intl.NumberFormat("ru-RU").format(189000000)}</h2>
+            <p>Баланс</p>
           </div>
         </div>
         <div className={styles.card}>
           <div className={styles.left}>
-            <AssuredWorkload />
+            <Paid className={`${styles.icon} ${styles.success}`} />
           </div>
           <div className={styles.right}>
-            <h2>1234</h2>
-            <p>Sklad</p>
+            <h2>{Intl.NumberFormat("ru-RU").format(20000000)}</h2>
+            <p>Долги</p>
           </div>
         </div>
         <div className={styles.card}>
           <div className={styles.left}>
-            <AssuredWorkload />
+            <Paid className={`${styles.icon} ${styles.danger}`} />
           </div>
           <div className={styles.right}>
-            <h2>1234</h2>
-            <p>Sklad</p>
+            <h2>{Intl.NumberFormat("ru-RU").format(15000000)}</h2>
+            <p>Наши долги</p>
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-          width: "100%",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Chart />
+      <div className={styles.incomeOutcomChart}>
+        <div className={styles.top}>
+          <h2>Финансы</h2>
+        </div>
+
+        <div className={styles.bottom}>
+          <Chart />
+        </div>
       </div>
     </div>
   );

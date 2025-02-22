@@ -1,0 +1,85 @@
+@import "../../styles/variables.module.scss";
+
+.outcomes {
+  margin: 20px;
+  color: $font-color;
+
+  h1 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .table {
+    padding-bottom: 20px;
+    width: 100%;
+    background-color: $color-white;
+    border-radius: 10px;
+    box-shadow: $card-box-shadow;
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+
+      h1 {
+        font-weight: 500;
+        font-size: 18px;
+      }
+
+      a {
+        background-color: $primary-color;
+        color: $color-white;
+        padding: 10px 20px;
+        font-size: 15px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+
+      tr {
+        td {
+          padding: 10px;
+          border-bottom: 1px solid $border-bottom-color;
+
+          &:first-child {
+            padding-left: 20px;
+          }
+
+          &:last-child {
+            padding-right: 20px;
+          }
+        }
+
+        .action {
+          display: flex;
+          align-items: center;
+
+          button,
+          a {
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+              background-color: $button-hover-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}

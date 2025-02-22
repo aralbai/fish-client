@@ -1,4 +1,4 @@
-@import './styles/variables.module.scss';
+@import "./styles/variables.module.scss";
 
 .home {
   margin: 20px;
@@ -35,12 +35,37 @@
         .icon {
           color: $primary-color;
         }
+
+        .success {
+          color: $success-color;
+        }
+
+        .danger {
+          color: $danger-color;
+        }
       }
 
       .right {
         display: flex;
         flex-direction: column;
         gap: 5px;
+      }
+    }
+  }
+
+  .incomeOutcomChart {
+    margin-top: 20px;
+    background-color: $color-white;
+    border-radius: 5px;
+    box-shadow: $card-box-shadow;
+    padding: 20px;
+
+    .top {
+      padding: 20px;
+
+      h2 {
+        text-align: center;
+        font-weight: 500;
       }
     }
   }
