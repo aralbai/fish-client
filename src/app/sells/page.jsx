@@ -32,10 +32,11 @@ export default function Sells() {
             <tr>
               <td>Продукта</td>
               <td>Клиент</td>
-              <td>Количество</td>
-              <td>Per kilo</td>
-              <td>Discount</td>
+              <td>Кол</td>
+              <td>Кило</td>
+              <td>Скидка</td>
               <td>Цена</td>
+              <td>Долг</td>
               <td>Дата</td>
               <td>Движение</td>
             </tr>
@@ -59,6 +60,11 @@ export default function Sells() {
                 <td>
                   {Intl.NumberFormat("uz-UZ")
                     .format(sell.price)
+                    .replace(/,/g, " ")}{" "}
+                </td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(sell.debt)
                     .replace(/,/g, " ")}{" "}
                 </td>
                 <td>{format(sell.addedDate, "dd.MM.yyyy")}</td>

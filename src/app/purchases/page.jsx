@@ -33,12 +33,12 @@ export default function Purchases() {
             <tr>
               <td>Продукта</td>
               <td>Поставщик</td>
-              <td>Ном авто</td>
-              <td>Количество</td>
-              <td>Per kilo</td>
-              <td>Discount</td>
+              <td>Ном</td>
+              <td>Кол</td>
+              <td>Кило</td>
+              <td>Скидка</td>
               <td>Цена</td>
-              <td>RA</td>
+              <td>Долг</td>
               <td>Дата</td>
               <td>Действие</td>
             </tr>
@@ -67,7 +67,11 @@ export default function Purchases() {
                     .format(purchase.price)
                     .replace(/,/g, " ")}{" "}
                 </td>
-                <td>{purchase.remainingAmount}</td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(purchase.debt)
+                    .replace(/,/g, " ")}{" "}
+                </td>
                 <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link

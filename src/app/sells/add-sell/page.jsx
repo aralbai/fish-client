@@ -20,9 +20,11 @@ export default function AddSell() {
     purchase: "Выберите поток",
     product: "Выберите продукт",
     custumer: "Выберите клиента",
+    custumerName: "",
     amount: "",
     price: "",
     discount: "",
+    debt: "",
     addedDate: new Date(),
   });
 
@@ -42,8 +44,10 @@ export default function AddSell() {
 
     const data = {
       ...sell,
+      custumer: checkClient ? sell.custumerName : sell.custumer,
       price: sell.price * sell.amount - sell.discount,
       discount: sell.discount === "" ? 0 : sell.discount,
+      debt: sell.debt === "" ? 0 : sell.debt,
     };
 
     handleSubmit(e, "create", "sells", data, setSell);
@@ -53,9 +57,11 @@ export default function AddSell() {
       purchase: "Выберите поток",
       product: "Выберите продукт",
       custumer: "Выберите клиента",
+      custumerName: "",
       amount: "",
       price: "",
       discount: "",
+      debt: "",
       addedDate: new Date(),
     });
   };
@@ -119,29 +125,29 @@ export default function AddSell() {
             </div>
           </div>
           <div className={styles.inputGroup}>
-            <div className={styles.formInputCheck}>
-              <CheckBox
-                id="checkClient"
-                value={checkClient}
-                setData={setCheckClient}
-              />
-              <label htmlFor="checkClient">Bez client</label>
-            </div>
-
-            {checkClient ? (
-              <div>
-                <Input
-                  type="text"
-                  name="custumer"
-                  placeholder={sell.custumer}
-                  value={sell.custumer}
-                  setData={setSell}
-                  required={true}
+            <div className={styles.formInput}>
+              <div className={styles.formInputCheck}>
+                <CheckBox
+                  id="checkClient"
+                  value={checkClient}
+                  setData={setCheckClient}
                 />
+                <label htmlFor="checkClient">Bez client</label>
               </div>
-            ) : (
-              <div className={styles.client}>
-                <div className={styles.formInput}>
+
+              {checkClient ? (
+                <div className={styles.client}>
+                  <Input
+                    type="text"
+                    name="custumer"
+                    placeholder="Имя клиента"
+                    value={sell.custumerName}
+                    setData={setSell}
+                    required={true}
+                  />
+                </div>
+              ) : (
+                <div className={styles.client}>
                   <Select
                     name="custumer"
                     mapData={custumers}
@@ -149,15 +155,17 @@ export default function AddSell() {
                     defValue={sell.custumer}
                     setData={setSell}
                   />
-                </div>
 
-                <div className={styles.formInput}>
                   <div onClick={() => setIsModalOpen(true)}>
                     <PrimaryBtn type="button">+</PrimaryBtn>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+
+            <div className={styles.formInput}>
+              <DatePick defDate={sell.addedDate} setDate={setSell} />
+            </div>
           </div>
 
           <div className={styles.inputGroup}>
@@ -188,23 +196,60 @@ export default function AddSell() {
               <Input
                 type="number"
                 name="discount"
-                placeholder="Discount"
+                placeholder="Скидка"
                 value={sell.discount}
                 setData={setSell}
                 required={false}
               />
             </div>
             <div className={styles.formInput}>
-              <DatePick defDate={sell.addedDate} setDate={setSell} />
+              <Input
+                type="number"
+                name="debt"
+                placeholder="Долг"
+                value={sell.debt}
+                setData={setSell}
+                required={false}
+              />
             </div>
           </div>
 
           <div className={styles.bottom}>
             <div className={styles.calc}>
-              <p>Total:</p>
+              <p>Итого:</p>
               <b>
                 {Intl.NumberFormat("uz-UZ")
-                  .format(sell.price * sell.amount - sell.discount)
+                  .format(sell.price * sell.amount)
+                  .replace(/,/g, " ")}
+
+                <b> SWM</b>
+              </b>
+            </div>
+            <div className={styles.calc}>
+              <p>Скидка:</p>
+              <b>
+                {Intl.NumberFormat("uz-UZ")
+                  .format(sell.discount)
+                  .replace(/,/g, " ")}
+
+                <b> SWM</b>
+              </b>
+            </div>
+            <div className={styles.calc}>
+              <p>Долг:</p>
+              <b>
+                {Intl.NumberFormat("uz-UZ")
+                  .format(sell.debt)
+                  .replace(/,/g, " ")}
+
+                <b> SWM</b>
+              </b>
+            </div>
+            <div className={styles.calc}>
+              <p>Оплачено:</p>
+              <b>
+                {Intl.NumberFormat("uz-UZ")
+                  .format(sell.price * sell.amount - sell.discount - sell.debt)
                   .replace(/,/g, " ")}
 
                 <b> SWM</b>

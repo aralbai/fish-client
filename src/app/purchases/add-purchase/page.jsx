@@ -20,6 +20,8 @@ export default function AddPurchase() {
     carNumber: "",
     amount: "",
     price: "",
+    given: "",
+    debt: "",
     discount: "",
     addedDate: new Date(),
   });
@@ -39,6 +41,7 @@ export default function AddPurchase() {
       remainingAmount: purchase.amount,
       price: purchase.price * purchase.amount - purchase.discount,
       discount: purchase.discount === "" ? 0 : purchase.discount,
+      debt: purchase.debt === "" ? 0 : purchase.debt,
     };
 
     handleSubmit(e, "create", "purchases", data, setPurchase);
@@ -49,6 +52,8 @@ export default function AddPurchase() {
       carNumber: "",
       amount: "",
       price: "",
+      given: "",
+      debt: "",
       discount: "",
       addedDate: new Date(),
     });
@@ -130,22 +135,62 @@ export default function AddPurchase() {
             <DatePick defDate={purchase.addedDate} setDate={setPurchase} />
           </div>
 
+          <div className={styles.inputGroup}>
+            <Input
+              type="number"
+              name="discount"
+              placeholder="Скидка"
+              value={purchase.discount}
+              setData={setPurchase}
+              required={false}
+            />
+            <Input
+              type="number"
+              name="debt"
+              placeholder="Долг"
+              value={purchase.debt}
+              setData={setPurchase}
+              required={false}
+            />
+          </div>
+
           <div className={styles.bottom}>
-            <div className={styles.discount}>
-              <Input
-                type="number"
-                name="discount"
-                placeholder="Discount"
-                value={purchase.discount}
-                setData={setPurchase}
-                required={false}
-              />
-            </div>
             <div className={styles.calc}>
-              <p>Total:</p>
+              <p>Итого:</p>
               <b>
                 {Intl.NumberFormat("uz-UZ")
-                  .format(purchase.amount * purchase.price - purchase.discount)
+                  .format(purchase.amount * purchase.price)
+                  .replace(/,/g, " ")}
+                <b> SWM</b>
+              </b>
+            </div>
+            <div className={styles.calc}>
+              <p>Скидка:</p>
+              <b>
+                {Intl.NumberFormat("uz-UZ")
+                  .format(purchase.discount)
+                  .replace(/,/g, " ")}
+                <b> SWM</b>
+              </b>
+            </div>
+            <div className={styles.calc}>
+              <p>Долг:</p>
+              <b>
+                {Intl.NumberFormat("uz-UZ")
+                  .format(purchase.debt)
+                  .replace(/,/g, " ")}
+                <b> SWM</b>
+              </b>
+            </div>
+            <div className={styles.calc}>
+              <p>Оплачено:</p>
+              <b>
+                {Intl.NumberFormat("uz-UZ")
+                  .format(
+                    purchase.amount * purchase.price -
+                      purchase.discount -
+                      purchase.debt
+                  )
                   .replace(/,/g, " ")}
                 <b> SWM</b>
               </b>

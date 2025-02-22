@@ -12,23 +12,31 @@ import { fetchData } from "@/utils/fetchData";
 
 export default function Home() {
   const [purchases, setPurchases] = useState([]);
+  const [outcomes, setOutcomes] = useState([]);
+  const [sells, setSells] = useState([]);
+  const [balance, setBalance] = useState([]);
 
   let total = 0;
+
   purchases.forEach((purchase) => {
     total += purchase.remainingAmount + purchase.shortage;
   });
 
   useEffect(() => {
-    fetchData("/purchases/active", setPurchases);
+    fetchData("/purchases", setPurchases);
+    fetchData("/outcomes", setOutcomes);
+    fetchData("/sells", setSells);
+    fetchData("/balance", setBalance);
   }, []);
 
+  console.log(balance);
   return (
     <div className={styles.home}>
       <h1 className={styles.title}>Statiska</h1>
 
       <div className={styles.cards}>
         {/* <div className={styles.card}> */}
-        <Link href="/flow" className={styles.card}>
+        <Link href="/cards/flow" className={styles.card}>
           <div className={styles.left}>
             <AssuredWorkload className={styles.icon} />
           </div>
@@ -40,33 +48,37 @@ export default function Home() {
           </div>
         </Link>
         {/* </div> */}
-        <div className={styles.card}>
+        <Link href="/cards/balance" className={styles.card}>
           <div className={styles.left}>
             <AccountBalanceWallet className={styles.icon} />
           </div>
           <div className={styles.right}>
-            <h2>{Intl.NumberFormat("ru-RU").format(189000000)}</h2>
+            <h2>
+              {Intl.NumberFormat("ru-RU").format(
+                balance[0]?.amount ? balance[0].amount : 0
+              )}
+            </h2>
             <p>Баланс</p>
           </div>
-        </div>
-        <div className={styles.card}>
+        </Link>
+        <Link href="/cards/debts" className={styles.card}>
           <div className={styles.left}>
             <Paid className={`${styles.icon} ${styles.success}`} />
           </div>
           <div className={styles.right}>
-            <h2>{Intl.NumberFormat("ru-RU").format(20000000)}</h2>
+            <h2>{Intl.NumberFormat("ru-RU").format(0)}</h2>
             <p>Долги</p>
           </div>
-        </div>
-        <div className={styles.card}>
+        </Link>
+        <Link href="/cards/ourDebts" className={styles.card}>
           <div className={styles.left}>
             <Paid className={`${styles.icon} ${styles.danger}`} />
           </div>
           <div className={styles.right}>
-            <h2>{Intl.NumberFormat("ru-RU").format(15000000)}</h2>
+            <h2>{Intl.NumberFormat("ru-RU").format(0)}</h2>
             <p>Наши долги</p>
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className={styles.incomeOutcomChart}>

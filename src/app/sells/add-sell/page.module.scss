@@ -40,10 +40,18 @@
         align-items: center;
         gap: 20px;
 
+        .formInputCheck {
+          width: 25% !important;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
         .client {
-          width: 50%;
+          width: 75% !important;
           display: flex;
           gap: 10px;
+          width: 100%;
 
           .formInput {
             width: 100%;
@@ -78,14 +86,6 @@
             justify-content: center;
           }
         }
-
-        .formInputCheck {
-          width: max-content;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-        }
       }
 
       .bottom {
@@ -97,7 +97,7 @@
         .calc {
           display: flex;
           gap: 10px;
-          margin-bottom: 20px;
+          margin-bottom: 10px;
         }
       }
     }

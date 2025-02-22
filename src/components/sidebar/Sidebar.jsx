@@ -128,18 +128,6 @@ export default function Sidebar() {
 
                 <li>
                   <Link
-                    href="/finance/incomes"
-                    className={
-                      pathname.includes("/finance/incomes") ? styles.active : ""
-                    }
-                  >
-                    <AddBox />
-                    Доход
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
                     href="/finance/deposits"
                     className={
                       pathname.includes("/finance/deposits")
@@ -149,34 +137,6 @@ export default function Sidebar() {
                   >
                     <Archive />
                     Пополнение
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/finance/withdraws"
-                    className={
-                      pathname.includes("/finance/withdraws")
-                        ? styles.active
-                        : ""
-                    }
-                  >
-                    <Unarchive />
-                    Снимать
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/finance/withdraws"
-                    className={
-                      pathname.includes("/finance/withdraws")
-                        ? styles.active
-                        : ""
-                    }
-                  >
-                    <Unarchive />
-                    Снимать
                   </Link>
                 </li>
 

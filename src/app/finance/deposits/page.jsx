@@ -1,46 +1,32 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import {
-  Add,
-  ArrowRight,
-  ArrowRightAlt,
-  Delete,
-  Edit,
-} from "@mui/icons-material";
+import { Add, ArrowRightAlt, Delete, Edit } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
 import { format } from "date-fns";
 
-export default function Outcomes() {
-  const [outcomes, setOutcomes] = useState([]);
-  const [purchases, setPurchases] = useState([]);
+export default function Deposits() {
+  const [deposites, setDeposites] = useState([]);
 
   useEffect(() => {
-    fetchData("/outcomes", setOutcomes);
-
-    fetchData("/purchases", setPurchases);
+    fetchData("/deposits", setDeposites);
   }, []);
 
   let total = 0;
-  let allOutcomes = 0;
-  purchases.forEach((purchase) => {
-    total += purchase.price - purchase.debt;
-    allOutcomes += purchase.price - purchase.debt;
+  deposites.forEach((deposit) => {
+    total += deposit.amount;
   });
 
-  outcomes.forEach((outcome) => {
-    allOutcomes += outcome.amount;
-  });
   return (
-    <div className={styles.outcomes}>
-      <h1>Расходы</h1>
+    <div className={styles.deposites}>
+      <h1>Депозиты</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все расходы</h1>
-          <Link href="/finance/outcomes/add-outcome">
+          <h1>Все депозиты</h1>
+          <Link href="/finance/deposits/add-deposit">
             <Add />
             Создать новый
           </Link>
@@ -48,35 +34,25 @@ export default function Outcomes() {
 
         <table>
           <thead>
-            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-              <td>{Intl.NumberFormat("ru-RU").format(allOutcomes)}</td>
-              <td></td>
-              <td></td>
-              <td className={styles.action}>
-                <Link href="/purchases">
-                  <ArrowRightAlt />
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
-              <td>Для покупки продуктов</td>
-              <td></td>
-              <td className={styles.action}>
-                <Link href="/purchases">
-                  <ArrowRightAlt />
-                </Link>
-              </td>
-            </tr>
             <tr>
               <td>Сумма</td>
-              <td>Куда</td>
+              <td>От кого</td>
               <td>Дата</td>
               <td>Действие</td>
             </tr>
           </thead>
           <tbody>
-            {outcomes?.map((outcome) => (
+            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
+              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
+              <td></td>
+              <td></td>
+              <td className={styles.action}>
+                <Link href="/deposites">
+                  <ArrowRightAlt />
+                </Link>
+              </td>
+            </tr>
+            {deposites?.map((outcome) => (
               <tr key={outcome._id}>
                 <td>{Intl.NumberFormat("ru-RU").format(outcome.amount)}</td>
                 <td>{outcome.purpose}</td>
@@ -84,7 +60,7 @@ export default function Outcomes() {
                 <td className={styles.action}>
                   <Link
                     href={{
-                      pathname: "/outcomes/edit-outcome",
+                      pathname: "/deposits/edit-outcome",
                       query: { outcomeId: outcome._id },
                     }}
                   >
@@ -94,10 +70,10 @@ export default function Outcomes() {
                   <button
                     onClick={() =>
                       handleDelete(
-                        "/outcomes",
+                        "/deposits",
                         outcome._id,
-                        outcomes,
-                        setOutcomes
+                        deposites,
+                        setDeposites
                       )
                     }
                   >

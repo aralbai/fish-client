@@ -7,34 +7,39 @@ import Input from "@/components/input/Input";
 import { handleSubmit } from "@/utils/handleSubmit";
 import DatePick from "@/components/datePicker/DatePicker";
 
-export default function AddOutcome() {
-  const [outcome, setOutcome] = useState({
+export default function AddDeposit() {
+  const [deposit, setDeposit] = useState({
     amount: "",
-    purpose: "",
+    fromWhom: "",
     addedDate: new Date(),
   });
 
   const pageHandleSubmit = (e) => {
-    handleSubmit(e, "create", "outcomes", outcome, setOutcome);
+    const data = {
+      ...deposit,
+      type: "increase",
+    };
 
-    setOutcome({
+    handleSubmit(e, "create", "deposits", data, setDeposit);
+
+    setDeposit({
       amount: "",
-      purpose: "",
+      fromWhom: "",
       addedDate: new Date(),
     });
   };
 
   return (
     <div className={styles.addProduct}>
-      <h1>Доходы</h1>
+      <h1>Депозиты</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Добавить новый доход</h1>
+          <h1>Добавить новый депозит</h1>
           <PrimaryBtn
             type="link"
             fullname="Вернуться к списку"
-            url="/finance/incomes"
+            url="/finance/deposits"
             icon={<KeyboardBackspace />}
           >
             <KeyboardBackspace />
@@ -47,19 +52,19 @@ export default function AddOutcome() {
             type="number"
             name="amount"
             placeholder="Сумма"
-            value={outcome.amount}
-            setData={setOutcome}
+            value={deposit.amount}
+            setData={setDeposit}
             required={true}
           />
           <Input
             type="text"
-            name="purpose"
-            placeholder="Откуда"
-            value={outcome.purpose}
-            setData={setOutcome}
+            name="fromWhom"
+            placeholder="От кого"
+            value={deposit.fromWhom}
+            setData={setDeposit}
             required={false}
           />
-          <DatePick defDate={outcome.addedDate} setDate={setOutcome} />
+          <DatePick defDate={deposit.addedDate} setDate={setDeposit} />
 
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
