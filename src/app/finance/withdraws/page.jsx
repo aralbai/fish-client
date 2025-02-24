@@ -34,6 +34,12 @@ export default function Withdraws() {
 
         <table>
           <thead>
+            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
+              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
+              <td></td>
+              <td></td>
+              <td style={{ padding: "30px" }}></td>
+            </tr>
             <tr>
               <td>Сумма</td>
               <td>Кому</td>
@@ -42,16 +48,6 @@ export default function Withdraws() {
             </tr>
           </thead>
           <tbody>
-            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
-              <td></td>
-              <td></td>
-              <td className={styles.action}>
-                <Link href="/withdraws">
-                  <ArrowRightAlt />
-                </Link>
-              </td>
-            </tr>
             {withdraws?.map((withdraw) => (
               <tr key={withdraw._id}>
                 <td>{Intl.NumberFormat("ru-RU").format(withdraw.amount)}</td>

@@ -15,24 +15,14 @@ import { format } from "date-fns";
 
 export default function Outcomes() {
   const [outcomes, setOutcomes] = useState([]);
-  const [purchases, setPurchases] = useState([]);
+  const [outcomesTotalPrice, setOutcomesTotalPrice] = useState([]);
 
   useEffect(() => {
     fetchData("/outcomes", setOutcomes);
 
-    fetchData("/purchases", setPurchases);
+    fetchData("/outcomes/total", setOutcomesTotalPrice);
   }, []);
 
-  let total = 0;
-  let allOutcomes = 0;
-  purchases.forEach((purchase) => {
-    total += purchase.price - purchase.debt;
-    allOutcomes += purchase.price - purchase.debt;
-  });
-
-  outcomes.forEach((outcome) => {
-    allOutcomes += outcome.amount;
-  });
   return (
     <div className={styles.outcomes}>
       <h1>Расходы</h1>
@@ -49,24 +39,14 @@ export default function Outcomes() {
         <table>
           <thead>
             <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-              <td>{Intl.NumberFormat("ru-RU").format(allOutcomes)}</td>
-              <td></td>
-              <td></td>
-              <td className={styles.action}>
-                <Link href="/purchases">
-                  <ArrowRightAlt />
-                </Link>
+              <td>
+                {Intl.NumberFormat("ru-RU").format(
+                  outcomesTotalPrice.totalOutcomes
+                )}
               </td>
-            </tr>
-            <tr>
-              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
-              <td>Для покупки продуктов</td>
               <td></td>
-              <td className={styles.action}>
-                <Link href="/purchases">
-                  <ArrowRightAlt />
-                </Link>
-              </td>
+              <td></td>
+              <td style={{ padding: "30px" }}></td>
             </tr>
             <tr>
               <td>Сумма</td>

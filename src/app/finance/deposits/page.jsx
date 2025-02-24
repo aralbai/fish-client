@@ -34,6 +34,12 @@ export default function Deposits() {
 
         <table>
           <thead>
+            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
+              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
+              <td></td>
+              <td></td>
+              <td style={{ padding: "30px" }}></td>
+            </tr>
             <tr>
               <td>Сумма</td>
               <td>От кого</td>
@@ -42,16 +48,6 @@ export default function Deposits() {
             </tr>
           </thead>
           <tbody>
-            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
-              <td></td>
-              <td></td>
-              <td className={styles.action}>
-                <Link href="/deposites">
-                  <ArrowRightAlt />
-                </Link>
-              </td>
-            </tr>
             {deposites?.map((outcome) => (
               <tr key={outcome._id}>
                 <td>{Intl.NumberFormat("ru-RU").format(outcome.amount)}</td>
