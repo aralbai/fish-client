@@ -14,7 +14,6 @@ import { format } from "date-fns";
 
 export default function AddSell() {
   const [purchases, setPurchases] = useState([]);
-  const [products, setProducts] = useState([]);
   const [custumers, setCustumers] = useState([]);
   const [sell, setSell] = useState({
     purchase: "Выберите поток",
@@ -30,13 +29,12 @@ export default function AddSell() {
 
   const [checkClient, setCheckClient] = useState(false);
   const [isModalOPen, setIsModalOpen] = useState(false);
+  const [checkAmount, setCheckAmount] = useState(9999999999999999999999999999n);
 
   useEffect(() => {
-    fetchData("/products", setProducts);
-
     fetchData("/custumers", setCustumers);
 
-    fetchData("/purchases", setPurchases);
+    fetchData("/purchases/active", setPurchases);
   }, [isModalOPen, sell]);
 
   const pageHandleSubmit = (e) => {
@@ -48,10 +46,10 @@ export default function AddSell() {
       price: sell.price * sell.amount - sell.discount,
       discount: sell.discount === "" ? 0 : sell.discount,
       debt: sell.debt === "" ? 0 : sell.debt,
+      given: sell.price * sell.amount - sell.discount - sell.debt,
     };
 
     handleSubmit(e, "create", "sells", data, setSell);
-    console.log(sell);
 
     setSell({
       purchase: "Выберите поток",
@@ -65,6 +63,20 @@ export default function AddSell() {
       addedDate: new Date(),
     });
   };
+
+  const handleChange = (e) => {
+    const givenPurchase = purchases.find((p) => p._id === e.target.value);
+
+    setSell((prev) => ({
+      ...prev,
+      purchase: e.target.value,
+      product: givenPurchase.product.title,
+    }));
+
+    setCheckAmount(givenPurchase.remainingAmount);
+  };
+
+  console.log(checkAmount);
 
   return (
     <div className={styles.addProduct}>
@@ -89,13 +101,8 @@ export default function AddSell() {
             <div className={styles.formInput} hidden>
               <select
                 required
-                value={sell.purchaseId}
-                onChange={(e) =>
-                  setSell((prev) => ({
-                    ...prev,
-                    purchase: e.target.value,
-                  }))
-                }
+                value={sell.purchase}
+                onChange={(e) => handleChange(e)}
               >
                 <option value="" hidden>
                   {sell.purchase}
@@ -106,22 +113,19 @@ export default function AddSell() {
                       " " +
                       purchase.supplier.title +
                       " " +
-                      purchase.amount +
-                      "kg" +
+                      format(purchase.addedDate, "dd.MM.yyyy") +
                       " " +
-                      format(purchase.addedDate, "dd.MM.yyyy")}
+                      purchase.remainingAmount +
+                      "kg" +
+                      " "}
                   </option>
                 ))}
               </select>
             </div>
             <div className={styles.formInput}>
-              <Select
-                name="product"
-                mapData={products}
-                text="title"
-                defValue={sell.product}
-                setData={setSell}
-              />
+              <select name="" id="" disabled>
+                <option value={sell.product}>{sell.product}</option>
+              </select>
             </div>
           </div>
           <div className={styles.inputGroup}>
@@ -132,14 +136,14 @@ export default function AddSell() {
                   value={checkClient}
                   setData={setCheckClient}
                 />
-                <label htmlFor="checkClient">Bez client</label>
+                <label htmlFor="checkClient">Не клиент</label>
               </div>
 
               {checkClient ? (
                 <div className={styles.client}>
                   <Input
                     type="text"
-                    name="custumer"
+                    name="custumerName"
                     placeholder="Имя клиента"
                     value={sell.custumerName}
                     setData={setSell}
@@ -177,6 +181,7 @@ export default function AddSell() {
                 value={sell.amount}
                 setData={setSell}
                 required={true}
+                max={checkAmount}
               />
             </div>
             <div className={styles.formInput}>

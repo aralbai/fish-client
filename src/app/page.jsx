@@ -11,25 +11,29 @@ import Link from "next/link";
 import { fetchData } from "@/utils/fetchData";
 
 export default function Home() {
-  const [purchases, setPurchases] = useState([]);
-  const [outcomes, setOutcomes] = useState([]);
+  const [deposits, setDeposits] = useState([]);
   const [sells, setSells] = useState([]);
-  const [balance, setBalance] = useState([]);
-
-  let total = 0;
-
-  purchases.forEach((purchase) => {
-    total += purchase.remainingAmount + purchase.shortage;
-  });
+  const [outcomes, setOutcomes] = useState([]);
+  const [purchases, setPurchases] = useState([]);
+  const [withdraws, setWithdraws] = useState([]);
+  const [purchaseAmount, setPurchaseAmount] = useState([]);
 
   useEffect(() => {
-    fetchData("/purchases", setPurchases);
-    fetchData("/outcomes", setOutcomes);
-    fetchData("/sells", setSells);
-    fetchData("/balance", setBalance);
+    fetchData("/purchases/total/price", setPurchases);
+    fetchData("/outcomes/total", setOutcomes);
+    fetchData("/sells/total", setSells);
+    fetchData("/deposits/total", setDeposits);
+    fetchData("/withdraws/total", setWithdraws);
+    fetchData("/purchases/total/amount", setPurchaseAmount);
   }, []);
 
-  console.log(balance);
+  const balance =
+    deposits.totalDeposits +
+    sells.totalSales -
+    outcomes.totalOutcomes -
+    purchases.totalPurchases -
+    withdraws.totalWithdraws;
+
   return (
     <div className={styles.home}>
       <h1 className={styles.title}>Statiska</h1>
@@ -42,7 +46,7 @@ export default function Home() {
           </div>
           <div className={styles.right}>
             <h2>
-              {total} <b>kg</b>
+              {purchaseAmount ? purchaseAmount.totalAmount : 0} <b>kg</b>
             </h2>
             <p>Sklad</p>
           </div>
@@ -53,11 +57,7 @@ export default function Home() {
             <AccountBalanceWallet className={styles.icon} />
           </div>
           <div className={styles.right}>
-            <h2>
-              {Intl.NumberFormat("ru-RU").format(
-                balance[0]?.amount ? balance[0].amount : 0
-              )}
-            </h2>
+            <h2>{balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}</h2>
             <p>Баланс</p>
           </div>
         </Link>

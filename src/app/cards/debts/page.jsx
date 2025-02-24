@@ -7,11 +7,11 @@ import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
 import { format } from "date-fns";
 
-export default function Purchases() {
-  const [purchases, setPurchases] = useState([]);
+export default function Debts() {
+  const [debts, setDebts] = useState([]);
 
   useEffect(() => {
-    fetchData("/purchases", setPurchases);
+    fetchData("/sells/debt", setDebts);
   }, []);
 
   return (
@@ -21,7 +21,7 @@ export default function Purchases() {
       <div className={styles.table}>
         <div className={styles.top}>
           <h1>Все покупки</h1>
-          <Link href="/purchases/add-purchase">
+          <Link href="/debts/add-debt">
             <Add />
             Создать новый
           </Link>
@@ -30,53 +30,50 @@ export default function Purchases() {
         <table>
           <thead>
             <tr>
-              <td>Продукта</td>
-              <td>Поставщик</td>
-              <td>Ном</td>
-              <td>Кол</td>
-              <td>Кило</td>
-              <td>Скидка</td>
+              <td>Product</td>
+              <td>Custumer</td>
+              <td>Количество</td>
+              <td>Discount</td>
               <td>Цена</td>
-              <td>Долг</td>
+              <td>Qarz</td>
+              <td>RA</td>
               <td>Дата</td>
               <td>Действие</td>
             </tr>
           </thead>
           <tbody>
-            {purchases.map((purchase) => (
-              <tr key={purchase._id}>
-                <td>{purchase.product?.title}</td>
-                <td>{purchase.supplier?.title}</td>
-                <td>{purchase.carNumber}</td>
-                <td>{purchase.amount}</td>
+            {debts?.map((debt) => (
+              <tr key={debt._id}>
+                <td>{debt.product?.title}</td>
+                <td>{debt.custumer?.fullname}</td>
+                <td>{debt.amount}</td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(
-                      (purchase.price + purchase.discount) / purchase.amount
-                    )
+                    .format(debt.discount)
+                    .replace(/,/g, " ")}
+                </td>
+                <td>
+                  {" "}
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(debt.price)
                     .replace(/,/g, " ")}
                 </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.discount)
+                    .format(debt.debt)
                     .replace(/,/g, " ")}
                 </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.price)
-                    .replace(/,/g, " ")}{" "}
+                    .format(debt.price - debt.debt)
+                    .replace(/,/g, " ")}
                 </td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.debt)
-                    .replace(/,/g, " ")}{" "}
-                </td>
-                <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
+                <td>{format(debt.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link
                     href={{
-                      pathname: "/purchases/edit-purchase",
-                      query: { purchaseId: purchase._id },
+                      pathname: "/debts/edit-debt",
+                      query: { debtId: debt._id },
                     }}
                   >
                     <Edit />
@@ -84,12 +81,7 @@ export default function Purchases() {
 
                   <button
                     onClick={() =>
-                      handleDelete(
-                        "/purchases",
-                        purchase._id,
-                        purchases,
-                        setPurchases
-                      )
+                      handleDelete("/debts", debt._id, debts, setDebts)
                     }
                   >
                     <Delete />

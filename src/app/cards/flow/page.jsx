@@ -14,7 +14,6 @@ export default function Flow() {
     fetchData("/purchases/active", setPurchases);
   }, []);
 
-  console.log(purchases);
   return (
     <div className={styles.products}>
       <h1>Покупки</h1>
@@ -44,7 +43,7 @@ export default function Flow() {
             </tr>
           </thead>
           <tbody>
-            {purchases.map((purchase) => (
+            {purchases?.map((purchase) => (
               <tr key={purchase._id}>
                 <td>{purchase.product?.title}</td>
                 <td>{purchase.supplier?.title}</td>

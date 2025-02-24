@@ -8,17 +8,30 @@ export default function Input({
   value,
   setData,
   required,
+  max,
 }) {
   return (
     <div className={styles.input}>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => handleChange(e, setData)}
-        required={required}
-      />
+      {max ? (
+        <input
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => handleChange(e, setData)}
+          required={required}
+          max={max}
+        />
+      ) : (
+        <input
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => handleChange(e, setData)}
+          required={required}
+        />
+      )}
     </div>
   );
 }

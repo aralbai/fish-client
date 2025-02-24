@@ -42,6 +42,8 @@ export default function AddPurchase() {
       price: purchase.price * purchase.amount - purchase.discount,
       discount: purchase.discount === "" ? 0 : purchase.discount,
       debt: purchase.debt === "" ? 0 : purchase.debt,
+      given:
+        purchase.price * purchase.amount - purchase.discount - purchase.debt,
     };
 
     handleSubmit(e, "create", "purchases", data, setPurchase);
