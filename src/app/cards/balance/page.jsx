@@ -1,11 +1,10 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, ArrowRightAlt, Delete, Edit } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { ArrowRightAlt } from "@mui/icons-material";
+import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
-import { handleDelete } from "@/utils/handleDelete";
-import { format } from "date-fns";
+import TableTop from "@/components/tableTop/TableTop";
 
 export default function Balance() {
   const [deposits, setDeposits] = useState([]);
@@ -13,6 +12,7 @@ export default function Balance() {
   const [outcomes, setOutcomes] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
+  const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/purchases/total/price", setPurchases);
@@ -40,12 +40,14 @@ export default function Balance() {
           <h1>Баланс</h1>
         </div>
 
-        <table>
+        <TableTop tableRef={tableRef} />
+
+        <table ref={tableRef}>
           <thead>
             <tr>
               <td>Название</td>
               <td>Сумма</td>
-              <td>Действие</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>

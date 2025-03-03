@@ -2,12 +2,14 @@
 import Link from "next/link";
 import styles from "./page.module.scss";
 import { Add, Delete, Edit } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
+import TableTop from "@/components/tableTop/TableTop";
 
 export default function Suppliers() {
   const [suppliers, setSuppliers] = useState([]);
+  const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/suppliers", setSuppliers);
@@ -26,13 +28,15 @@ export default function Suppliers() {
           </Link>
         </div>
 
-        <table>
+        <TableTop tableRef={tableRef} />
+
+        <table ref={tableRef}>
           <thead>
             <tr>
               <td>Название поставщика</td>
               <td>Номер телефона</td>
               <td>Адрес</td>
-              <td> Действие</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -68,6 +72,9 @@ export default function Suppliers() {
             ))}
           </tbody>
         </table>
+        {suppliers.length < 1 && (
+          <div className={styles.empty}>Этот раздел пуст.</div>
+        )}
       </div>
     </div>
   );

@@ -13,9 +13,9 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.3",
     "@mui/material": "^6.4.3",
-    "@next/font": "^14.2.15",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
+    "file-saver": "^2.0.5",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-datepicker": "^8.0.0",
@@ -23,7 +23,8 @@
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.3",
     "recharts": "^2.15.1",
-    "sass": "^1.84.0"
+    "sass": "^1.84.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

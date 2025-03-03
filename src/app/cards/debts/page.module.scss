@@ -21,7 +21,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px;
+      padding: 20px 20px 0 20px;
 
       h1 {
         font-weight: 500;
@@ -81,5 +81,12 @@
         }
       }
     }
+  }
+
+  .empty {
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

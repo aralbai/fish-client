@@ -2,13 +2,15 @@
 import Link from "next/link";
 import styles from "./page.module.scss";
 import { Add, Delete, Edit } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
 import { format } from "date-fns";
+import TableTop from "@/components/tableTop/TableTop";
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);
+  const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/purchases", setPurchases);
@@ -27,7 +29,9 @@ export default function Purchases() {
           </Link>
         </div>
 
-        <table>
+        <TableTop tableRef={tableRef} />
+
+        <table ref={tableRef}>
           <thead>
             <tr>
               <td>Продукта</td>
@@ -38,8 +42,9 @@ export default function Purchases() {
               <td>Скидка</td>
               <td>Цена</td>
               <td>Долг</td>
+              <td>Остальные</td>
               <td>Дата</td>
-              <td>Действие</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -71,6 +76,11 @@ export default function Purchases() {
                     .format(purchase.debt)
                     .replace(/,/g, " ")}{" "}
                 </td>
+                <td>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(purchase.remainingAmount)
+                    .replace(/,/g, " ")}{" "}
+                </td>
                 <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>
                   <Link
@@ -99,6 +109,9 @@ export default function Purchases() {
             ))}
           </tbody>
         </table>
+        {purchases.length < 1 && (
+          <div className={styles.empty}>Этот раздел пуст.</div>
+        )}
       </div>
     </div>
   );

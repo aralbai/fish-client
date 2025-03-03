@@ -1,0 +1,20 @@
+@import "../../app/styles/variables.module.scss";
+
+.tableTop {
+  padding: 20px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .excelButton {
+    background: none;
+    border: none;
+    color: $primary-color;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+  }
+}

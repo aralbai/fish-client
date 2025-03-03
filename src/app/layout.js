@@ -1,4 +1,4 @@
-import { Roboto } from "@next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.scss";
 import Layout from "@/components/layout/Layout";
 import { ToastContainer } from "react-toastify";

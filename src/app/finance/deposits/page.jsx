@@ -80,6 +80,9 @@ export default function Deposits() {
             ))}
           </tbody>
         </table>
+        {deposites.length < 1 && (
+          <div className={styles.empty}>Этот раздел пуст.</div>
+        )}
       </div>
     </div>
   );

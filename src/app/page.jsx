@@ -17,6 +17,7 @@ export default function Home() {
   const [purchases, setPurchases] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
   const [purchaseAmount, setPurchaseAmount] = useState([]);
+  const [totalDebts, setTotalDebts] = useState(0);
 
   useEffect(() => {
     fetchData("/purchases/total/price", setPurchases);
@@ -25,6 +26,7 @@ export default function Home() {
     fetchData("/deposits/total", setDeposits);
     fetchData("/withdraws/total", setWithdraws);
     fetchData("/purchases/total/amount", setPurchaseAmount);
+    fetchData("/sells/total/debts", setTotalDebts);
   }, []);
 
   const balance =
@@ -46,7 +48,7 @@ export default function Home() {
           </div>
           <div className={styles.right}>
             <h2>
-              {purchaseAmount ? purchaseAmount.totalAmount : 0} <b>kg</b>
+              {purchaseAmount.totalAmount ? purchaseAmount.totalAmount : 0}
             </h2>
             <p>Sklad</p>
           </div>
@@ -66,7 +68,11 @@ export default function Home() {
             <Paid className={`${styles.icon} ${styles.success}`} />
           </div>
           <div className={styles.right}>
-            <h2>{Intl.NumberFormat("ru-RU").format(0)}</h2>
+            <h2>
+              {totalDebts.totalDebts
+                ? Intl.NumberFormat("ru-RU").format(totalDebts.totalDebts)
+                : 0}
+            </h2>
             <p>Долги</p>
           </div>
         </Link>

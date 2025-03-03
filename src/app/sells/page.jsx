@@ -2,13 +2,15 @@
 import Link from "next/link";
 import styles from "./page.module.scss";
 import { Add, Delete, Edit } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
+import TableTop from "@/components/tableTop/TableTop";
 
 export default function Sells() {
   const [sells, setSells] = useState([]);
+  const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/sells", setSells);
@@ -27,18 +29,19 @@ export default function Sells() {
           </Link>
         </div>
 
-        <table>
+        <TableTop tableRef={tableRef} />
+
+        <table ref={tableRef}>
           <thead>
             <tr>
               <td>Продукта</td>
               <td>Клиент</td>
               <td>Кол</td>
-              <td>Кило</td>
               <td>Скидка</td>
               <td>Цена</td>
               <td>Долг</td>
               <td>Дата</td>
-              <td>Движение</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -47,11 +50,6 @@ export default function Sells() {
                 <td>{sell.product.title}</td>
                 <td>{sell.custumer.fullname}</td>
                 <td>{sell.amount}</td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format((sell.price + sell.discount) / sell.amount)
-                    .replace(/,/g, " ")}
-                </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
                     .format(sell.discount)
@@ -92,6 +90,9 @@ export default function Sells() {
             ))}
           </tbody>
         </table>
+        {sells.length < 1 && (
+          <div className={styles.empty}>Этот раздел пуст.</div>
+        )}
       </div>
     </div>
   );
