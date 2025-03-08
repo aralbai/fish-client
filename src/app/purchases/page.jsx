@@ -38,10 +38,10 @@ export default function Purchases() {
               <td>Поставщик</td>
               <td>Ном</td>
               <td>Кол</td>
-              <td>Кило</td>
               <td>Скидка</td>
               <td>Цена</td>
               <td>Долг</td>
+              <td>Недостаток</td>
               <td>Остальные</td>
               <td>Дата</td>
               <td></td>
@@ -54,13 +54,7 @@ export default function Purchases() {
                 <td>{purchase.supplier?.title}</td>
                 <td>{purchase.carNumber}</td>
                 <td>{purchase.amount}</td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(
-                      (purchase.price + purchase.discount) / purchase.amount
-                    )
-                    .replace(/,/g, " ")}
-                </td>
+
                 <td>
                   {Intl.NumberFormat("uz-UZ")
                     .format(purchase.discount)
@@ -69,17 +63,18 @@ export default function Purchases() {
                 <td>
                   {Intl.NumberFormat("uz-UZ")
                     .format(purchase.price)
-                    .replace(/,/g, " ")}{" "}
+                    .replace(/,/g, " ")}
                 </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
                     .format(purchase.debt)
-                    .replace(/,/g, " ")}{" "}
+                    .replace(/,/g, " ")}
                 </td>
+                <td>{purchase.shortage}</td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
                     .format(purchase.remainingAmount)
-                    .replace(/,/g, " ")}{" "}
+                    .replace(/,/g, " ")}
                 </td>
                 <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
                 <td className={styles.action}>

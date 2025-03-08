@@ -1,19 +1,22 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, Delete, Edit } from "@mui/icons-material";
+import { Add, Delete, Edit, FormatColorReset } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
 import TableTop from "@/components/tableTop/TableTop";
+import LimitModal from "@/components/limitModal/LimitModal";
 
 export default function Custumers() {
   const [custumers, setCustumers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [custumerId, setCustumerId] = useState("");
   const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/custumers", setCustumers);
-  }, []);
+  }, [isModalOpen]);
 
   return (
     <div className={styles.custumers}>
@@ -47,7 +50,9 @@ export default function Custumers() {
                 <td>{custumer.phone}</td>
                 <td>{custumer.address}</td>
                 <td>
-                  {custumer.limit === -1 ? "Безлимитный" : custumer.limit}
+                  {custumer.limit === -1
+                    ? "Безлимитный"
+                    : Intl.NumberFormat("ru-RU").format(custumer.limit)}
                 </td>
                 <td className={styles.action}>
                   <Link
@@ -71,6 +76,14 @@ export default function Custumers() {
                   >
                     <Delete />
                   </button>
+                  <button
+                    onClick={() => {
+                      setCustumerId(custumer._id);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    <FormatColorReset />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -80,6 +93,12 @@ export default function Custumers() {
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}
       </div>
+
+      <LimitModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        custumerId={custumerId}
+      />
     </div>
   );
 }

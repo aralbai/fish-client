@@ -10,14 +10,6 @@ export const handleSubmit = async (e, reqType, route, data, setData) => {
       .then((res) => {
         // Showing toast success message
         toast.success(res.data);
-
-        // Setting all values of object to empty string
-        // Object.keys(data).forEach((key) => {
-        //   setData((prev) => ({
-        //     ...prev,
-        //     [key]: "",
-        //   }));
-        // });
       })
       .catch((err) => {
         console.log(err);
@@ -28,14 +20,6 @@ export const handleSubmit = async (e, reqType, route, data, setData) => {
       .then((res) => {
         // Showing toast success message
         toast.success(res.data);
-
-        // Setting all values of object to empty string
-        Object.keys(data).forEach((key) => {
-          setData((prev) => ({
-            ...prev,
-            [key]: "",
-          }));
-        });
       })
       .catch((err) => {
         console.log(err);

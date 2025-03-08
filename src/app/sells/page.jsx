@@ -1,15 +1,19 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, Delete, Edit } from "@mui/icons-material";
-import { useEffect, useRef, useState } from "react";
+import { AccountBalanceWallet, Add, Delete, Edit } from "@mui/icons-material";
+import { use, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { fetchData } from "@/utils/fetchData";
 import { handleDelete } from "@/utils/handleDelete";
 import TableTop from "@/components/tableTop/TableTop";
+import RepayModal from "@/components/repayModal/RepayModal";
 
 export default function Sells() {
   const [sells, setSells] = useState([]);
+  const [sellId, setSellId] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const tableRef = useRef(null);
 
   useEffect(() => {
@@ -85,6 +89,16 @@ export default function Sells() {
                   >
                     <Delete />
                   </button>
+                  {sell.debt > 0 && (
+                    <button
+                      onClick={() => {
+                        setSellId(sell._id);
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      <AccountBalanceWallet />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -93,6 +107,11 @@ export default function Sells() {
         {sells.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}
+        <RepayModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          sellId={sellId}
+        />
       </div>
     </div>
   );
