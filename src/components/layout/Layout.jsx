@@ -1,16 +1,31 @@
+"use client";
+import { usePathname } from "next/navigation";
 import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import styles from "./Layout.module.scss";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function Layout({ children }) {
-  return (
-    <div className={styles.layout}>
-      <Sidebar />
+  const path = usePathname();
 
-      <div className={styles.main}>
-        <Navbar />
-        {children}
-      </div>
-    </div>
-  );
+  if (path === "/login") {
+    return (
+      <AuthProvider>
+        <div>{children}</div>;
+      </AuthProvider>
+    );
+  } else {
+    return (
+      <AuthProvider>
+        <div className={styles.layout}>
+          <Sidebar />
+
+          <div className={styles.main}>
+            <Navbar />
+            {children}
+          </div>
+        </div>
+      </AuthProvider>
+    );
+  }
 }

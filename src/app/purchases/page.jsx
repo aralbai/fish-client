@@ -1,10 +1,9 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, Delete, Edit } from "@mui/icons-material";
+import { Add, ArrowRightAlt } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
-import { handleDelete } from "@/utils/handleDelete";
 import { format } from "date-fns";
 import TableTop from "@/components/tableTop/TableTop";
 
@@ -80,25 +79,12 @@ export default function Purchases() {
                 <td className={styles.action}>
                   <Link
                     href={{
-                      pathname: "/purchases/edit-purchase",
+                      pathname: "/purchases/single-purchase",
                       query: { purchaseId: purchase._id },
                     }}
                   >
-                    <Edit />
+                    <ArrowRightAlt />
                   </Link>
-
-                  <button
-                    onClick={() =>
-                      handleDelete(
-                        "/purchases",
-                        purchase._id,
-                        purchases,
-                        setPurchases
-                      )
-                    }
-                  >
-                    <Delete />
-                  </button>
                 </td>
               </tr>
             ))}

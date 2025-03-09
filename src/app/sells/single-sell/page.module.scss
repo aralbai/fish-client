@@ -1,0 +1,125 @@
+@import "../../styles/variables.module.scss";
+
+.singleSell {
+  margin: 20px;
+  color: $font-color;
+
+  h1 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .sellInfo {
+    display: flex;
+    gap: 20;
+
+    .left,
+    .right {
+      width: 50%;
+      padding: 20px;
+      box-shadow: $card-box-shadow;
+      border-radius: 5px;
+
+      h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      ul {
+        li {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid $border-bottom-color;
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    .left {
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+
+        button,
+        a {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 10px;
+          border-radius: 50%;
+
+          &:hover {
+            background-color: $button-hover-color;
+          }
+        }
+      }
+    }
+  }
+
+  .repays {
+    padding: 20px;
+    box-shadow: $card-box-shadow;
+    border-radius: 5px;
+    margin-top: 20px;
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+
+      tr {
+        td {
+          padding: 10px;
+          border-bottom: 1px solid $border-bottom-color;
+
+          &:first-child {
+            padding-left: 20px;
+          }
+
+          &:last-child {
+            padding-right: 20px;
+          }
+        }
+
+        .action {
+          display: flex;
+          align-items: center;
+
+          button,
+          a {
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+              background-color: $button-hover-color;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .empty {
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

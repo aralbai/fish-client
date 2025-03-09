@@ -55,8 +55,8 @@ export default function Debts() {
                 <td className={styles.action}>
                   <Link
                     href={{
-                      pathname: "/debts/edit-debt",
-                      query: { debtId: debt._id },
+                      pathname: "/sells/single-sell",
+                      query: { sellId: debt._id },
                     }}
                   >
                     <ArrowRightAlt />

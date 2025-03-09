@@ -1,7 +1,7 @@
 "use client";
 import Chart from "@/components/chart/Chart";
 import styles from "./page.module.scss";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   AccountBalanceWallet,
   AssuredWorkload,
@@ -9,8 +9,11 @@ import {
 } from "@mui/icons-material";
 import Link from "next/link";
 import { fetchData } from "@/utils/fetchData";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function Home() {
+  const { user, logout } = useContext(AuthContext);
+
   const [deposits, setDeposits] = useState([]);
   const [sells, setSells] = useState([]);
   const [outcomes, setOutcomes] = useState([]);

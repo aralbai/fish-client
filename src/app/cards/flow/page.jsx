@@ -16,7 +16,7 @@ export default function Flow() {
 
   useEffect(() => {
     fetchData("/purchases/active", setPurchases);
-  }, []);
+  }, [isModalOpen]);
 
   return (
     <div className={styles.products}>

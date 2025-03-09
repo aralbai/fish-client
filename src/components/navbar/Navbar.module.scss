@@ -1,6 +1,7 @@
+@import "../../app/styles/variables.module.scss";
+
 .navbar {
   width: 100%;
-  overflow: hidden;
   color: #34314c;
   z-index: 1;
   background-color: #fff;
@@ -29,6 +30,63 @@
     .menuIcon {
       font-size: 30px;
       cursor: pointer;
+    }
+  }
+
+  .user {
+    display: flex;
+    position: relative;
+
+    .account {
+      display: flex;
+      border-radius: 30px;
+      padding: 2px;
+      align-items: center;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $button-hover-color;
+      }
+
+      p {
+        padding: 10px;
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+
+        .icon {
+          font-size: 35px;
+        }
+      }
+    }
+
+    .popup {
+      width: 100%;
+      min-width: max-content;
+      position: absolute;
+      background-color: #fff;
+      bottom: -90px;
+      right: 0;
+      z-index: 999999999999999;
+      overflow: visible;
+      border-radius: 5px;
+      box-shadow: $card-box-shadow;
+      display: flex;
+      flex-direction: column;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        padding: 10px 20px;
+
+        &:hover {
+          background-color: $button-hover-color;
+        }
+      }
     }
   }
 }
