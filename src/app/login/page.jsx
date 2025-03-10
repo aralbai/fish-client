@@ -17,8 +17,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(user);
-
     await axios
       .post(`http://localhost:5000/api/users/login`, user)
       .then((res) => {
@@ -29,6 +27,11 @@ export default function Login() {
         toast.error(err?.response?.data?.message);
         console.log(err);
       });
+
+    setUser({
+      username: "",
+      password: "",
+    });
   };
 
   return (

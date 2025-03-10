@@ -3,6 +3,7 @@ import "./globals.scss";
 import Layout from "@/components/layout/Layout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -20,8 +21,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${roboto.className}`}>
-        <Layout>{children}</Layout>
-        <ToastContainer position="top-right" autoClose={3000} />
+        <AuthProvider>
+          <Layout>{children}</Layout>
+          <ToastContainer position="top-right" autoClose={3000} />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,31 +1,42 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import styles from "./Layout.module.scss";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthContext, AuthProvider } from "@/context/AuthContext";
+import { useContext, useEffect, useState } from "react";
+import Loading from "../loading/Loading";
 
 export default function Layout({ children }) {
+  const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
   const path = usePathname();
+  const router = useRouter();
 
-  if (path === "/login") {
-    return (
-      <AuthProvider>
-        <div>{children}</div>;
-      </AuthProvider>
-    );
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <Loading />;
   } else {
-    return (
-      <AuthProvider>
-        <div className={styles.layout}>
-          <Sidebar />
+    if (path === "/login") {
+      return <div>{children}</div>;
+    } else {
+      if (user) {
+        return (
+          <div className={styles.layout}>
+            <Sidebar />
 
-          <div className={styles.main}>
-            <Navbar />
-            {children}
+            <div className={styles.main}>
+              <Navbar />
+              {children}
+            </div>
           </div>
-        </div>
-      </AuthProvider>
-    );
+        );
+      } else {
+        return <>{children}</>;
+      }
+    }
   }
 }
