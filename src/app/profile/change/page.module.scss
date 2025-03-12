@@ -1,6 +1,6 @@
-@import "../styles/variables.module.scss";
+@import "../../styles/variables.module.scss";
 
-.profile {
+.changeInfo {
   padding: 20px;
   color: $font-color;
   display: flex;
@@ -40,7 +40,7 @@
     }
   }
 
-  .info {
+  .change {
     width: 80%;
     background-color: #fff;
     box-shadow: $card-box-shadow;
@@ -56,28 +56,43 @@
       border-top-right-radius: 5px;
     }
 
-    .bottom {
+    .title {
+      margin-top: 20px;
       padding: 20px;
-      color: $font-color;
+      border-bottom: 1px solid $border-bottom-color;
 
       h2 {
-        text-align: center;
-        margin-top: 30px;
         font-size: 20px;
+        color: $font-color;
+      }
+    }
+
+    form {
+      padding: 20px;
+
+      div {
+        display: flex;
+        gap: 20px;
+
+        input {
+          width: 33%;
+          padding: 10px;
+          outline: none;
+          border: 1px solid $input-border-color;
+          border-radius: 5px;
+          font-size: 15px;
+        }
       }
 
-      span {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 100px;
-        margin-top: 30px;
-
-        p {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
+      .submit {
+        background-color: $primary-color;
+        color: #fff;
+        padding: 10px 40px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 20px;
+        font-size: 15px;
       }
     }
   }

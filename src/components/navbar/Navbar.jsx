@@ -8,6 +8,7 @@ import {
 import styles from "./Navbar.module.scss";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
+import Link from "next/link";
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
@@ -56,8 +57,10 @@ export default function Navbar() {
             onClick={(e) => e.stopPropagation()}
           >
             <li>
-              <Settings />
-              Settings
+              <Link href="/profile">
+                <Settings />
+                Settings
+              </Link>
             </li>
             <li onClick={logout}>
               <PowerSettingsNew />

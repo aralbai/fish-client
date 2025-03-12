@@ -3,7 +3,6 @@ import Link from "next/link";
 import styles from "./Sidebar.module.scss";
 import {
   AccountBox,
-  AddBox,
   Archive,
   ChevronRight,
   Dashboard,

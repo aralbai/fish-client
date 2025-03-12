@@ -83,8 +83,15 @@
         cursor: pointer;
         padding: 10px 20px;
 
+        a {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
         &:hover {
           background-color: $button-hover-color;
+          border-radius: 5px;
         }
       }
     }
