@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import Link from "next/link";
 import {
+  AccountBalanceWallet,
   ArrowRightAlt,
   Delete,
   Edit,
@@ -19,48 +20,46 @@ import { AuthContext } from "@/context/AuthContext";
 import LimitModal from "@/components/limitModal/LimitModal";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 
-export default function SinglePurchase() {
+export default function SingleCustumer() {
   const { user } = useContext(AuthContext);
-  const [purchase, setPurchase] = useState({});
+  const [custumer, setCustumer] = useState({});
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [limitModal, setLimitModal] = useState(false);
-  const [purchaseSells, setPurchaseSells] = useState([]);
+  const [custumerDebts, setCustumedebts] = useState([]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const purchaseId = searchParams.get("purchaseId");
+  const custumerId = searchParams.get("custumerId");
 
   const tableRef = useRef();
 
   useEffect(() => {
-    fetchData(`/purchases/${purchaseId}`, setPurchase);
+    fetchData(`/custumers/${custumerId}`, setCustumer);
     fetchData(`/users/all`, setUsers);
-    fetchData(`/sells/single/purchase/${purchaseId}`, setPurchaseSells);
+    fetchData(`/sells/single/debts/${custumerId}`, setCustumedebts);
   }, [isModalOpen, limitModal]);
 
   const handleDelete = async (e) => {
     e.preventDefault();
 
     await axios
-      .delete(`http://localhost:5000/api/purchases/${purchaseId}`)
+      .delete(`http://localhost:5000/api/custumers/${custumerId}`)
       .then((res) => {
         toast.success(res.data);
-        router.push("/purchases");
+        router.push("/custumers");
       });
   };
 
-  console.log(purchaseSells);
-
   return (
-    <div className={styles.singlePurchase}>
+    <div className={styles.singleCustumer}>
       <div className={styles.title}>
-        <h1>Разовая покупка</h1>
+        <h1>Единый клиент</h1>
 
         <PrimaryBtn
           type="link"
           fullname="Вернуться к списку"
-          url="/purchases"
+          url="/custumers"
           icon={<KeyboardBackspace />}
         >
           <KeyboardBackspace />
@@ -68,27 +67,25 @@ export default function SinglePurchase() {
         </PrimaryBtn>
       </div>
 
-      <div className={styles.purchaseInfo}>
+      <div className={styles.custumerInfo}>
         <div className={styles.left}>
           <div className={styles.top}>
-            <h2>Информация о покупке</h2>
+            <h2>Информация о клиенте</h2>
 
             <div>
               <Link
                 href={{
-                  pathname: "/purchases/edit-purchase",
+                  pathname: "/custumers/edit-custumer",
                   query: {
-                    purchaseId: purchase._id,
+                    custumerId: custumer._id,
                   },
                 }}
               >
                 <Edit />
               </Link>
-              {purchaseSells.length <= 0 && (
-                <button onClick={handleDelete}>
-                  <Delete />
-                </button>
-              )}
+              <button onClick={handleDelete}>
+                <Delete />
+              </button>
               <button
                 onClick={() => {
                   setLimitModal(true);
@@ -101,47 +98,28 @@ export default function SinglePurchase() {
 
           <ul>
             <li>
-              <p>Продукта</p>
-              <p>{purchase?.product?.title}</p>
+              <p>Имя клиента</p>
+              <p>{custumer?.fullname}</p>
             </li>
             <li>
-              <p>Поставщик</p>
-              <p>{purchase?.supplier?.title}</p>
+              <p>Номер телефона</p>
+              <p>{custumer?.phone}</p>
             </li>
             <li>
-              <p>Номер автомобиля</p>
-              <p>{purchase?.carNumber}</p>
+              <p>Адрес</p>
+              <p>{custumer?.address}</p>
             </li>
             <li>
-              <p>Количество</p>
-              <p>{purchase?.amount}</p>
-            </li>
-
-            <li>
-              <p>Цена</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase.price)}</p>
-            </li>
-            <li>
-              <p>Скидка</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase.discount)}</p>
-            </li>
-            <li>
-              <p>Долг</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase.debt)}</p>
-            </li>
-            <li>
-              <p>Оплачено</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase.given)}</p>
-            </li>
-            <li>
-              <p>Остальные</p>
+              <p>Лимит</p>
               <p>
-                {Intl.NumberFormat("ru-RU").format(purchase.remainingAmount)}
+                {custumer.limit === -1
+                  ? "Безлимитный"
+                  : Intl.NumberFormat("ru-RU").format(custumer.limit)}
               </p>
             </li>
             <li>
-              <p>Недостаток</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase.shortage)}</p>
+              <p>Лимит</p>
+              <p>{Intl.NumberFormat("ru-RU").format(custumer.debt)}</p>
             </li>
           </ul>
         </div>
@@ -155,15 +133,15 @@ export default function SinglePurchase() {
             <li>
               <p>Дата добавления</p>
               <p>
-                {purchase?.createdAt &&
-                  format(new Date(purchase?.createdAt), "dd.MM.yyyy HH:mm")}
+                {custumer?.createdAt &&
+                  format(new Date(custumer?.createdAt), "dd.MM.yyyy hh:mm:ss")}
               </p>
             </li>
             <li>
               <p>Дата изменения</p>
               <p>
-                {purchase?.updatedAt &&
-                  format(new Date(purchase?.updatedAt), "dd.MM.yyyy HH:mm")}
+                {custumer?.updatedAt &&
+                  format(new Date(custumer?.updatedAt), "dd.MM.yyyy hh:mm:ss")}
               </p>
             </li>
 
@@ -173,7 +151,7 @@ export default function SinglePurchase() {
                 <p>
                   {users?.map(
                     (user) =>
-                      user._id === purchase.addedUserId && (
+                      user._id === custumer.addedUserId && (
                         <Link
                           href="/users"
                           key={user._id}
@@ -193,7 +171,7 @@ export default function SinglePurchase() {
                 <p>
                   {users?.map(
                     (user) =>
-                      user?._id === purchase?.changedUserId && (
+                      user?._id === custumer?.changedUserId && (
                         <Link
                           href="/users"
                           key={user._id}
@@ -211,27 +189,25 @@ export default function SinglePurchase() {
       </div>
 
       <div className={styles.repays}>
-        <h2>Список продаж</h2>
+        <h2>Список долгов</h2>
 
         <table ref={tableRef}>
           <thead>
             <tr>
               <td>Продукта</td>
-              <td>Клиент</td>
               <td>Amount</td>
-              <td>Цена</td>
+              <td>Debt</td>
               <td>Дата</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
-            {purchaseSells.length > 0 &&
-              purchaseSells.map((sell) => (
+            {custumerDebts.length > 0 &&
+              custumerDebts.map((sell) => (
                 <tr key={sell._id}>
                   <td>{sell.product?.title}</td>
-                  <td>{sell.custumer?.fullname}</td>
                   <td>{sell.amount}</td>
-                  <td>{Intl.NumberFormat("ru-RU").format(sell.price)}</td>
+                  <td>{Intl.NumberFormat("ru-RU").format(sell.debt)}</td>
                   <td>
                     {format(new Date(sell.addedDate), "dd.MM.yyyy HH:mm")}
                   </td>
@@ -252,7 +228,7 @@ export default function SinglePurchase() {
           </tbody>
         </table>
 
-        {purchaseSells.length < 1 && (
+        {custumerDebts.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}
       </div>
@@ -260,13 +236,13 @@ export default function SinglePurchase() {
       <RepayModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        purchaseId={purchaseId}
+        custumerId={custumerId}
       />
 
       <LimitModal
         isModalOpen={limitModal}
         setIsModalOpen={setLimitModal}
-        purchaseId={purchaseId}
+        custumerId={custumerId}
       />
     </div>
   );

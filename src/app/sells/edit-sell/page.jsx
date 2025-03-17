@@ -3,12 +3,14 @@ import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "@/components/input/Input";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function EditSupplier() {
+  const { user } = useContext(AuthContext);
   const searchParams = useSearchParams();
   const supplierId = searchParams.get("id");
   const supplierTitle = searchParams.get("title");
@@ -19,6 +21,7 @@ export default function EditSupplier() {
     title: supplierTitle,
     phone: supplierPhone,
     address: supplierAddress,
+    changedUserId: user?.id,
   });
 
   const [inputErr, setInputErr] = useState({

@@ -4,29 +4,43 @@ import Input from "@/components/input/Input";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { KeyboardBackspace } from "@mui/icons-material";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
-import { handleSubmit } from "@/utils/handleSubmit";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function EditProduct() {
+  const { user } = useContext(AuthContext);
   const router = useRouter();
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
   const [changedProduct, setChangedProduct] = useState({
     title: "",
+    changedUserId: user?.id,
   });
 
   useEffect(() => {
     fetchData(`/products/${productId}`, setChangedProduct);
   }, []);
 
-  const pageHandleSubmit = (e) => {
-    const { _id, _v, updatedAt, createdAt, ...data } = changedProduct;
+  const pageHandleSubmit = async (e) => {
+    e.preventDefault();
 
-    handleSubmit(e, productId, "products", data, setChangedProduct);
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`, {
+        title: changedProduct?.title,
+        changedUserId: user?.id,
+      })
+      .then((res) => {
+        toast.success(res.data);
 
-    router.push("/products");
+        router.push("/products");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
 
   return (

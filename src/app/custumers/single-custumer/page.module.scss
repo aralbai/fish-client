@@ -1,6 +1,6 @@
 @import "../../styles/variables.module.scss";
 
-.singlePurchase {
+.singleCustumer {
   margin: 20px;
   color: $font-color;
 
@@ -18,7 +18,7 @@
     }
   }
 
-  .purchaseInfo {
+  .custumerInfo {
     display: flex;
     gap: 20;
 

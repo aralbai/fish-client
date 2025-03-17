@@ -3,13 +3,17 @@ import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "@/components/input/Input";
 import { handleSubmit } from "@/utils/handleSubmit";
 import { fetchData } from "@/utils/fetchData";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function EditSupplier() {
+  const { user } = useContext(AuthContext);
   const router = useRouter();
   const searchParams = useSearchParams();
   const supplierId = searchParams.get("supplierId");
@@ -21,11 +25,25 @@ export default function EditSupplier() {
   });
 
   const pageHandleSubmit = async (e) => {
-    const { _id, _v, updatedAt, createdAt, ...data } = changedSupplier;
+    e.preventDefault();
 
-    handleSubmit(e, supplierId, "suppliers", data, setChangedSupplier);
+    const data = {
+      title: changedSupplier.title,
+      phone: changedSupplier.phone,
+      address: changedSupplier.address,
+      changedUserId: user?.id,
+    };
 
-    router.push("/suppliers");
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/suppliers/${supplierId}`, data)
+      .then((res) => {
+        toast.success(res.data);
+
+        router.push("/suppliers");
+      })
+      .catch((err) => {
+        toast.success(err?.response?.data?.message);
+      });
   };
 
   useEffect(() => {

@@ -35,8 +35,7 @@ export default function Purchases() {
             <tr>
               <td>Продукта</td>
               <td>Поставщик</td>
-              <td>Ном</td>
-              <td>Кол</td>
+              <td>Количество</td>
               <td>Скидка</td>
               <td>Цена</td>
               <td>Долг</td>
@@ -51,7 +50,6 @@ export default function Purchases() {
               <tr key={purchase._id}>
                 <td>{purchase.product?.title}</td>
                 <td>{purchase.supplier?.title}</td>
-                <td>{purchase.carNumber}</td>
                 <td>{purchase.amount}</td>
 
                 <td>

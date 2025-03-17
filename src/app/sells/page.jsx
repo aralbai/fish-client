@@ -48,7 +48,7 @@ export default function Sells() {
             {sells.map((sell) => (
               <tr key={sell._id}>
                 <td>{sell.product.title}</td>
-                <td>{sell.custumer.fullname}</td>
+                <td>{sell.custumer?.fullname}</td>
                 <td>{sell.amount}</td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")

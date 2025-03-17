@@ -3,13 +3,17 @@ import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "@/components/input/Input";
 import { fetchData } from "@/utils/fetchData";
 import { handleSubmit } from "@/utils/handleSubmit";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function EditCustumer() {
+  const { user } = useContext(AuthContext);
   const router = useRouter();
   const searchParams = useSearchParams();
   const custumerId = searchParams.get("custumerId");
@@ -20,17 +24,28 @@ export default function EditCustumer() {
     address: "",
   });
 
-  const pageHandleSubmit = async (e) => {
-    const { _id, _v, updatedAt, createdAt, ...data } = changedCustumer;
-
-    handleSubmit(e, custumerId, "custumers", data, setChangedCustumer);
-
-    router.push("/custumers");
-  };
-
   useEffect(() => {
     fetchData(`/custumers/${custumerId}`, setChangedCustumer);
   }, []);
+
+  const pageHandleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { fullname, phone, address } = changedCustumer;
+
+    const data = { fullname, phone, address, changedUserId: user?.id };
+
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/custumers/${custumerId}`, data)
+      .then((res) => {
+        toast.success(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
+
+    router.push(`/custumers/single-custumer?custumerId=${custumerId}`);
+  };
 
   return (
     <div className={styles.editProduct}>

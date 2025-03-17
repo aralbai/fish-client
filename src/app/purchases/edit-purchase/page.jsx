@@ -18,11 +18,14 @@ export default function EditSupplier() {
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [changedPurchase, setChangedPurchase] = useState({
-    productId: "",
-    supplierId: "",
+    product: "",
+    supplier: "",
     carNumber: "",
     amount: "",
     price: "",
+    perKilo: "",
+    debt: "",
+    discount: "",
     addedDate: new Date(),
   });
 
@@ -34,6 +37,17 @@ export default function EditSupplier() {
     handleSubmit(e, purchaseId, "purchases", data, setChangedPurchase);
 
     router.push("/purchases");
+
+    setChangedPurchase({
+      product: "",
+      supplier: "",
+      carNumber: "",
+      amount: "",
+      price: "",
+      debt: "",
+      discount: "",
+      addedDate: new Date(),
+    });
   };
 
   useEffect(() => {
@@ -41,6 +55,8 @@ export default function EditSupplier() {
     fetchData("/products", setProducts);
     fetchData("/suppliers", setSuppliers);
   }, []);
+
+  console.log(changedPurchase);
 
   return (
     <div className={styles.editProduct}>
@@ -61,43 +77,189 @@ export default function EditSupplier() {
         </div>
 
         <form onSubmit={pageHandleSubmit}>
+          {/* Product Supplier CarNumber */}
           <div className={styles.inputGroup}>
-            <Select
-              name="productId"
-              mapData={products}
-              text="title"
-              defValue="Выберите продукт"
-              setData={setChangedPurchase}
-            />
-            <Select
-              name="supplierId"
-              mapData={suppliers}
-              text="title"
-              defValue="Выберите поставщика"
-              setData={setChangedPurchase}
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <Input
-              type="number"
-              name="amount"
-              placeholder="Количество"
-              value={changedPurchase.amount}
-              setData={setChangedPurchase}
-            />
-            <Input
-              type="number"
-              name="price"
-              placeholder="Цена"
-              value={changedPurchase.price}
-              setData={setChangedPurchase}
-            />
-            <DatePick
-              defDate={changedPurchase.addedDate}
-              setDate={setChangedPurchase}
-            />
+            <div className={styles.input}>
+              <label htmlFor="">Product</label>
+              <select
+                name="productId"
+                value={changedPurchase?.product?.id}
+                onChange={(e) =>
+                  setChangedPurchase((prev) => ({
+                    ...prev,
+                    product: e.target.value,
+                  }))
+                }
+              >
+                <option value={changedPurchase?.product?.id} hidden>
+                  {changedPurchase?.product?.title}
+                </option>
+                {products?.map((product) => (
+                  <option value={product?._id} key={product?._id}>
+                    {product?.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.input}>
+              <label htmlFor="">Supplier</label>
+              <select
+                name="productId"
+                value={changedPurchase?.supplier?.id}
+                onChange={(e) =>
+                  setChangedPurchase((prev) => ({
+                    ...prev,
+                    supplier: e.target.value,
+                  }))
+                }
+              >
+                <option value={changedPurchase?.supplier?.id} hidden>
+                  {changedPurchase?.supplier?.title}
+                </option>
+                {suppliers?.map((supplier) => (
+                  <option value={supplier?._id} key={supplier?._id}>
+                    {supplier?.title}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
+          {/* Amount PerKilo  */}
+          <div className={styles.inputGroup}>
+            <div className={styles.input}>
+              <label htmlFor="">Amount</label>
+              <input
+                type="number"
+                name="Amount"
+                value={changedPurchase.amount}
+                onChange={(e) =>
+                  setChangedPurchase((prev) => ({
+                    ...prev,
+                    amount: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className={styles.input}>
+              <label htmlFor="">Price</label>
+              <input
+                type="number"
+                name="Amount"
+                value={changedPurchase.perKilo}
+                onChange={(e) =>
+                  setChangedPurchase((prev) => ({
+                    ...prev,
+                    perKilo: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          </div>
+
+          {/* CarNumber AddedDate  */}
+          <div className={styles.inputGroup}>
+            <div className={styles.input}>
+              <label htmlFor="">Car Number</label>
+              <input
+                type="text"
+                value={changedPurchase.carNumber}
+                onChange={(e) =>
+                  setChangedPurchase((prev) => ({
+                    ...prev,
+                    carNumber: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className={styles.input}>
+              <label htmlFor="">Added date</label>
+              <DatePick
+                defDate={changedPurchase.addedDate}
+                setDate={setChangedPurchase}
+              />
+            </div>
+          </div>
+
+          {/* Discount Debt  */}
+          <div className={styles.inputGroup}>
+            <div className={styles.input}>
+              <label htmlFor="">Discount</label>
+              <input
+                type="number"
+                value={changedPurchase.discount}
+                onChange={(e) =>
+                  setChangedPurchase((prev) => ({
+                    ...prev,
+                    discount: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className={styles.input}>
+              <label htmlFor="">Debt</label>
+              <input
+                type="number"
+                value={changedPurchase.debt}
+                onChange={(e) =>
+                  setChangedPurchase((prev) => ({
+                    ...prev,
+                    debt: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          </div>
+
+          <div className={styles.bottom}>
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Итого:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(changedPurchase.amount * changedPurchase.perKilo)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+              <div className={styles.calc}>
+                <p>Скидка:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(changedPurchase.discount)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+            </div>
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Долг:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(changedPurchase.debt)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+              <div className={styles.calc}>
+                <p>Оплачено:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(
+                      changedPurchase.amount * changedPurchase.perKilo -
+                        changedPurchase.discount -
+                        changedPurchase.debt
+                    )
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+            </div>
+          </div>
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>

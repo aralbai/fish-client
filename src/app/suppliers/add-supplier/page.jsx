@@ -2,25 +2,36 @@
 import styles from "./page.module.scss";
 import { KeyboardBackspace } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "@/components/input/Input";
-import { handleSubmit } from "@/utils/handleSubmit";
+import { AuthContext } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function AddSupplier() {
+  const router = useRouter();
+  const { user } = useContext(AuthContext);
   const [supplier, setSupplier] = useState({
     title: "",
     phone: "",
     address: "",
+    addedUserId: user?.id,
   });
 
-  const pageHandleSubmit = (e) => {
-    handleSubmit(e, "create", "suppliers", supplier, setSupplier);
+  const pageHandleSubmit = async (e) => {
+    e.preventDefault();
 
-    setSupplier({
-      title: "",
-      phone: "",
-      address: "",
-    });
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/suppliers`, supplier)
+      .then((res) => {
+        toast.success(res.data);
+
+        router.push("/suppliers");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
 
   return (
@@ -42,32 +53,36 @@ export default function AddSupplier() {
         </div>
 
         <form onSubmit={pageHandleSubmit}>
-          <Input
-            type="text"
-            name="title"
-            placeholder="Название поставщика"
-            value={supplier.title}
-            setData={setSupplier}
-            required={true}
-          />
-          <Input
-            type="text"
-            name="phone"
-            placeholder="Номер телефона"
-            value={supplier.phone}
-            setData={setSupplier}
-            required={false}
-          />
-          <Input
-            type="text"
-            name="address"
-            placeholder="Адрес"
-            value={supplier.address}
-            setData={setSupplier}
-            required={false}
-          />
+          <div className={styles.inputGroup}>
+            <Input
+              type="text"
+              name="title"
+              placeholder="Название поставщика"
+              value={supplier.title}
+              setData={setSupplier}
+              required={true}
+            />
+            <Input
+              type="text"
+              name="phone"
+              placeholder="Номер телефона"
+              value={supplier.phone}
+              setData={setSupplier}
+              required={false}
+            />
+            <Input
+              type="text"
+              name="address"
+              placeholder="Адрес"
+              value={supplier.address}
+              setData={setSupplier}
+              required={false}
+            />
+          </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          </div>
         </form>
       </div>
     </div>

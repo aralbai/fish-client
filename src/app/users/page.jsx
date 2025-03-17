@@ -18,11 +18,11 @@ export default function Users() {
 
   return (
     <div className={styles.users}>
-      <h1>Клиенты</h1>
+      <h1>Пользователи</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все клиенты</h1>
+          <h1>Все пользователи</h1>
           <Link href="/users/add-user">
             <Add />
             Создать новый
@@ -34,14 +34,16 @@ export default function Users() {
         <table ref={tableRef}>
           <thead>
             <tr>
-              <td>Имя клиента</td>
-              <td>Номер телефона</td>
+              <td>Полное имя</td>
+              <td>Имя пользователя</td>
+              <td>Роль</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
             {users?.map((user) => (
               <tr key={user._id}>
+                <td>{user.fullname}</td>
                 <td>{user.username}</td>
                 <td>{user.role}</td>
                 <td className={styles.action}>

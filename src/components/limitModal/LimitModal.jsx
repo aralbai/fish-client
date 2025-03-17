@@ -3,38 +3,70 @@ import styles from "./LimitModal.module.scss";
 import Input from "../input/Input";
 import PrimaryBtn from "../primaryBtn/PrimaryBtn";
 import { useState } from "react";
-import { handleSubmit } from "@/utils/handleSubmit";
+import { toast } from "react-toastify";
+import axios from "axios";
+import CheckBox from "../checkBox/CheckBox";
 
 export default function LimitModal({
   isModalOpen,
   setIsModalOpen,
-  purchaseId,
+  custumerId,
 }) {
-  const [purchase, setPurchase] = useState({
-    shortage: "",
+  const [custumer, setCustumer] = useState({
+    limit: "",
   });
+  const [unlimited, setUnlimited] = useState(false);
+  const [error, setError] = useState("");
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
-    handleSubmit(e, purchaseId, "purchases/shortage", purchase, setPurchase);
+    if (custumer.limit <= 0 && !unlimited) {
+      return setError("Сумма лимита не введена.");
+    }
 
-    setIsModalOpen(false);
+    const data = unlimited ? { limit: -1 } : { limit: custumer.limit };
 
-    setPurchase({
-      shortage: "",
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_API_URL}/custumers/limit/${custumerId}`,
+        data
+      )
+      .then((res) => {
+        toast.success(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.dat?.message);
+      });
+
+    setCustumer({
+      limit: "",
     });
+    setError("");
+    setUnlimited(false);
+    setIsModalOpen(false);
   };
 
   if (!isModalOpen) return null;
+
+  console.log(unlimited);
 
   return (
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Недостаток товаров</h2>
+          <h2>Лимит клиента</h2>
 
-          <button onClick={() => setIsModalOpen(false)}>
+          <button
+            onClick={() => {
+              setIsModalOpen(false);
+              setError("");
+              setCustumer({
+                limit: "",
+              });
+              setUnlimited(false);
+            }}
+          >
             <Close />
           </button>
         </div>
@@ -42,11 +74,25 @@ export default function LimitModal({
         <form className={styles.bottom} onSubmit={pageHandleSubmit}>
           <Input
             type="text"
-            name="shortage"
+            name="limit"
             placeholder="Количество"
-            value={purchase.shortage}
-            setData={setPurchase}
+            value={custumer.limit}
+            setData={setCustumer}
           />
+
+          <div className={styles.unlimited}>
+            <CheckBox id="limit" value={unlimited} setData={setUnlimited} />
+            <label htmlFor="limit">Unlimited</label>
+          </div>
+
+          <p>
+            Лимит:{" "}
+            {unlimited
+              ? "Безлимитный"
+              : Intl.NumberFormat("ru-RU").format(custumer.limit)}
+          </p>
+
+          <p className={styles.error}>{error}</p>
 
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>

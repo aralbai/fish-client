@@ -31,18 +31,10 @@
     }
 
     form {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 20px;
-      padding: 20px;
-
-      input {
-        padding: 10px;
-        outline: none;
-        border: 1px solid $input-border-color;
-        border-radius: 5px;
-        font-size: 15px;
+      .inputGroup {
+        display: flex;
+        gap: 20px;
+        margin: 20px;
       }
     }
   }

@@ -26,7 +26,8 @@ export default function TableTop({ tableRef }) {
     <div className={styles.tableTop}>
       <div></div>
       <button onClick={exportToExcel} className={styles.excelButton}>
-        <SystemUpdateAlt /> Export to Excel
+        <SystemUpdateAlt />
+        Экспорт в Excel
       </button>
     </div>
   );

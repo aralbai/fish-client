@@ -2,7 +2,7 @@
 import styles from "./page.module.scss";
 import { KeyboardBackspace } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "@/components/input/Input";
 import Select from "@/components/select/Select";
 import DatePick from "@/components/datePicker/DatePicker";
@@ -11,8 +11,10 @@ import CheckBox from "@/components/checkBox/CheckBox";
 import { handleSubmit } from "@/utils/handleSubmit";
 import CustumerModal from "@/components/custumerModal/CustumerModal";
 import { format } from "date-fns";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function AddSell() {
+  const { user } = useContext(AuthContext);
   const [purchases, setPurchases] = useState([]);
   const [custumers, setCustumers] = useState([]);
   const [sell, setSell] = useState({
@@ -45,23 +47,12 @@ export default function AddSell() {
       custumer: checkClient ? sell.custumerName : sell.custumer,
       price: sell.price * sell.amount - sell.discount,
       discount: sell.discount === "" ? 0 : sell.discount,
-      debt: sell.debt === "" ? 0 : sell.debt,
+      debt: sell.debt === "" ? 0 : parseFloat(sell.debt),
       given: sell.price * sell.amount - sell.discount - sell.debt,
+      addedUserId: user?.id,
     };
 
     handleSubmit(e, "create", "sells", data, setSell);
-
-    setSell({
-      purchase: "Выберите поток",
-      product: "Выберите продукт",
-      custumer: "Выберите клиента",
-      custumerName: "",
-      amount: "",
-      price: "",
-      discount: "",
-      debt: "",
-      addedDate: new Date(),
-    });
   };
 
   const handleChange = (e) => {
@@ -70,13 +61,13 @@ export default function AddSell() {
     setSell((prev) => ({
       ...prev,
       purchase: e.target.value,
-      product: givenPurchase.product.title,
+      product: givenPurchase.product?.id,
     }));
 
     setCheckAmount(givenPurchase.remainingAmount);
   };
 
-  console.log(checkAmount);
+  console.log(sell);
 
   return (
     <div className={styles.addProduct}>

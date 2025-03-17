@@ -2,16 +2,19 @@
 import styles from "./page.module.scss";
 import { Add, KeyboardBackspace } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "@/components/input/Input";
 import Select from "@/components/select/Select";
 import DatePick from "@/components/datePicker/DatePicker";
 import { fetchData } from "@/utils/fetchData";
-import { handleSubmit } from "@/utils/handleSubmit";
 import ProductModal from "@/components/productModal/ProductModal";
 import SupplierModal from "@/components/supplierModal/SupplierModal";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function AddPurchase() {
+  const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [purchase, setPurchase] = useState({
@@ -35,30 +38,28 @@ export default function AddPurchase() {
     fetchData("/suppliers", setSuppliers);
   }, []);
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
+    e.preventDefault();
+
     const data = {
       ...purchase,
-      remainingAmount: purchase.amount,
+      perKilo: purchase.price,
       price: purchase.price * purchase.amount - purchase.discount,
       discount: purchase.discount === "" ? 0 : purchase.discount,
       debt: purchase.debt === "" ? 0 : purchase.debt,
       given:
         purchase.price * purchase.amount - purchase.discount - purchase.debt,
+      addedUserId: user?.id,
     };
 
-    handleSubmit(e, "create", "purchases", data, setPurchase);
-
-    setPurchase({
-      product: "Выберите продукт",
-      supplier: "Выберите поставщика",
-      carNumber: "",
-      amount: "",
-      price: "",
-      given: "",
-      debt: "",
-      discount: "",
-      addedDate: new Date(),
-    });
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/purchases`, data)
+      .then((res) => {
+        toast.success(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
 
   return (

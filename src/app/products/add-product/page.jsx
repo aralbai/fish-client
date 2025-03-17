@@ -3,21 +3,40 @@ import styles from "./page.module.scss";
 import Input from "@/components/input/Input";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { KeyboardBackspace } from "@mui/icons-material";
-import { useState } from "react";
-import { handleSubmit } from "@/utils/handleSubmit";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function AddProduct() {
+  const { user } = useContext(AuthContext);
+  const router = useRouter();
   const [product, setProduct] = useState({
     title: "",
   });
 
-  const pageHandleSubmit = (e) => {
-    handleSubmit(e, "create", "products", product, setProduct);
+  const pageHandleSubmit = async (e) => {
+    e.preventDefault();
 
-    setProduct({
-      title: "",
-    });
+    const data = {
+      title: product.title,
+      addedUserId: user.id,
+      changedUserId: user.id,
+    };
+
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/products`, data)
+      .then((res) => {
+        toast.success(res.data);
+
+        router.push("/products");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
+
   return (
     <div className={styles.addProduct}>
       <h1>Продукты</h1>
@@ -37,14 +56,16 @@ export default function AddProduct() {
         </div>
 
         <form onSubmit={pageHandleSubmit}>
-          <Input
-            type="text"
-            name="title"
-            placeholder="Количество"
-            value={product.title}
-            setData={setProduct}
-            required={true}
-          />
+          <div className={styles.inputGroup}>
+            <Input
+              type="text"
+              name="title"
+              placeholder="Количество"
+              value={product.title}
+              setData={setProduct}
+              required={true}
+            />
+          </div>
 
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
