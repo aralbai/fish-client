@@ -7,7 +7,6 @@ import { format } from "date-fns";
 import Link from "next/link";
 import {
   ArrowRightAlt,
-  BedtimeOff,
   Delete,
   Edit,
   KeyboardBackspace,
@@ -16,56 +15,63 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import ShortageModal from "@/components/shortageModal/ShortageModal";
 import DeleteModal from "@/components/deleteModal/DeleteModal";
 
-export default function SinglePurchase() {
+export default function SingleSupplier() {
   const { user } = useContext(AuthContext);
-  const [purchase, setPurchase] = useState({});
+  const [supplier, setSupplier] = useState({});
   const [users, setUsers] = useState([]);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [shortageModalOpen, setShortageModalOpen] = useState(false);
-  const [purchaseSells, setPurchaseSells] = useState([]);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [purchases, setPurchases] = useState([]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const purchaseId = searchParams.get("purchaseId");
+  const supplierId = searchParams.get("supplierId");
 
   const tableRef = useRef();
 
   useEffect(() => {
-    fetchData(`/purchases/${purchaseId}`, setPurchase);
+    fetchData(`/suppliers/${supplierId}`, setSupplier);
     fetchData(`/users/all`, setUsers);
-    fetchData(`/sells/single/purchase/${purchaseId}`, setPurchaseSells);
-  }, [deleteModalOpen, shortageModalOpen]);
+    fetchData(`/purchases/supplier/purchases/${supplierId}`, setPurchases);
+  }, [deleteModal]);
 
   const handleDeleteClick = (id) => {
-    setDeleteModalOpen(true);
+    setDeleteModal(true);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.preventDefault();
+
     await axios
-      .delete(`${process.env.NEXT_PUBLIC_API_URL}/purchases/${purchaseId}`)
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/suppliers/${supplierId}`)
       .then((res) => {
         toast.success(res.data);
-        router.push("/purchases");
+        router.push("/suppliers");
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
       });
 
-    setDeleteModalOpen(false);
+    setDeleteModal(false);
   };
 
+  const purchasesTotal = purchases.reduce(
+    (sum, purchase) => sum + purchase.debt,
+    0
+  );
+
+  console.log(purchases);
+
   return (
-    <div className={styles.singlePurchase}>
+    <div className={styles.singleSupplier}>
       <div className={styles.title}>
-        <h1>Разовая покупка</h1>
+        <h1>Единый клиент</h1>
 
         <PrimaryBtn
           type="link"
           fullname="Вернуться к списку"
-          url="/purchases"
+          url="/suppliers"
           icon={<KeyboardBackspace />}
         >
           <KeyboardBackspace />
@@ -73,83 +79,44 @@ export default function SinglePurchase() {
         </PrimaryBtn>
       </div>
 
-      <div className={styles.purchaseInfo}>
+      <div className={styles.supplierInfo}>
         <div className={styles.left}>
           <div className={styles.top}>
-            <h2>Информация о покупке</h2>
+            <h2>Информация о клиенте</h2>
 
             <div>
               <Link
                 href={{
-                  pathname: "/purchases/edit-purchase",
+                  pathname: "/suppliers/edit-supplier",
                   query: {
-                    purchaseId: purchaseId,
+                    supplierId: supplierId,
                   },
                 }}
               >
                 <Edit />
               </Link>
-              {purchaseSells.length <= 0 && (
-                <button onClick={handleDeleteClick}>
-                  <Delete />
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  setShortageModalOpen(true);
-                }}
-              >
-                <BedtimeOff />
+              <button onClick={handleDeleteClick}>
+                <Delete />
               </button>
             </div>
           </div>
 
           <ul>
             <li>
-              <p>Продукта</p>
-              <p>{purchase?.product?.title}</p>
-            </li>
-            <li>
               <p>Поставщик</p>
-              <p>{purchase?.supplier?.title}</p>
+              <p>{supplier?.title}</p>
             </li>
             <li>
-              <p>Номер автомобиля</p>
-              <p>{purchase?.carNumber}</p>
+              <p>Номер телефона</p>
+              <p>{supplier?.phone}</p>
             </li>
             <li>
-              <p>Количество</p>
-              <p>{purchase?.amount}</p>
+              <p>Адрес</p>
+              <p>{supplier?.address}</p>
             </li>
             <li>
-              <p>Цена за килограмм</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.price)}</p>
-            </li>
-            <li>
-              <p>Цена</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)}</p>
-            </li>
-            <li>
-              <p>Скидка</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.discount)}</p>
-            </li>
-            <li>
-              <p>Долг</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.debt)}</p>
-            </li>
-            <li>
-              <p>Оплачено</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.given)}</p>
-            </li>
-            <li>
-              <p>Остальные</p>
-              <p>
-                {Intl.NumberFormat("ru-RU").format(purchase?.remainingAmount)}
-              </p>
-            </li>
-            <li>
-              <p>Недостаток</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.shortage)}</p>
+              <p>Наши общие долги</p>
+              <p>{Intl.NumberFormat("ru-RU").format(purchasesTotal)}</p>
             </li>
           </ul>
         </div>
@@ -163,15 +130,15 @@ export default function SinglePurchase() {
             <li>
               <p>Дата добавления</p>
               <p>
-                {purchase?.createdAt &&
-                  format(new Date(purchase?.createdAt), "dd.MM.yyyy HH:mm")}
+                {supplier?.createdAt &&
+                  format(new Date(supplier?.createdAt), "dd.MM.yyyy hh:mm:ss")}
               </p>
             </li>
             <li>
               <p>Дата изменения</p>
               <p>
-                {purchase?.updatedAt &&
-                  format(new Date(purchase?.updatedAt), "dd.MM.yyyy HH:mm")}
+                {supplier?.updatedAt &&
+                  format(new Date(supplier?.updatedAt), "dd.MM.yyyy hh:mm:ss")}
               </p>
             </li>
 
@@ -181,13 +148,13 @@ export default function SinglePurchase() {
                 <p>
                   {users?.map(
                     (user) =>
-                      user._id === purchase?.addedUserId && (
+                      user?._id === supplier?.addedUserId && (
                         <Link
                           href="/users"
                           key={user._id}
                           style={{ color: "#1976D2" }}
                         >
-                          {user?.username}
+                          {user.username}
                         </Link>
                       )
                   )}
@@ -201,7 +168,7 @@ export default function SinglePurchase() {
                 <p>
                   {users?.map(
                     (user) =>
-                      user?._id === purchase?.changedUserId && (
+                      user?._id === supplier?.changedUserId && (
                         <Link
                           href="/users"
                           key={user?._id}
@@ -219,36 +186,34 @@ export default function SinglePurchase() {
       </div>
 
       <div className={styles.repays}>
-        <h2>Список продаж</h2>
+        <h2>Покупки</h2>
 
         <table ref={tableRef}>
           <thead>
             <tr>
               <td>Продукта</td>
-              <td>Клиент</td>
               <td>Amount</td>
-              <td>Цена</td>
+              <td>Debt</td>
               <td>Дата</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
-            {purchaseSells.length > 0 &&
-              purchaseSells.map((sell) => (
-                <tr key={sell?._id}>
-                  <td>{sell?.product?.title}</td>
-                  <td>{sell?.custumer?.fullname}</td>
-                  <td>{sell?.amount}</td>
-                  <td>{Intl.NumberFormat("ru-RU").format(sell?.price)}</td>
+            {purchases.length > 0 &&
+              purchases.map((purchase) => (
+                <tr key={purchase._id}>
+                  <td>{purchase.product?.title}</td>
+                  <td>{purchase.amount}</td>
+                  <td>{Intl.NumberFormat("ru-RU").format(purchase.debt)}</td>
                   <td>
-                    {format(new Date(sell?.addedDate), "dd.MM.yyyy HH:mm")}
+                    {format(new Date(purchase.addedDate), "dd.MM.yyyy HH:mm")}
                   </td>
                   <td className={styles.action}>
                     <Link
                       href={{
-                        pathname: "/sells/single-sell",
+                        pathname: "/purchases/single-purchase",
                         query: {
-                          sellId: sell?._id,
+                          purchaseId: purchase._id,
                         },
                       }}
                     >
@@ -260,20 +225,14 @@ export default function SinglePurchase() {
           </tbody>
         </table>
 
-        {purchaseSells.length < 1 && (
+        {purchases.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}
       </div>
 
-      <ShortageModal
-        isModalOpen={shortageModalOpen}
-        setIsModalOpen={setShortageModalOpen}
-        purchaseId={purchaseId}
-      />
-
       <DeleteModal
-        isModalOpen={deleteModalOpen}
-        setIsModalOpen={setDeleteModalOpen}
+        isModalOpen={deleteModal}
+        setIsModalOpen={setDeleteModal}
         handleDelete={handleDelete}
       />
     </div>

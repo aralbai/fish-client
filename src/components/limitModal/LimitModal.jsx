@@ -49,8 +49,6 @@ export default function LimitModal({
 
   if (!isModalOpen) return null;
 
-  console.log(unlimited);
-
   return (
     <div className={styles.sellModal}>
       <div className={styles.container}>

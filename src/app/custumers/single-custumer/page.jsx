@@ -12,6 +12,7 @@ import {
   Edit,
   FormatColorReset,
   KeyboardBackspace,
+  WalletOutlined,
 } from "@mui/icons-material";
 import RepayModal from "@/components/repayModal/RepayModal";
 import axios from "axios";
@@ -116,10 +117,6 @@ export default function SingleCustumer() {
                   ? "Безлимитный"
                   : Intl.NumberFormat("ru-RU").format(custumer.limit)}
               </p>
-            </li>
-            <li>
-              <p>Лимит</p>
-              <p>{Intl.NumberFormat("ru-RU").format(custumer.debt)}</p>
             </li>
           </ul>
         </div>

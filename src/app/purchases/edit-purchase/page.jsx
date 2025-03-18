@@ -3,15 +3,16 @@ import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import Input from "@/components/input/Input";
+import { useContext, useEffect, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
-import { handleSubmit } from "@/utils/handleSubmit";
 import DatePick from "@/components/datePicker/DatePicker";
-import Select from "@/components/select/Select";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function EditSupplier() {
+  const { user } = useContext(AuthContext);
   const router = useRouter();
   const searchParams = useSearchParams();
   const purchaseId = searchParams.get("purchaseId");
@@ -20,49 +21,85 @@ export default function EditSupplier() {
   const [changedPurchase, setChangedPurchase] = useState({
     product: "",
     supplier: "",
-    carNumber: "",
     amount: "",
     price: "",
-    perKilo: "",
-    debt: "",
-    discount: "",
+    carNumber: "",
     addedDate: new Date(),
+    discount: "",
+    debt: "",
+    minAmount: "",
   });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    const values = value.split("-");
+
+    setChangedPurchase((prev) => ({
+      ...prev,
+      [name]: {
+        id: values[0],
+        title: values[1],
+      },
+    }));
+  };
 
   const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
-    const { _id, _v, updatedAt, createdAt, ...data } = changedPurchase;
+    const data = {
+      ...changedPurchase,
 
-    handleSubmit(e, purchaseId, "purchases", data, setChangedPurchase);
+      discount:
+        parseFloat(changedPurchase.discount) === ""
+          ? 0
+          : parseFloat(changedPurchase.discount),
+      debt:
+        parseFloat(changedPurchase.debt) === ""
+          ? 0
+          : parseFloat(changedPurchase.debt),
+      changedUserId: user?.id,
+    };
+
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/purchases/${purchaseId}`, data)
+      .then((res) => {
+        toast.success(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
 
     router.push("/purchases");
-
-    setChangedPurchase({
-      product: "",
-      supplier: "",
-      carNumber: "",
-      amount: "",
-      price: "",
-      debt: "",
-      discount: "",
-      addedDate: new Date(),
-    });
   };
 
   useEffect(() => {
-    fetchData(`/purchases/${purchaseId}`, setChangedPurchase);
     fetchData("/products", setProducts);
     fetchData("/suppliers", setSuppliers);
-  }, []);
 
-  console.log(changedPurchase);
+    const fetchPurchase = async () => {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/purchases/${purchaseId}`)
+        .then((res) => {
+          setChangedPurchase({
+            ...res.data,
+            minAmount: res?.data?.amount - res?.data?.remainingAmount,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    fetchPurchase();
+  }, []);
 
   return (
     <div className={styles.editProduct}>
       <h1>Поставщики</h1>
 
       <div className={styles.form}>
+        {/* Title and back button  */}
         <div className={styles.top}>
           <h1>Создать новый поставщик</h1>
           <PrimaryBtn
@@ -77,25 +114,23 @@ export default function EditSupplier() {
         </div>
 
         <form onSubmit={pageHandleSubmit}>
-          {/* Product Supplier CarNumber */}
+          {/* Product Supplier */}
           <div className={styles.inputGroup}>
             <div className={styles.input}>
               <label htmlFor="">Product</label>
               <select
-                name="productId"
+                name="product"
                 value={changedPurchase?.product?.id}
-                onChange={(e) =>
-                  setChangedPurchase((prev) => ({
-                    ...prev,
-                    product: e.target.value,
-                  }))
-                }
+                onChange={(e) => handleChange(e)}
               >
                 <option value={changedPurchase?.product?.id} hidden>
                   {changedPurchase?.product?.title}
                 </option>
                 {products?.map((product) => (
-                  <option value={product?._id} key={product?._id}>
+                  <option
+                    value={`${product?._id}-${product?.title}`}
+                    key={product?._id}
+                  >
                     {product?.title}
                   </option>
                 ))}
@@ -104,20 +139,18 @@ export default function EditSupplier() {
             <div className={styles.input}>
               <label htmlFor="">Supplier</label>
               <select
-                name="productId"
+                name="supplier"
                 value={changedPurchase?.supplier?.id}
-                onChange={(e) =>
-                  setChangedPurchase((prev) => ({
-                    ...prev,
-                    supplier: e.target.value,
-                  }))
-                }
+                onChange={(e) => handleChange(e)}
               >
                 <option value={changedPurchase?.supplier?.id} hidden>
                   {changedPurchase?.supplier?.title}
                 </option>
                 {suppliers?.map((supplier) => (
-                  <option value={supplier?._id} key={supplier?._id}>
+                  <option
+                    value={`${supplier?._id}-${supplier?.title}`}
+                    key={supplier?._id}
+                  >
                     {supplier?.title}
                   </option>
                 ))}
@@ -132,6 +165,7 @@ export default function EditSupplier() {
               <input
                 type="number"
                 name="Amount"
+                min={changedPurchase.minAmount}
                 value={changedPurchase.amount}
                 onChange={(e) =>
                   setChangedPurchase((prev) => ({
@@ -147,11 +181,11 @@ export default function EditSupplier() {
               <input
                 type="number"
                 name="Amount"
-                value={changedPurchase.perKilo}
+                value={changedPurchase.price}
                 onChange={(e) =>
                   setChangedPurchase((prev) => ({
                     ...prev,
-                    perKilo: e.target.value,
+                    price: e.target.value,
                   }))
                 }
               />
@@ -214,17 +248,22 @@ export default function EditSupplier() {
             </div>
           </div>
 
+          {/* Calculate total */}
           <div className={styles.bottom}>
             <div className={styles.row}>
               <div className={styles.calc}>
                 <p>Итого:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(changedPurchase.amount * changedPurchase.perKilo)
+                    .format(
+                      parseFloat(changedPurchase.amount) *
+                        parseFloat(changedPurchase.price)
+                    )
                     .replace(/,/g, " ")}
                   <b> SWM</b>
                 </b>
               </div>
+
               <div className={styles.calc}>
                 <p>Скидка:</p>
                 <b>
@@ -237,23 +276,23 @@ export default function EditSupplier() {
             </div>
             <div className={styles.row}>
               <div className={styles.calc}>
-                <p>Долг:</p>
+                <p>Оплачено:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(changedPurchase.debt)
+                    .format(
+                      changedPurchase.amount * changedPurchase.price -
+                        changedPurchase.discount -
+                        changedPurchase.debt
+                    )
                     .replace(/,/g, " ")}
                   <b> SWM</b>
                 </b>
               </div>
               <div className={styles.calc}>
-                <p>Оплачено:</p>
+                <p>Долг:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(
-                      changedPurchase.amount * changedPurchase.perKilo -
-                        changedPurchase.discount -
-                        changedPurchase.debt
-                    )
+                    .format(changedPurchase.debt)
                     .replace(/,/g, " ")}
                   <b> SWM</b>
                 </b>

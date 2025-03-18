@@ -8,11 +8,18 @@ import TableTop from "@/components/tableTop/TableTop";
 
 export default function Custumers() {
   const [custumers, setCustumers] = useState([]);
+  const [sells, setSells] = useState([]);
   const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/custumers", setCustumers);
+    fetchData("/sells", setSells);
   }, []);
+
+  const debtMap = sells.reduce((acc, sell) => {
+    acc[sell?.custumer?.id] = (acc[sell?.custumer?.id] || 0) + sell?.debt;
+    return acc;
+  }, {});
 
   return (
     <div className={styles.custumers}>
@@ -36,6 +43,7 @@ export default function Custumers() {
               <td>Номер телефона</td>
               <td>Адрес</td>
               <td>Лимит</td>
+              <td>Общая долги</td>
               <td></td>
             </tr>
           </thead>
@@ -50,7 +58,13 @@ export default function Custumers() {
                     ? "Безлимитный"
                     : Intl.NumberFormat("ru-RU").format(custumer.limit)}
                 </td>
-
+                <td>
+                  {(debtMap[custumer?._id] &&
+                    Intl.NumberFormat("ru-RU").format(
+                      debtMap[custumer?._id]
+                    )) ||
+                    0}
+                </td>
                 <td className={styles.action}>
                   <Link
                     href={{

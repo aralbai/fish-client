@@ -39,7 +39,7 @@ export default function EditSupplier() {
       .then((res) => {
         toast.success(res.data);
 
-        router.push("/suppliers");
+        router.push(`/suppliers/single-supplier?supplierId=${supplierId}`);
       })
       .catch((err) => {
         toast.success(err?.response?.data?.message);

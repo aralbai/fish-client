@@ -59,7 +59,7 @@ export default function Purchases() {
                 </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.price)
+                    .format(purchase.totalPrice)
                     .replace(/,/g, " ")}
                 </td>
                 <td>

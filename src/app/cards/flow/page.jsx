@@ -51,24 +51,16 @@ export default function Flow() {
                   <td>{purchase.amount}</td>
                   <td>
                     {Intl.NumberFormat("uz-UZ")
-                      .format(purchase.price)
+                      .format(purchase.totalPrice)
                       .replace(/,/g, " ")}{" "}
                   </td>
                   <td>{purchase.shortage}</td>
                   <td>{purchase.remainingAmount}</td>
                   <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
                   <td className={styles.action}>
-                    <button
-                      onClick={() => {
-                        setPurchaseId(purchase._id);
-                        setIsModalOpen(true);
-                      }}
-                    >
-                      <FormatColorReset />
-                    </button>
                     <Link
                       href={{
-                        pathname: "/purchases/edit-purchase",
+                        pathname: "/purchases/single-purchase",
                         query: { purchaseId: purchase._id },
                       }}
                     >

@@ -12,9 +12,11 @@ import SupplierModal from "@/components/supplierModal/SupplierModal";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function AddPurchase() {
   const { user } = useContext(AuthContext);
+  const router = useRouter();
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [purchase, setPurchase] = useState({
@@ -43,8 +45,7 @@ export default function AddPurchase() {
 
     const data = {
       ...purchase,
-      perKilo: purchase.price,
-      price: purchase.price * purchase.amount - purchase.discount,
+      totalPrice: purchase.price * purchase.amount - purchase.discount,
       discount: purchase.discount === "" ? 0 : purchase.discount,
       debt: purchase.debt === "" ? 0 : purchase.debt,
       given:
@@ -56,6 +57,8 @@ export default function AddPurchase() {
       .post(`${process.env.NEXT_PUBLIC_API_URL}/purchases`, data)
       .then((res) => {
         toast.success(res.data);
+
+        router.push("/purchases");
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);

@@ -1,9 +1,10 @@
 import { Close } from "@mui/icons-material";
-import styles from "./LimitModal.module.scss";
+import styles from "./ShortageModal.module.scss";
 import Input from "../input/Input";
 import PrimaryBtn from "../primaryBtn/PrimaryBtn";
 import { useState } from "react";
-import { handleSubmit } from "@/utils/handleSubmit";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function ShortageModal({
   isModalOpen,
@@ -11,18 +12,28 @@ export default function ShortageModal({
   purchaseId,
 }) {
   const [purchase, setPurchase] = useState({
-    limit: "",
+    shortage: "",
   });
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
-    handleSubmit(e, purchaseId, "purchases/shortage", purchase, setPurchase);
+    await axios
+      .put(
+        `${process.env.NEXT_PUBLIC_API_URL}/purchases/shortage/${purchaseId}`,
+        purchase
+      )
+      .then((res) => {
+        toast.success(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
 
     setIsModalOpen(false);
 
     setPurchase({
-      limit: "",
+      shortage: "",
     });
   };
 
@@ -32,7 +43,7 @@ export default function ShortageModal({
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Установить лимит</h2>
+          <h2>Недостаток</h2>
 
           <button onClick={() => setIsModalOpen(false)}>
             <Close />
@@ -42,9 +53,9 @@ export default function ShortageModal({
         <form className={styles.bottom} onSubmit={pageHandleSubmit}>
           <Input
             type="text"
-            name="limit"
-            placeholder="Лимит"
-            value={purchase.limit}
+            name="shortage"
+            placeholder="Количество"
+            value={purchase.shortage}
             setData={setPurchase}
           />
 
