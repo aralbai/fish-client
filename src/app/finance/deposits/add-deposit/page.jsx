@@ -2,35 +2,46 @@
 import styles from "./page.module.scss";
 import { KeyboardBackspace } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "@/components/input/Input";
-import { handleSubmit } from "@/utils/handleSubmit";
 import DatePick from "@/components/datePicker/DatePicker";
+import { AuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function AddDeposit() {
+  const { user } = useContext(AuthContext);
+  const router = useRouter();
   const [deposit, setDeposit] = useState({
     amount: "",
     fromWhom: "",
     addedDate: new Date(),
   });
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
+    e.preventDefault();
+
     const data = {
       ...deposit,
-      type: "increase",
+      addedUserId: user?.id,
     };
 
-    handleSubmit(e, "create", "deposits", data, setDeposit);
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/deposits`, data)
+      .then((res) => {
+        toast.success(res.data);
 
-    setDeposit({
-      amount: "",
-      fromWhom: "",
-      addedDate: new Date(),
-    });
+        router.push("/finance/deposits");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+        console.log(err);
+      });
   };
 
   return (
-    <div className={styles.addProduct}>
+    <div className={styles.addDeposit}>
       <h1>Депозиты</h1>
 
       <div className={styles.form}>
@@ -48,23 +59,38 @@ export default function AddDeposit() {
         </div>
 
         <form onSubmit={pageHandleSubmit}>
-          <Input
-            type="number"
-            name="amount"
-            placeholder="Сумма"
-            value={deposit.amount}
-            setData={setDeposit}
-            required={true}
-          />
-          <Input
-            type="text"
-            name="fromWhom"
-            placeholder="От кого"
-            value={deposit.fromWhom}
-            setData={setDeposit}
-            required={false}
-          />
-          <DatePick defDate={deposit.addedDate} setDate={setDeposit} />
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <Input
+                type="number"
+                name="amount"
+                placeholder="Сумма"
+                value={deposit.amount}
+                setData={setDeposit}
+                required={true}
+              />
+
+              <p>
+                Сумма:{" "}
+                {deposit?.amount
+                  ? Intl.NumberFormat("ru-RU").format(deposit?.amount)
+                  : 0}
+              </p>
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="fromWhom"
+                placeholder="Куда"
+                value={deposit.fromWhom}
+                setData={setDeposit}
+                required={false}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <DatePick defDate={deposit.addedDate} setDate={setDeposit} />
+            </div>
+          </div>
 
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>

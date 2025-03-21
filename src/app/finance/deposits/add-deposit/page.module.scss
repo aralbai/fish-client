@@ -1,6 +1,6 @@
 @import "../../../styles/variables.module.scss";
 
-.addProduct {
+.addDeposit {
   margin: 20px;
   color: $font-color;
 
@@ -31,18 +31,27 @@
     }
 
     form {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 20px;
       padding: 20px;
 
-      input {
-        padding: 10px;
-        outline: none;
-        border: 1px solid $input-border-color;
-        border-radius: 5px;
-        font-size: 15px;
+      .inputGroup {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 20px;
+
+        .formInput {
+          width: 33%;
+
+          input {
+            padding: 10px;
+            outline: none;
+            border: 1px solid $input-border-color;
+            border-radius: 5px;
+            font-size: 15px;
+            margin-bottom: 10px;
+          }
+        }
       }
     }
   }

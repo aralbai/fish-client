@@ -62,7 +62,7 @@
           display: flex;
           align-items: center;
           gap: 10px;
-          width: 40%;
+          width: 50%;
 
           select {
             width: 100%;
@@ -89,15 +89,19 @@
       }
 
       .bottom {
-        .discount {
-          width: 300px;
-          margin-bottom: 20px;
-        }
+        margin: 20px 0;
+        width: 100%;
 
-        .calc {
+        .row {
           display: flex;
-          gap: 10px;
-          margin-bottom: 10px;
+          gap: 20px;
+
+          .calc {
+            width: 50%;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+          }
         }
       }
     }

@@ -38,7 +38,7 @@ export default function AddPurchase() {
     fetchData("/products", setProducts);
 
     fetchData("/suppliers", setSuppliers);
-  }, []);
+  }, [isProductOpen, isSupplierOpen]);
 
   const pageHandleSubmit = async (e) => {
     e.preventDefault();

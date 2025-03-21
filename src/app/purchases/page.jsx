@@ -37,7 +37,7 @@ export default function Purchases() {
               <td>Поставщик</td>
               <td>Количество</td>
               <td>Скидка</td>
-              <td>Цена</td>
+              <td>Сумма</td>
               <td>Долг</td>
               <td>Недостаток</td>
               <td>Остальные</td>

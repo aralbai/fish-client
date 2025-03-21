@@ -1,48 +1,45 @@
 "use client";
 import styles from "./page.module.scss";
-import Input from "@/components/input/Input";
-import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { KeyboardBackspace } from "@mui/icons-material";
-import { useSearchParams } from "next/navigation";
+import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useContext, useEffect, useState } from "react";
-import { fetchData } from "@/utils/fetchData";
-import { useRouter } from "next/navigation";
+import Input from "@/components/input/Input";
+import DatePick from "@/components/datePicker/DatePicker";
 import { AuthContext } from "@/context/AuthContext";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
-import DatePick from "@/components/datePicker/DatePicker";
+import { fetchData } from "@/utils/fetchData";
 
-export default function EditOutcome() {
+export default function EditDeposit() {
   const { user } = useContext(AuthContext);
   const router = useRouter();
-
   const searchParams = useSearchParams();
-  const outcomeId = searchParams.get("outcomeId");
-  const [changedOutcome, setChangedOutcome] = useState({
+  const depositId = searchParams.get("depositId");
+  const [changedDeposit, setChangedDeposit] = useState({
     amount: "",
-    purpose: "",
+    fromWhom: "",
     addedDate: new Date(),
   });
 
   useEffect(() => {
-    fetchData(`/outcomes/${outcomeId}`, setChangedOutcome);
+    fetchData(`/deposits/${depositId}`, setChangedDeposit);
   }, []);
 
   const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
     const data = {
-      ...changedOutcome,
+      ...changedDeposit,
       changedUserId: user?.id,
     };
-    console.log(data);
 
     await axios
-      .put(`${process.env.NEXT_PUBLIC_API_URL}/outcomes/${outcomeId}`, data)
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/deposits/${depositId}`, data)
       .then((res) => {
         toast.success(res.data);
 
-        router.push("/finance/outcomes");
+        router.push("/finance/deposits");
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
@@ -51,16 +48,16 @@ export default function EditOutcome() {
   };
 
   return (
-    <div className={styles.editOutcome}>
-      <h1>Расходы</h1>
+    <div className={styles.editDeposit}>
+      <h1>Депозиты</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Изменить расход</h1>
+          <h1>Добавить новый депозит</h1>
           <PrimaryBtn
             type="link"
-            title="Вернуться к списку"
-            url="/finance/outcomes"
+            fullname="Вернуться к списку"
+            url="/finance/changedDeposits"
             icon={<KeyboardBackspace />}
           >
             <KeyboardBackspace />
@@ -75,32 +72,32 @@ export default function EditOutcome() {
                 type="number"
                 name="amount"
                 placeholder="Сумма"
-                value={changedOutcome.amount}
-                setData={setChangedOutcome}
+                value={changedDeposit.amount}
+                setData={setChangedDeposit}
                 required={true}
               />
 
               <p>
                 Сумма:{" "}
-                {changedOutcome?.amount
-                  ? Intl.NumberFormat("ru-RU").format(changedOutcome?.amount)
+                {changedDeposit?.amount
+                  ? Intl.NumberFormat("ru-RU").format(changedDeposit?.amount)
                   : 0}
               </p>
             </div>
             <div className={styles.formInput}>
               <Input
                 type="text"
-                name="purpose"
+                name="fromWhom"
                 placeholder="Куда"
-                value={changedOutcome.purpose}
-                setData={setChangedOutcome}
+                value={changedDeposit.fromWhom}
+                setData={setChangedDeposit}
                 required={false}
               />
             </div>
             <div className={styles.formInput}>
               <DatePick
-                defDate={changedOutcome.addedDate}
-                setDate={setChangedOutcome}
+                defDate={changedDeposit.addedDate}
+                setDate={setChangedDeposit}
               />
             </div>
           </div>

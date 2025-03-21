@@ -87,7 +87,7 @@ export default function Products() {
                           ) : null
                         )
                       : ""}
-                    {format(new Date(product.createdAt), "dd.MM.yyyy HH:mm:ss")}
+                    {format(new Date(product.createdAt), "dd.MM.yyyy HH:mm")}
                   </td>
                   <td>
                     {user?.role === "superadmin"
@@ -103,7 +103,7 @@ export default function Products() {
                           ) : null
                         )
                       : ""}
-                    {format(new Date(product.updatedAt), "dd.MM.yyyy HH:mm:ss")}
+                    {format(new Date(product.updatedAt), "dd.MM.yyyy HH:mm")}
                   </td>
                   <td className={styles.action}>
                     <Link

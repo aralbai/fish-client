@@ -36,9 +36,9 @@ export default function Sells() {
             <tr>
               <td>Продукта</td>
               <td>Клиент</td>
-              <td>Кол</td>
+              <td>Количество</td>
               <td>Скидка</td>
-              <td>Цена</td>
+              <td>Сумма</td>
               <td>Долг</td>
               <td>Дата</td>
               <td></td>
@@ -57,7 +57,7 @@ export default function Sells() {
                 </td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(sell.price)
+                    .format(sell.totalPrice)
                     .replace(/,/g, " ")}{" "}
                 </td>
                 <td>

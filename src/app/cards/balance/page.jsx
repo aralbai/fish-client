@@ -137,14 +137,12 @@ export default function Balance() {
             <tr
               style={
                 profit < 0
-                  ? { backgroundColor: "#28A745", color: "#fff" }
-                  : { backgroundColor: "#FF6378", color: "#fff" }
+                  ? { backgroundColor: "#FF6378", color: "#fff" }
+                  : { backgroundColor: "#28A745", color: "#fff" }
               }
             >
               <td>Прибыль</td>
-              <td>
-                {balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}
-              </td>
+              <td>{profit ? Intl.NumberFormat("ru-RU").format(profit) : 0}</td>
               <td></td>
               <td style={{ padding: "30px" }}></td>
             </tr>

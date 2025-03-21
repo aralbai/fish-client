@@ -1,27 +1,35 @@
 "use client";
 import styles from "./page.module.scss";
-import { KeyboardBackspace } from "@mui/icons-material";
+import { KeyboardBackspace, SellSharp } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useContext, useEffect, useState } from "react";
 import Input from "@/components/input/Input";
-import Select from "@/components/select/Select";
 import DatePick from "@/components/datePicker/DatePicker";
 import { fetchData } from "@/utils/fetchData";
 import CheckBox from "@/components/checkBox/CheckBox";
-import { handleSubmit } from "@/utils/handleSubmit";
 import CustumerModal from "@/components/custumerModal/CustumerModal";
 import { format } from "date-fns";
 import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function AddSell() {
   const { user } = useContext(AuthContext);
+  const router = useRouter();
   const [purchases, setPurchases] = useState([]);
   const [custumers, setCustumers] = useState([]);
   const [sell, setSell] = useState({
-    purchase: "Выберите поток",
-    product: "Выберите продукт",
-    custumer: "Выберите клиента",
-    custumerName: "",
+    purchaseId: "Выберите поток",
+    product: {
+      id: "Выберите продукт",
+      title: "Выберите продукт",
+    },
+    custumer: {
+      id: "",
+      fullname: "Выберите клиента",
+    },
+    custumerName: "Клиент",
     amount: "",
     price: "",
     discount: "",
@@ -39,35 +47,60 @@ export default function AddSell() {
     fetchData("/purchases/active", setPurchases);
   }, [isModalOPen, sell]);
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
     const data = {
       ...sell,
-      custumer: checkClient ? sell.custumerName : sell.custumer,
-      price: sell.price * sell.amount - sell.discount,
+      custumer: checkClient
+        ? { id: null, fullname: sell.custumerName }
+        : sell.custumer,
       discount: sell.discount === "" ? 0 : sell.discount,
       debt: sell.debt === "" ? 0 : parseFloat(sell.debt),
-      given: sell.price * sell.amount - sell.discount - sell.debt,
       addedUserId: user?.id,
     };
 
-    handleSubmit(e, "create", "sells", data, setSell);
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, data)
+      .then((res) => {
+        toast.success(res.data);
+        router.push("/sells");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+        console.log(err);
+      });
   };
 
   const handleChange = (e) => {
-    const givenPurchase = purchases.find((p) => p._id === e.target.value);
+    const { name, value } = e.target;
+    const givenPurchase = purchases.find((p) => p._id === value);
+    const values = value.split("-");
 
-    setSell((prev) => ({
-      ...prev,
-      purchase: e.target.value,
-      product: givenPurchase.product?.id,
-    }));
+    if (name === "purchase") {
+      setSell((prev) => ({
+        ...prev,
+        purchaseId: value,
+        product: {
+          id: givenPurchase?.product?.id,
+          title: givenPurchase?.product?.title,
+        },
+      }));
 
-    setCheckAmount(givenPurchase.remainingAmount);
+      setCheckAmount(givenPurchase.remainingAmount);
+    }
+
+    if (name === "custumer") {
+      setSell((prev) => ({
+        ...prev,
+        custumer: {
+          id: values[0],
+          fullname: values[1],
+        },
+        custumerName: "Клиент",
+      }));
+    }
   };
-
-  console.log(sell);
 
   return (
     <div className={styles.addProduct}>
@@ -88,18 +121,20 @@ export default function AddSell() {
         </div>
 
         <form onSubmit={pageHandleSubmit}>
+          {/* Purchase Product  */}
           <div className={styles.inputGroup}>
-            <div className={styles.formInput} hidden>
+            <div className={styles.formInput}>
               <select
-                required
-                value={sell.purchase}
+                name="purchase"
+                value={sell.purchaseId}
                 onChange={(e) => handleChange(e)}
+                required
               >
                 <option value="" hidden>
-                  {sell.purchase}
+                  {sell.purchaseId}
                 </option>
                 {purchases.map((purchase) => (
-                  <option key={purchase._id} value={purchase._id}>
+                  <option key={purchase._id} value={purchase?._id}>
                     {purchase.product.title +
                       " " +
                       purchase.supplier.title +
@@ -113,12 +148,15 @@ export default function AddSell() {
                 ))}
               </select>
             </div>
+
             <div className={styles.formInput}>
               <select name="" id="" disabled>
-                <option value={sell.product}>{sell.product}</option>
+                <option value={sell.product.id}>{sell.product.title}</option>
               </select>
             </div>
           </div>
+
+          {/* Custumer AddedDate  */}
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
               <div className={styles.formInputCheck}>
@@ -143,13 +181,24 @@ export default function AddSell() {
                 </div>
               ) : (
                 <div className={styles.client}>
-                  <Select
+                  <select
                     name="custumer"
-                    mapData={custumers}
-                    text="fullname"
-                    defValue={sell.custumer}
-                    setData={setSell}
-                  />
+                    value={sell.custumer.id}
+                    onChange={(e) => handleChange(e)}
+                    required={true}
+                  >
+                    <option value={sell.custumer.id} hidden>
+                      {sell?.custumer?.fullname}
+                    </option>
+                    {custumers.map((custumer) => (
+                      <option
+                        key={custumer._id}
+                        value={`${custumer?._id}-${custumer.fullname}`}
+                      >
+                        {custumer?.fullname}
+                      </option>
+                    ))}
+                  </select>
 
                   <div onClick={() => setIsModalOpen(true)}>
                     <PrimaryBtn type="button">+</PrimaryBtn>
@@ -163,6 +212,7 @@ export default function AddSell() {
             </div>
           </div>
 
+          {/* Amount Price  */}
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
               <Input
@@ -187,6 +237,7 @@ export default function AddSell() {
             </div>
           </div>
 
+          {/* Discount Debt  */}
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
               <Input
@@ -210,46 +261,51 @@ export default function AddSell() {
             </div>
           </div>
 
+          {/* Calculate total */}
           <div className={styles.bottom}>
-            <div className={styles.calc}>
-              <p>Итого:</p>
-              <b>
-                {Intl.NumberFormat("uz-UZ")
-                  .format(sell.price * sell.amount)
-                  .replace(/,/g, " ")}
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Итого:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(sell.amount * sell.price)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
 
-                <b> SWM</b>
-              </b>
+              <div className={styles.calc}>
+                <p>Скидка:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(sell.discount)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
             </div>
-            <div className={styles.calc}>
-              <p>Скидка:</p>
-              <b>
-                {Intl.NumberFormat("uz-UZ")
-                  .format(sell.discount)
-                  .replace(/,/g, " ")}
 
-                <b> SWM</b>
-              </b>
-            </div>
-            <div className={styles.calc}>
-              <p>Долг:</p>
-              <b>
-                {Intl.NumberFormat("uz-UZ")
-                  .format(sell.debt)
-                  .replace(/,/g, " ")}
-
-                <b> SWM</b>
-              </b>
-            </div>
-            <div className={styles.calc}>
-              <p>Оплачено:</p>
-              <b>
-                {Intl.NumberFormat("uz-UZ")
-                  .format(sell.price * sell.amount - sell.discount - sell.debt)
-                  .replace(/,/g, " ")}
-
-                <b> SWM</b>
-              </b>
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Оплачено:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(
+                      sell.amount * sell.price - sell.discount - sell.debt
+                    )
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+              <div className={styles.calc}>
+                <p>Долг:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(sell.debt)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
             </div>
           </div>
 

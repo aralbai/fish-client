@@ -1,23 +1,52 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, ArrowRightAlt, Delete, Edit } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { Add, Delete, Edit } from "@mui/icons-material";
+import { useContext, useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
-import { handleDelete } from "@/utils/handleDelete";
 import { format } from "date-fns";
+import TableTop from "@/components/tableTop/TableTop";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import DeleteModal from "@/components/deleteModal/DeleteModal";
+import axios from "axios";
 
 export default function Deposits() {
+  const { user } = useContext(AuthContext);
   const [deposites, setDeposites] = useState([]);
+  const [depositId, setDepositId] = useState("");
+  const [users, setUsers] = useState([]);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const tableRef = useRef();
 
   useEffect(() => {
     fetchData("/deposits", setDeposites);
-  }, []);
+    fetchData("/users/all", setUsers);
+  }, [deleteModalOpen]);
 
   let total = 0;
   deposites.forEach((deposit) => {
     total += deposit.amount;
   });
+
+  const handleDeleteClick = (id) => {
+    setDepositId(id);
+
+    setDeleteModalOpen(true);
+  };
+
+  const handleDelete = async (e) => {
+    await axios
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/deposits/${depositId}`)
+      .then((res) => {
+        toast.success(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
+
+    setDeleteModalOpen(false);
+  };
 
   return (
     <div className={styles.deposites}>
@@ -32,10 +61,14 @@ export default function Deposits() {
           </Link>
         </div>
 
-        <table>
+        <TableTop tableRef={tableRef} />
+
+        <table ref={tableRef}>
           <thead>
             <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
               <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td style={{ padding: "30px" }}></td>
@@ -44,35 +77,60 @@ export default function Deposits() {
               <td>Сумма</td>
               <td>От кого</td>
               <td>Дата</td>
-              <td>Действие</td>
+              <td>Добавление</td>
+              <td>Последнее изменение</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
-            {deposites?.map((outcome) => (
-              <tr key={outcome._id}>
-                <td>{Intl.NumberFormat("ru-RU").format(outcome.amount)}</td>
-                <td>{outcome.purpose}</td>
-                <td>{format(outcome.addedDate, "dd.MM.yyyy")}</td>
+            {deposites?.map((deposit) => (
+              <tr key={deposit._id}>
+                <td>{Intl.NumberFormat("ru-RU").format(deposit.amount)}</td>
+                <td>{deposit.fromWhom}</td>
+                <td>{format(deposit.addedDate, "dd.MM.yyyy HH:mm")}</td>
+                <td>
+                  {user?.role === "superadmin"
+                    ? users?.map((user) =>
+                        user._id === deposit?.addedUserId ? (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user.username} {" - "}
+                          </Link>
+                        ) : null
+                      )
+                    : ""}
+                  {format(new Date(deposit?.createdAt), "dd.MM.yyyy HH:mm")}
+                </td>
+                <td>
+                  {user?.role === "superadmin"
+                    ? users?.map((user) =>
+                        user._id === deposit?.changedUserId ? (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user.username} {" - "}
+                          </Link>
+                        ) : null
+                      )
+                    : ""}
+                  {format(new Date(deposit?.updatedAt), "dd.MM.yyyy HH:mm")}
+                </td>
                 <td className={styles.action}>
                   <Link
                     href={{
-                      pathname: "/deposits/edit-outcome",
-                      query: { outcomeId: outcome._id },
+                      pathname: "/finance/deposits/edit-deposit",
+                      query: { depositId: deposit._id },
                     }}
                   >
                     <Edit />
                   </Link>
 
-                  <button
-                    onClick={() =>
-                      handleDelete(
-                        "/deposits",
-                        outcome._id,
-                        deposites,
-                        setDeposites
-                      )
-                    }
-                  >
+                  <button onClick={() => handleDeleteClick(deposit._id)}>
                     <Delete />
                   </button>
                 </td>
@@ -84,6 +142,12 @@ export default function Deposits() {
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}
       </div>
+
+      <DeleteModal
+        isModalOpen={deleteModalOpen}
+        setIsModalOpen={setDeleteModalOpen}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 }

@@ -3,126 +3,126 @@ import { KeyboardBackspace } from "@mui/icons-material";
 import styles from "./page.module.scss";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useSearchParams } from "next/navigation";
-import { useContext, useState } from "react";
-import Input from "@/components/input/Input";
+import { useContext, useEffect, useState } from "react";
+import { fetchData } from "@/utils/fetchData";
+import DatePick from "@/components/datePicker/DatePicker";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
+import { format } from "date-fns";
 
-export default function EditSupplier() {
+export default function EditSell() {
   const { user } = useContext(AuthContext);
-  const searchParams = useSearchParams();
-  const supplierId = searchParams.get("id");
-  const supplierTitle = searchParams.get("title");
-  const supplierPhone = searchParams.get("phone");
-  const supplierAddress = searchParams.get("address");
+  const router = useRouter();
 
-  const [changedSupplier, setChangedSupplier] = useState({
-    title: supplierTitle,
-    phone: supplierPhone,
-    address: supplierAddress,
-    changedUserId: user?.id,
+  const searchParams = useSearchParams();
+  const sellId = searchParams.get("sellId");
+  const purchaseId = searchParams.get("purchaseId");
+
+  const [custumers, setCustumers] = useState([]);
+  const [repays, setRepays] = useState([]);
+  const [purchase, setPurchase] = useState({
+    remainingAmount: 0,
   });
 
-  const [inputErr, setInputErr] = useState({
-    title: "",
-    phone: "",
-    address: "",
+  const [changedSell, setChangedSell] = useState({
+    custumer: {
+      id: "",
+      fullname: "",
+    },
+    addedDate: new Date(),
+    prevAmount: 0,
+    amount: 0,
+    price: 0,
+    discount: 0,
+    debt: 0,
+    maxAmount: 0,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Example validation: Check if the input is empty
-    const errorMessage =
-      value.trim() === "" ? "Обязательное поле для ввода" : "";
+    const values = value.split("-");
 
-    setChangedSupplier((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-
-    setInputErr((prevData) => ({
-      ...prevData,
-      [name]: errorMessage,
+    setChangedSell((prev) => ({
+      ...prev,
+      [name]: {
+        id: values[0],
+        title: values[1],
+      },
     }));
   };
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    fetchData("/custumers", setCustumers);
+    fetchData(`/purchases/${purchaseId}`, setPurchase);
+    fetchData(`/repays/${sellId}`, setRepays);
+
+    const fetchSell = async () => {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/sells/${sellId}`)
+        .then((res) => {
+          setChangedSell({
+            ...res.data,
+            maxAmount: changedSell?.maxAmount + res?.data?.amount,
+            prevAmount: res.data.amount,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    fetchSell();
+  }, []);
+
+  let totalMaxAmount = 0;
+
+  totalMaxAmount =
+    parseFloat(changedSell?.maxAmount) + parseFloat(purchase?.remainingAmount);
+
+  const maxDebt = changedSell.amount * changedSell.price - changedSell.discount;
+  const maxDiscount = changedSell?.amount * changedSell?.price;
+  const totalRepay =
+    repays.length > 0
+      ? repays.reduce((sum, repay) => sum + repay.amount, 0)
+      : 0;
+
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
-    let countErr = 0;
 
-    if (changedSupplier.title === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        title: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
-
-    if (changedSupplier.phone === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        phone: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
-
-    if (changedSupplier.address === "") {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        address: "Обязательное поле для ввода",
-      }));
-      countErr += 1;
-    }
-
-    if (
-      changedSupplier.title === supplierTitle &&
-      changedSupplier.phone === supplierPhone &&
-      changedSupplier.address === supplierAddress
-    ) {
-      setInputErr((prevSupplier) => ({
-        ...prevSupplier,
-        title: "Ничего не изменилось",
-      }));
-      countErr += 1;
-    }
-
-    if (countErr > 0) {
-      return;
-    }
+    const data = {
+      ...changedSell,
+      purchaseId,
+      totalRepay,
+      changedUserId: user?.id,
+    };
 
     await axios
-      .put(`http://localhost:5000/api/suppliers/${supplierId}`, changedSupplier)
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/sells/${sellId}`, data)
       .then((res) => {
         toast.success(res.data);
-        setChangedSupplier({
-          title: "",
-          phone: "",
-          address: "",
-        });
-        setInputErr({
-          title: "",
-          phone: "",
-          address: "",
-        });
+
+        router.push(`/sells/single-sell?sellId=${sellId}`);
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err?.response?.data?.message);
       });
   };
 
   return (
     <div className={styles.editProduct}>
-      <h1>Поставщики</h1>
+      <h1>Продажи</h1>
 
       <div className={styles.form}>
+        {/* Title and back button  */}
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
+          <h1>Редактировать продаж</h1>
           <PrimaryBtn
             type="link"
             title="Вернуться к списку"
-            url="/suppliers"
+            url="/sells"
             icon={<KeyboardBackspace />}
           >
             <KeyboardBackspace />
@@ -130,33 +130,192 @@ export default function EditSupplier() {
           </PrimaryBtn>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            name="title"
-            placeholder="Название поставщика"
-            value={changedSupplier.title}
-            handleChange={handleChange}
-            err={inputErr.title}
-          />
-          <Input
-            type="text"
-            name="phone"
-            placeholder="Номер телефона"
-            value={changedSupplier.phone}
-            handleChange={handleChange}
-            err={inputErr.phone}
-          />
-          <Input
-            type="text"
-            name="address"
-            placeholder="Адрес"
-            value={changedSupplier.address}
-            handleChange={handleChange}
-            err={inputErr.address}
-          />
+        <form onSubmit={pageHandleSubmit}>
+          {/* Purchase Product */}
+          <div className={styles.inputGroup}>
+            {/* Purchase  */}
+            <div className={styles.input}>
+              <label htmlFor="">Покупка</label>
+              <input
+                type="text"
+                name="purchase"
+                value={`${purchase?.supplier?.title} ${
+                  purchase?.remainingAmount
+                }kg ${
+                  purchase?.addedDate &&
+                  format(new Date(purchase?.addedDate), "dd.MM.yyyy")
+                }`}
+                disabled
+              />
+            </div>
 
-          <PrimaryBtn type="button">Сохранять</PrimaryBtn>
+            {/* Product  */}
+            <div className={styles.input}>
+              <label htmlFor="">Продукта</label>
+              <input
+                type="text"
+                name="product"
+                value={`${purchase?.product?.title}`}
+                disabled
+              />
+            </div>
+          </div>
+
+          {/* Custumer AddedDate */}
+          <div className={styles.inputGroup}>
+            {/* Custumer  */}
+            <div className={styles.input}>
+              <label htmlFor="">Клиент</label>
+              <select
+                name="custumer"
+                value={changedSell?.custumer?.fullname}
+                onChange={(e) => handleChange(e)}
+              >
+                <option value={changedSell?.custumer?.id} hidden>
+                  {changedSell?.custumer?.fullname}
+                </option>
+                {custumers?.map((custumer) => (
+                  <option
+                    value={`${custumer?._id}-${custumer?.fullname}`}
+                    key={custumer?._id}
+                  >
+                    {custumer?.fullname}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* AddedDate  */}
+            <div className={styles.input}>
+              <label htmlFor="">Дата добавления</label>
+              <DatePick
+                defDate={changedSell.addedDate}
+                setDate={setChangedSell}
+              />
+            </div>
+          </div>
+
+          {/* Amount Price  */}
+          <div className={styles.inputGroup}>
+            <div className={styles.input}>
+              <label htmlFor="">Количество</label>
+              <input
+                type="number"
+                name="amount"
+                max={totalMaxAmount}
+                value={changedSell.amount}
+                onChange={(e) =>
+                  setChangedSell((prev) => ({
+                    ...prev,
+                    amount: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            {/* Price  */}
+            <div className={styles.input}>
+              <label htmlFor="">Цена</label>
+              <input
+                type="number"
+                name="Price"
+                value={changedSell.price}
+                onChange={(e) =>
+                  setChangedSell((prev) => ({
+                    ...prev,
+                    price: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          </div>
+
+          {/* Discount Debt  */}
+          <div className={styles.inputGroup}>
+            <div className={styles.input}>
+              <label htmlFor="">Скидка</label>
+              <input
+                type="number"
+                value={changedSell.discount}
+                max={maxDiscount}
+                onChange={(e) =>
+                  setChangedSell((prev) => ({
+                    ...prev,
+                    discount: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className={styles.input}>
+              <label htmlFor="">Долг</label>
+              <input
+                type="number"
+                value={changedSell.debt}
+                max={maxDebt}
+                min={totalRepay}
+                onChange={(e) =>
+                  setChangedSell((prev) => ({
+                    ...prev,
+                    debt: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          </div>
+
+          {/* Calculate total */}
+          <div className={styles.bottom}>
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Итого:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(
+                      parseFloat(changedSell.amount) *
+                        parseFloat(changedSell.price)
+                    )
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+
+              <div className={styles.calc}>
+                <p>Скидка:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(changedSell.discount)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+            </div>
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Оплачено:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(
+                      changedSell.amount * changedSell.price -
+                        changedSell.discount -
+                        changedSell.debt
+                    )
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+              <div className={styles.calc}>
+                <p>Долг:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(changedSell.debt)
+                    .replace(/,/g, " ")}
+                  <b> SWM</b>
+                </b>
+              </div>
+            </div>
+          </div>
+          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>
       </div>
     </div>

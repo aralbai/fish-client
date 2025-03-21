@@ -22,7 +22,6 @@ export default function AddProduct() {
     const data = {
       title: product.title,
       addedUserId: user.id,
-      changedUserId: user.id,
     };
 
     await axios

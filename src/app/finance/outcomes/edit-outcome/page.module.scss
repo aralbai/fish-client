@@ -1,0 +1,58 @@
+@import "../../../styles/variables.module.scss";
+
+.editOutcome {
+  margin: 20px;
+  color: $font-color;
+
+  h1 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .form {
+    padding-bottom: 20px;
+    width: 100%;
+    background-color: $color-white;
+    border-radius: 10px;
+    box-shadow: $card-box-shadow;
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      border-bottom: 1px solid $border-bottom-color;
+
+      h1 {
+        font-size: 18px;
+        font-weight: 500;
+      }
+    }
+
+    form {
+      padding: 20px;
+
+      .inputGroup {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 20px;
+
+        .formInput {
+          width: 33%;
+
+          input {
+            padding: 10px;
+            outline: none;
+            border: 1px solid $input-border-color;
+            border-radius: 5px;
+            font-size: 15px;
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+}

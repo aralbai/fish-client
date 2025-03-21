@@ -2,20 +2,38 @@ import { Close } from "@mui/icons-material";
 import styles from "./ProductModal.module.scss";
 import Input from "../input/Input";
 import PrimaryBtn from "../primaryBtn/PrimaryBtn";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { handleSubmit } from "@/utils/handleSubmit";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function ProductModal({ isModalOpen, setIsModalOpen }) {
+  const { user } = useContext(AuthContext);
   const [product, setProduct] = useState({
     title: "",
   });
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
-    handleSubmit(e, "create", "products", product, setProduct);
+    const data = {
+      title: product.title,
+      addedUserId: user?.id,
+    };
 
-    setIsModalOpen(false);
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/products`, data)
+      .then((res) => {
+        toast.success(res.data);
+        setProduct({
+          title: "",
+        });
+        setIsModalOpen(false);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
 
   if (!isModalOpen) return null;
@@ -24,12 +42,9 @@ export default function ProductModal({ isModalOpen, setIsModalOpen }) {
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Add new Product</h2>
+          <h2>Создать новый продукт</h2>
 
-          <button
-            onClick={() => setIsModalOpen(false)}
-            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-          >
+          <button onClick={() => setIsModalOpen(false)}>
             <Close />
           </button>
         </div>
@@ -38,7 +53,7 @@ export default function ProductModal({ isModalOpen, setIsModalOpen }) {
           <Input
             type="text"
             name="title"
-            placeholder="Количество"
+            placeholder="Название продукта"
             value={product.title}
             setData={setProduct}
           />

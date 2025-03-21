@@ -6,13 +6,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import Link from "next/link";
 import {
-  AccountBalanceWallet,
   ArrowRightAlt,
   Delete,
   Edit,
   FormatColorReset,
   KeyboardBackspace,
-  WalletOutlined,
 } from "@mui/icons-material";
 import RepayModal from "@/components/repayModal/RepayModal";
 import axios from "axios";

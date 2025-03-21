@@ -2,22 +2,43 @@ import { Close } from "@mui/icons-material";
 import styles from "./CustumerModal.module.scss";
 import Input from "../input/Input";
 import PrimaryBtn from "../primaryBtn/PrimaryBtn";
-import { useState } from "react";
-import { handleSubmit } from "@/utils/handleSubmit";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function CustumerModal({ isModalOpen, setIsModalOpen }) {
+  const { user } = useContext(AuthContext);
   const [custumer, setCustumer] = useState({
     fullname: "",
     phone: "",
     address: "",
   });
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
-    handleSubmit(e, "create", "custumers", custumer, setCustumer);
+    const data = {
+      ...custumer,
+      addedUserId: user?.id,
+    };
 
-    setIsModalOpen(false);
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/custumers`, data)
+      .then((res) => {
+        toast.success(res.data);
+
+        setCustumer({
+          fullname: "",
+          phone: "",
+          address: "",
+        });
+
+        setIsModalOpen(false);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
 
   if (!isModalOpen) return null;
@@ -26,12 +47,9 @@ export default function CustumerModal({ isModalOpen, setIsModalOpen }) {
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Add new Client</h2>
+          <h2>Создать новый клиент</h2>
 
-          <button
-            onClick={() => setIsModalOpen(false)}
-            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-          >
+          <button onClick={() => setIsModalOpen(false)}>
             <Close />
           </button>
         </div>

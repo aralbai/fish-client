@@ -30,7 +30,7 @@ export default function Debts() {
             <tr>
               <td>Продукта</td>
               <td>Клиент</td>
-              <td>Цена</td>
+              <td>Сумма</td>
               <td>Долг</td>
               <td>Дата</td>
               <td></td>
@@ -43,7 +43,7 @@ export default function Debts() {
                 <td>{debt.custumer?.fullname}</td>
                 <td>
                   {Intl.NumberFormat("uz-UZ")
-                    .format(debt.price)
+                    .format(debt.totalPrice)
                     .replace(/,/g, " ")}
                 </td>
                 <td>

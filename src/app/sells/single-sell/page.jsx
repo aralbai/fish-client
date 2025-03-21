@@ -1,62 +1,99 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "./page.module.scss";
 import { fetchData } from "@/utils/fetchData";
-import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import Link from "next/link";
 import { AccountBalanceWallet, Delete, Edit } from "@mui/icons-material";
 import RepayModal from "@/components/repayModal/RepayModal";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AuthContext } from "@/context/AuthContext";
+import { useRouter, useSearchParams } from "next/navigation";
+import DeleteModal from "@/components/deleteModal/DeleteModal";
 
 export default function SingleSell() {
+  const { user } = useContext(AuthContext);
   const [sell, setSell] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRepay, setDeleteRepay] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [repays, setRepays] = useState([]);
 
-  const router = useRouter();
   const searchParams = useSearchParams();
   const sellId = searchParams.get("sellId");
+  const router = useRouter();
 
   const tableRef = useRef();
 
   useEffect(() => {
     fetchData(`/sells/${sellId}`, setSell);
-  }, [isModalOpen]);
+    fetchData(`/users/all`, setUsers);
+    fetchData(`/repays/${sellId}`, setRepays);
+  }, [isModalOpen, deleteRepay]);
 
-  const handleDelete = async (e) => {
+  const handleRepayDelete = async (e, repayId) => {
     e.preventDefault();
 
     await axios
-      .delete(`http://localhost:5000/api/sells/${sellId}`)
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/repays/${sellId}/${repayId}`)
       .then((res) => {
         toast.success(res.data);
-        router.push("/sells");
+
+        setDeleteRepay(!deleteRepay);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+        console.log(err);
       });
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const handleSellDelete = async (e, repayId) => {
+    e.preventDefault();
+
+    await axios
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/sells/${sellId}`)
+      .then((res) => {
+        toast.success(res.data);
+
+        router.push("/sells");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+        console.log(err);
+      });
+
+    setDeleteModalOpen(false);
   };
 
   return (
     <div className={styles.singleSell}>
-      <h1>Single sell</h1>
+      <h1>Единая продажа</h1>
 
       <div className={styles.sellInfo}>
         <div className={styles.left}>
           <div className={styles.top}>
-            <h2>Sell info</h2>
+            <h2>Информация о продажа</h2>
 
             <div>
               <Link
                 href={{
-                  pathname: "/sells/edit-supplier",
+                  pathname: "/sells/edit-sell",
                   query: {
                     sellId: sell._id,
+                    purchaseId: sell.purchaseId,
                   },
                 }}
               >
                 <Edit />
               </Link>
 
-              <button onClick={handleDelete}>
+              <button onClick={handleDeleteClick}>
                 <Delete />
               </button>
 
@@ -69,23 +106,20 @@ export default function SingleSell() {
           </div>
           <ul>
             <li>
-              <p>Product</p>
+              <p>Продукта</p>
               <p>{sell?.product?.title}</p>
             </li>
             <li>
-              <p>Custumer</p>
+              <p>Клиент</p>
               <p>{sell?.custumer?.fullname}</p>
             </li>
             <li>
-              <p>Amount</p>
+              <p>Количество</p>
               <p>{sell?.amount ? sell.amount : 0}</p>
             </li>
+
             <li>
-              <p>Descount</p>
-              <p>{sell?.discount ? sell.discount : 0}</p>
-            </li>
-            <li>
-              <p>Price</p>
+              <p>Цена</p>
               <p>
                 {sell?.price
                   ? Intl.NumberFormat("ru-RU").format(sell.price)
@@ -93,13 +127,29 @@ export default function SingleSell() {
               </p>
             </li>
             <li>
-              <p>Debt</p>
+              <p>Сумма</p>
+              <p>
+                {sell?.price
+                  ? Intl.NumberFormat("ru-RU").format(sell.totalPrice)
+                  : 0}
+              </p>
+            </li>
+            <li>
+              <p>Скидка</p>
+              <p>
+                {sell?.discount
+                  ? Intl.NumberFormat("ru-RU").format(sell.discount)
+                  : 0}
+              </p>
+            </li>
+            <li>
+              <p>Долг</p>
               <p>
                 {sell?.debt ? Intl.NumberFormat("ru-RU").format(sell.debt) : 0}
               </p>
             </li>
             <li>
-              <p>Paid</p>
+              <p>Оплачено</p>
               <p>
                 {sell?.given
                   ? Intl.NumberFormat("ru-RU").format(sell.given)
@@ -110,61 +160,122 @@ export default function SingleSell() {
         </div>
 
         <div className={styles.right}>
-          <h2>Sell info</h2>
+          <div className={styles.top}>
+            <h2>Добавление и изменение</h2>
+          </div>
 
           <ul>
             <li>
-              <p>Added date</p>
-              <p>
-                {sell?.addedDate &&
-                  format(new Date(sell?.addedDate), "dd.MM.yyyy hh:mm:ss")}
-              </p>
-            </li>
-            <li>
-              <p>Creaated at</p>
+              <p>Дата добавления</p>
               <p>
                 {sell?.createdAt &&
-                  format(new Date(sell?.createdAt), "dd.MM.yyyy hh:mm:ss")}
+                  format(new Date(sell?.createdAt), "dd.MM.yyyy HH:mm")}
               </p>
             </li>
             <li>
-              <p>Updated at</p>
+              <p>Дата изменения</p>
               <p>
                 {sell?.updatedAt &&
-                  format(new Date(sell?.updatedAt), "dd.MM.yyyy hh:mm:ss")}
+                  format(new Date(sell?.updatedAt), "dd.MM.yyyy HH:mm")}
               </p>
             </li>
-            <li>
-              <p>Added user</p>
-              <p>{sell?.addedUserId}</p>
-            </li>
-            <li>
-              <p>Last Changed User</p>
-              <p>{sell?.changedUserId}</p>
-            </li>
+
+            {user?.role === "superadmin" && (
+              <li>
+                <p>Кто добавил</p>
+                <p>
+                  {users?.map(
+                    (user) =>
+                      user._id === sell?.addedUserId && (
+                        <Link
+                          href="/users"
+                          key={user._id}
+                          style={{ color: "#1976D2" }}
+                        >
+                          {user?.username}
+                        </Link>
+                      )
+                  )}
+                </p>
+              </li>
+            )}
+
+            {user?.role === "superadmin" && (
+              <li>
+                <p>Кто изменился последним</p>
+                <p>
+                  {users?.map(
+                    (user) =>
+                      user?._id === sell?.changedUserId && (
+                        <Link
+                          href="/users"
+                          key={user?._id}
+                          style={{ color: "#1976D2" }}
+                        >
+                          {user?.username}
+                        </Link>
+                      )
+                  )}
+                </p>
+              </li>
+            )}
           </ul>
         </div>
       </div>
 
       <div className={styles.repays}>
-        <h2>Repays</h2>
+        <h2>Погашение долга</h2>
 
         <table ref={tableRef}>
           <thead>
             <tr>
-              <td>Продукта</td>
+              <td>Сумма</td>
               <td>Дата</td>
+              <td>Кто принял</td>
+              <td>Кто изменился</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
-            {sell?.repays?.length > 0 &&
-              sell?.repays?.map((repay) => (
+            {repays?.length > 0 &&
+              repays?.map((repay) => (
                 <tr key={repay._id}>
-                  <td>{repay.amount}</td>
                   <td>
-                    {repay?.date &&
-                      format(new Date(repay?.date), "dd.MM.yyyy hh:mm:ss")}
+                    {(repay.amount &&
+                      Intl.NumberFormat("ru-RU").format(repay.amount)) ||
+                      0}
+                  </td>
+                  <td>
+                    {repay?.addedDate &&
+                      format(new Date(repay?.addedDate), "dd.MM.yyyy HH:mm")}
+                  </td>
+                  <td>
+                    {users?.map(
+                      (user) =>
+                        user._id === repay?.addedUserId && (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user?.username}
+                          </Link>
+                        )
+                    )}
+                  </td>
+                  <td>
+                    {users?.map(
+                      (user) =>
+                        user._id === repay?.changedUserId && (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user?.username}
+                          </Link>
+                        )
+                    )}
                   </td>
                   <td className={styles.action}>
                     <Link
@@ -178,11 +289,7 @@ export default function SingleSell() {
                       <Edit />
                     </Link>
 
-                    <button
-                    // onClick={() =>
-                    //   handleDelete("/repays", repay._id, repays, setrepays)
-                    // }
-                    >
+                    <button onClick={(e) => handleRepayDelete(e, repay._id)}>
                       <Delete />
                     </button>
                   </td>
@@ -200,6 +307,13 @@ export default function SingleSell() {
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         sellId={sellId}
+        max={sell?.debt}
+      />
+
+      <DeleteModal
+        isModalOpen={deleteModalOpen}
+        setIsModalOpen={setDeleteModalOpen}
+        handleDelete={handleSellDelete}
       />
     </div>
   );

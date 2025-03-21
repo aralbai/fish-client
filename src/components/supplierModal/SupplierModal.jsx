@@ -2,22 +2,42 @@ import { Close } from "@mui/icons-material";
 import styles from "./SupplierModal.module.scss";
 import Input from "../input/Input";
 import PrimaryBtn from "../primaryBtn/PrimaryBtn";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { handleSubmit } from "@/utils/handleSubmit";
+import { AuthContext } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function SupplierModal({ isModalOpen, setIsModalOpen }) {
+  const { user } = useContext(AuthContext);
   const [supplier, setSupplier] = useState({
     title: "",
     phone: "",
     address: "",
   });
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
-    handleSubmit(e, "create", "suppliers", supplier, setSupplier);
+    const data = {
+      ...supplier,
+      addedUserId: user?.id,
+    };
 
-    setIsModalOpen(false);
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/suppliers`, data)
+      .then((res) => {
+        toast.success(res.data);
+        setSupplier({
+          title: "",
+          phone: "",
+          address: "",
+        });
+        setIsModalOpen(false);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
 
   if (!isModalOpen) return null;
@@ -26,12 +46,9 @@ export default function SupplierModal({ isModalOpen, setIsModalOpen }) {
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Add new Supplier</h2>
+          <h2>Создать новый поставщик</h2>
 
-          <button
-            onClick={() => setIsModalOpen(false)}
-            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-          >
+          <button onClick={() => setIsModalOpen(false)}>
             <Close />
           </button>
         </div>

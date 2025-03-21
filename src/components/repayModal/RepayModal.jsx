@@ -1,33 +1,52 @@
-import { Close, Payment } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import styles from "./RepayModal.module.scss";
 import Input from "../input/Input";
 import PrimaryBtn from "../primaryBtn/PrimaryBtn";
-import { useState } from "react";
-import { handleSubmit } from "@/utils/handleSubmit";
+import { useContext, useState } from "react";
 import DatePick from "../datePicker/DatePicker";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-export default function RepayModal({ isModalOpen, setIsModalOpen, sellId }) {
+export default function RepayModal({
+  isModalOpen,
+  setIsModalOpen,
+  sellId,
+  max,
+}) {
+  const { user } = useContext(AuthContext);
   const [repay, setRepay] = useState({
     amount: "",
-    paymentDate: new Date(),
+    addedDate: new Date(),
   });
 
-  const pageHandleSubmit = (e) => {
+  const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
-    handleSubmit(e, sellId, "sells/repay", repay, setRepay);
+    const data = {
+      ...repay,
+      sellId,
+      addedUserId: user?.id,
+    };
 
-    setIsModalOpen(false);
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/repays`, data)
+      .then((res) => {
+        toast.success(res.data);
 
-    setRepay({
-      amount: "",
-      paymentDate: new Date(),
-    });
+        setIsModalOpen(false);
+
+        setRepay({
+          amount: "",
+          addedDate: new Date(),
+        });
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
   };
 
   if (!isModalOpen) return null;
-
-  console.log(repay);
 
   return (
     <div className={styles.sellModal}>
@@ -42,14 +61,22 @@ export default function RepayModal({ isModalOpen, setIsModalOpen, sellId }) {
 
         <form className={styles.bottom} onSubmit={pageHandleSubmit}>
           <Input
-            type="text"
+            type="number"
             name="amount"
             placeholder="Сумма"
             value={repay.amount}
             setData={setRepay}
+            max={max}
           />
 
-          <DatePick defDate={repay.paymentDate} setDate={setRepay} />
+          <DatePick defDate={repay.addedDate} setDate={setRepay} />
+
+          <p>
+            Сумма:{" "}
+            {(repay.amount &&
+              Intl.NumberFormat("ru-RU").format(repay.amount)) ||
+              0}
+          </p>
 
           <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
         </form>

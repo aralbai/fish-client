@@ -48,6 +48,7 @@ export default function SinglePurchase() {
       .delete(`${process.env.NEXT_PUBLIC_API_URL}/purchases/${purchaseId}`)
       .then((res) => {
         toast.success(res.data);
+
         router.push("/purchases");
       })
       .catch((err) => {
@@ -89,7 +90,7 @@ export default function SinglePurchase() {
               >
                 <Edit />
               </Link>
-              {purchaseSells.length <= 0 && (
+              {purchaseSells?.length <= 0 && (
                 <button onClick={handleDeleteClick}>
                   <Delete />
                 </button>
@@ -122,11 +123,11 @@ export default function SinglePurchase() {
               <p>{purchase?.amount}</p>
             </li>
             <li>
-              <p>Цена за килограмм</p>
+              <p>Цена</p>
               <p>{Intl.NumberFormat("ru-RU").format(purchase?.price)}</p>
             </li>
             <li>
-              <p>Цена</p>
+              <p>Сумма</p>
               <p>{Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)}</p>
             </li>
             <li>
@@ -145,6 +146,16 @@ export default function SinglePurchase() {
               <p>Остальные</p>
               <p>
                 {Intl.NumberFormat("ru-RU").format(purchase?.remainingAmount)}
+              </p>
+            </li>
+            <li>
+              <p>Продано</p>
+              <p>
+                {Intl.NumberFormat("ru-RU").format(
+                  purchase?.amount -
+                    purchase?.remainingAmount -
+                    purchase?.shortage
+                )}
               </p>
             </li>
             <li>
@@ -227,7 +238,7 @@ export default function SinglePurchase() {
               <td>Продукта</td>
               <td>Клиент</td>
               <td>Amount</td>
-              <td>Цена</td>
+              <td>Сумма</td>
               <td>Дата</td>
               <td></td>
             </tr>
@@ -239,7 +250,7 @@ export default function SinglePurchase() {
                   <td>{sell?.product?.title}</td>
                   <td>{sell?.custumer?.fullname}</td>
                   <td>{sell?.amount}</td>
-                  <td>{Intl.NumberFormat("ru-RU").format(sell?.price)}</td>
+                  <td>{Intl.NumberFormat("ru-RU").format(sell?.totalPrice)}</td>
                   <td>
                     {format(new Date(sell?.addedDate), "dd.MM.yyyy HH:mm")}
                   </td>
