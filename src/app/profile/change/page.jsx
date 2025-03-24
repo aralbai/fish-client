@@ -49,19 +49,19 @@ export default function Change() {
         <li className={pathname === "/profile" ? styles.active : ""}>
           <Link href="/profile">
             <Info />
-            Basic info
+            <p>Информация</p>
           </Link>
         </li>
         <li className={pathname === "/profile/change" ? styles.active : ""}>
           <Link href="/profile/change">
             <Settings />
-            Change account
+            <p>Изменить аккаунт</p>
           </Link>
         </li>
         <li className={pathname === "/profile/password" ? styles.active : ""}>
           <Link href="/profile/password">
             <Lock />
-            Change password
+            <p>Изменить пароль</p>
           </Link>
         </li>
       </ul>
@@ -70,7 +70,7 @@ export default function Change() {
         <div className={styles.top}></div>
 
         <div className={styles.title}>
-          <h2>Change information</h2>
+          <h2>Изменить информацию</h2>
         </div>
 
         <form onSubmit={handleSubmit}>

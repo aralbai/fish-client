@@ -1,19 +1,42 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, ArrowRightAlt } from "@mui/icons-material";
+import { Add, ArrowRightAlt, FilterList } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import { format } from "date-fns";
 import TableTop from "@/components/tableTop/TableTop";
+import PurchasesFilter from "../../components/filters/purchasesFilter/PurchasesFilter";
+import { getFirstDayOfMonthThisYear } from "@/utils/getFirstDay";
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [filters, setFilters] = useState({
+    product: {
+      id: "",
+      title: "Все",
+    },
+    supplier: {
+      id: "",
+      title: "Все",
+    },
+    status: "",
+    startDate: getFirstDayOfMonthThisYear(),
+    endDate: new Date(),
+  });
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
   const tableRef = useRef(null);
 
   useEffect(() => {
-    fetchData("/purchases", setPurchases);
-  }, []);
+    fetchData(
+      `/purchases?productId=${filters?.product?.id}&supplierId=${filters?.supplier?.id}&status=${filters?.status}&startDate=${filters?.startDate}&endDate=${filters?.endDate}`,
+      setPurchases
+    );
+    fetchData("/products", setProducts);
+    fetchData("/suppliers", setSuppliers);
+  }, [filters]);
 
   return (
     <div className={styles.products}>
@@ -28,7 +51,22 @@ export default function Purchases() {
           </Link>
         </div>
 
-        <TableTop tableRef={tableRef} />
+        <div className={styles.tableTop}>
+          <div className={styles.filter}>
+            <button onClick={() => setFilterModalOpen((prev) => !prev)}>
+              <FilterList /> Фильтр
+            </button>
+            <PurchasesFilter
+              isModalOpen={filterModalOpen}
+              setIsModalOpen={setFilterModalOpen}
+              products={products}
+              suppliers={suppliers}
+              filters={filters}
+              setFilters={setFilters}
+            />
+          </div>
+          <TableTop tableRef={tableRef} />
+        </div>
 
         <table ref={tableRef}>
           <thead>
@@ -38,7 +76,6 @@ export default function Purchases() {
               <td>Количество</td>
               <td>Скидка</td>
               <td>Сумма</td>
-              <td>Долг</td>
               <td>Недостаток</td>
               <td>Остальные</td>
               <td>Дата</td>
@@ -46,7 +83,7 @@ export default function Purchases() {
             </tr>
           </thead>
           <tbody>
-            {purchases.map((purchase) => (
+            {purchases?.map((purchase) => (
               <tr key={purchase._id}>
                 <td>{purchase.product?.title}</td>
                 <td>{purchase.supplier?.title}</td>
@@ -60,11 +97,6 @@ export default function Purchases() {
                 <td>
                   {Intl.NumberFormat("uz-UZ")
                     .format(purchase.totalPrice)
-                    .replace(/,/g, " ")}
-                </td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.debt)
                     .replace(/,/g, " ")}
                 </td>
                 <td>{purchase.shortage}</td>

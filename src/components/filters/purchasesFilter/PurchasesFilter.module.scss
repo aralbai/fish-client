@@ -1,0 +1,54 @@
+@import "@/app/styles/variables.module.scss";
+
+.purchasesFilter {
+  position: absolute;
+  background-color: #fff;
+  box-shadow: $filter-box-shadow;
+  padding: 15px;
+  display: flex;
+  gap: 20px;
+  border-radius: 5px;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &:last-child {
+      button {
+        padding: 10px;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: $button-hover-color;
+        }
+      }
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 5px;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid $input-border-color;
+      font-size: 15px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: none;
+    }
+
+    div {
+      .react-datepicker-wrapper,
+      .react-datepicker__input-container input {
+        border: none !important;
+        background: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+        display: inline-block;
+        width: max-content !important;
+      }
+    }
+  }
+}

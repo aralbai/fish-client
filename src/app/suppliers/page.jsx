@@ -54,49 +54,52 @@ export default function Suppliers() {
           <h1>Все поставщики</h1>
           <Link href="/suppliers/add-supplier">
             <Add />
-            Создать новый
+            <p>Создать новый</p>
           </Link>
         </div>
 
         <TableTop tableRef={tableRef} />
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Поставщик</td>
-              <td>Номер телефона</td>
-              <td>Адрес</td>
-              <td>Наши долги</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {suppliers?.map((supplier) => (
-              <tr key={supplier._id}>
-                <td>{supplier.title}</td>
-                <td>{supplier.phone}</td>
-                <td>{supplier.address}</td>
-                <td>
-                  {(debtMap[supplier?._id] &&
-                    Intl.NumberFormat("ru-RU").format(
-                      debtMap[supplier?._id]
-                    )) ||
-                    0}
-                </td>
-                <td className={styles.action}>
-                  <Link
-                    href={{
-                      pathname: "/suppliers/single-supplier",
-                      query: { supplierId: supplier._id },
-                    }}
-                  >
-                    <ArrowRightAlt />
-                  </Link>
-                </td>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Поставщик</td>
+                <td>Номер телефона</td>
+                <td>Адрес</td>
+                <td>Наши долги</td>
+                <td></td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {suppliers?.map((supplier) => (
+                <tr key={supplier._id}>
+                  <td>{supplier.title}</td>
+                  <td>{supplier.phone}</td>
+                  <td>{supplier.address}</td>
+                  <td>
+                    {(debtMap[supplier?._id] &&
+                      Intl.NumberFormat("ru-RU").format(
+                        debtMap[supplier?._id]
+                      )) ||
+                      0}
+                  </td>
+                  <td className={styles.action}>
+                    <Link
+                      href={{
+                        pathname: "/suppliers/single-supplier",
+                        query: { supplierId: supplier._id },
+                      }}
+                    >
+                      <ArrowRightAlt />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         {suppliers.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}

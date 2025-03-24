@@ -1,20 +1,44 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, ArrowRightAlt } from "@mui/icons-material";
+import { Add, ArrowRightAlt, FilterList } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { fetchData } from "@/utils/fetchData";
 import TableTop from "@/components/tableTop/TableTop";
+import SellsFilter from "@/components/filters/sellsFilter/SellsFilter";
+import { getFirstDayOfMonthThisYear } from "@/utils/getFirstDay";
 
 export default function Sells() {
   const [sells, setSells] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [custumers, setCustumers] = useState([]);
+  const [filters, setFilters] = useState({
+    product: {
+      id: "",
+      title: "Все",
+    },
+    custumer: {
+      id: "",
+      title: "Все",
+    },
+    status: "",
+    startDate: getFirstDayOfMonthThisYear(),
+    endDate: new Date(),
+  });
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const tableRef = useRef(null);
 
   useEffect(() => {
-    fetchData("/sells", setSells);
-  }, []);
+    fetchData("/products", setProducts);
+    fetchData("/custumers", setCustumers);
+
+    fetchData(
+      `/sells?productId=${filters?.product?.id}&custumerId=${filters?.custumer?.id}&status=${filters?.status}&startDate=${filters?.startDate}&endDate=${filters?.endDate}`,
+      setSells
+    );
+  }, [filters]);
 
   return (
     <div className={styles.products}>
@@ -29,7 +53,22 @@ export default function Sells() {
           </Link>
         </div>
 
-        <TableTop tableRef={tableRef} />
+        <div className={styles.tableTop}>
+          <div className={styles.filter}>
+            <button onClick={() => setFilterModalOpen((prev) => !prev)}>
+              <FilterList /> Фильтр
+            </button>
+            <SellsFilter
+              isModalOpen={filterModalOpen}
+              setIsModalOpen={setFilterModalOpen}
+              products={products}
+              custumers={custumers}
+              filters={filters}
+              setFilters={setFilters}
+            />
+          </div>
+          <TableTop tableRef={tableRef} />
+        </div>
 
         <table ref={tableRef}>
           <thead>

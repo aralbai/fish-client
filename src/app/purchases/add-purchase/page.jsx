@@ -13,6 +13,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AddPurchase() {
   const { user } = useContext(AuthContext);
@@ -20,13 +21,17 @@ export default function AddPurchase() {
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [purchase, setPurchase] = useState({
-    product: "Выберите продукт",
-    supplier: "Выберите поставщика",
+    product: {
+      id: "",
+      title: "Выберите продукт",
+    },
+    supplier: {
+      id: "",
+      title: "Выберите поставщика",
+    },
     carNumber: "",
     amount: "",
     price: "",
-    given: "",
-    debt: "",
     discount: "",
     addedDate: new Date(),
   });
@@ -40,16 +45,28 @@ export default function AddPurchase() {
     fetchData("/suppliers", setSuppliers);
   }, [isProductOpen, isSupplierOpen]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    const values = value.split("-");
+
+    setPurchase((prev) => ({
+      ...prev,
+      [name]: {
+        id: values[0],
+        title: values[1],
+      },
+    }));
+  };
+
+  console.log(purchase);
+
   const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
     const data = {
       ...purchase,
-      totalPrice: purchase.price * purchase.amount - purchase.discount,
       discount: purchase.discount === "" ? 0 : purchase.discount,
-      debt: purchase.debt === "" ? 0 : purchase.debt,
-      given:
-        purchase.price * purchase.amount - purchase.discount - purchase.debt,
       addedUserId: user?.id,
     };
 
@@ -58,7 +75,7 @@ export default function AddPurchase() {
       .then((res) => {
         toast.success(res.data);
 
-        router.push("/purchases");
+        // router.push("/purchases");
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
@@ -72,104 +89,127 @@ export default function AddPurchase() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Создать новый поставщик</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/purchases"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/purchases">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
+          {/* // Product Supplier  */}
           <div className={styles.inputGroup}>
-            <Select
-              name="product"
-              mapData={products}
-              text="title"
-              defValue={purchase.product}
-              setData={setPurchase}
-            />
-            <div onClick={() => setIsProductOpen(true)}>
-              <PrimaryBtn type="button">
-                <Add />
-              </PrimaryBtn>
+            {/* // Product  */}
+            <div className={styles.formInput}>
+              <select
+                name="product"
+                value={`${purchase?.product?._id}-${purchase?.product.title}`}
+                onChange={handleChange}
+              >
+                <option value="" hidden>
+                  {purchase?.product?.title}
+                </option>
+                {products?.map((product) => (
+                  <option
+                    key={product?._id}
+                    value={`${product?._id}-${product.title}`}
+                  >
+                    {product?.title}
+                  </option>
+                ))}
+              </select>
+              <div onClick={() => setIsProductOpen(true)}>
+                <PrimaryBtn type="button">
+                  <Add />
+                </PrimaryBtn>
+              </div>
             </div>
-            <Select
-              name="supplier"
-              mapData={suppliers}
-              text="title"
-              defValue={purchase.supplier}
-              setData={setPurchase}
-            />
-            <div onClick={() => setIsSupplierOpen(true)}>
-              <PrimaryBtn type="button">
-                <Add />
-              </PrimaryBtn>
+
+            {/* // Supplier  */}
+            <div className={styles.formInput}>
+              <select
+                name="supplier"
+                value={`${purchase?.supplier?._id}-${purchase?.supplier.title}`}
+                onChange={handleChange}
+              >
+                <option value="" hidden>
+                  {purchase?.supplier?.title}
+                </option>
+                {suppliers?.map((supplier) => (
+                  <option
+                    key={supplier?._id}
+                    value={`${supplier?._id}-${supplier.title}`}
+                  >
+                    {supplier?.title}
+                  </option>
+                ))}
+              </select>
+              <div onClick={() => setIsSupplierOpen(true)}>
+                <PrimaryBtn type="button">
+                  <Add />
+                </PrimaryBtn>
+              </div>
             </div>
           </div>
+
+          {/* Amount Price  */}
           <div className={styles.inputGroup}>
-            <Input
-              type="number"
-              name="amount"
-              placeholder="Количество"
-              value={purchase.amount}
-              setData={setPurchase}
-              required={true}
-            />
-            <Input
-              type="number"
-              name="price"
-              placeholder="Цена"
-              value={purchase.price}
-              setData={setPurchase}
-              required={true}
-            />
+            <div className={styles.formInput}>
+              <Input
+                type="number"
+                name="amount"
+                placeholder="Количество"
+                value={purchase.amount}
+                setData={setPurchase}
+                required={true}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="number"
+                name="price"
+                placeholder="Цена"
+                value={purchase.price}
+                setData={setPurchase}
+                required={true}
+              />
+            </div>
           </div>
 
+          {/* CarNumber Discount */}
           <div className={styles.inputGroup}>
-            <Input
-              type="text"
-              name="carNumber"
-              placeholder="Номер автомобиля"
-              value={purchase.carNumber}
-              setData={setPurchase}
-              required={true}
-            />
-            <DatePick defDate={purchase.addedDate} setDate={setPurchase} />
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="carNumber"
+                placeholder="Номер автомобиля"
+                value={purchase.carNumber}
+                setData={setPurchase}
+                required={true}
+              />
+            </div>
+
+            <div className={styles.formInput}>
+              <Input
+                type="number"
+                name="discount"
+                placeholder="Скидка"
+                value={purchase.discount}
+                setData={setPurchase}
+                required={false}
+              />
+            </div>
           </div>
 
+          {/* AddedDate  */}
           <div className={styles.inputGroup}>
-            <Input
-              type="number"
-              name="discount"
-              placeholder="Скидка"
-              value={purchase.discount}
-              setData={setPurchase}
-              required={false}
-            />
-            <Input
-              type="number"
-              name="debt"
-              placeholder="Долг"
-              value={purchase.debt}
-              setData={setPurchase}
-              required={false}
-            />
+            <div className={styles.formInput}>
+              <DatePick defDate={purchase.addedDate} setDate={setPurchase} />
+            </div>
+            <div className={styles.formInput}></div>
           </div>
 
+          {/* Calc values  */}
           <div className={styles.bottom}>
-            <div className={styles.calc}>
-              <p>Итого:</p>
-              <b>
-                {Intl.NumberFormat("uz-UZ")
-                  .format(purchase.amount * purchase.price)
-                  .replace(/,/g, " ")}
-                <b> SWM</b>
-              </b>
-            </div>
             <div className={styles.calc}>
               <p>Скидка:</p>
               <b>
@@ -180,30 +220,21 @@ export default function AddPurchase() {
               </b>
             </div>
             <div className={styles.calc}>
-              <p>Долг:</p>
+              <p>Итого:</p>
               <b>
                 {Intl.NumberFormat("uz-UZ")
-                  .format(purchase.debt)
-                  .replace(/,/g, " ")}
-                <b> SWM</b>
-              </b>
-            </div>
-            <div className={styles.calc}>
-              <p>Оплачено:</p>
-              <b>
-                {Intl.NumberFormat("uz-UZ")
-                  .format(
-                    purchase.amount * purchase.price -
-                      purchase.discount -
-                      purchase.debt
-                  )
+                  .format(purchase.amount * purchase.price - purchase.discount)
                   .replace(/,/g, " ")}
                 <b> SWM</b>
               </b>
             </div>
           </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+          </div>
         </form>
       </div>
 

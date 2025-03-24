@@ -30,55 +30,57 @@ export default function Custumers() {
           <h1>Все клиенты</h1>
           <Link href="/custumers/add-custumer">
             <Add />
-            Создать новый
+            <p>Создать новый</p>
           </Link>
         </div>
 
         <TableTop tableRef={tableRef} />
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Имя клиента</td>
-              <td>Номер телефона</td>
-              <td>Адрес</td>
-              <td>Лимит</td>
-              <td>Общая долги</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {custumers?.map((custumer) => (
-              <tr key={custumer._id}>
-                <td>{custumer.fullname}</td>
-                <td>{custumer.phone}</td>
-                <td>{custumer.address}</td>
-                <td>
-                  {custumer.limit === -1
-                    ? "Безлимитный"
-                    : Intl.NumberFormat("ru-RU").format(custumer.limit)}
-                </td>
-                <td>
-                  {(debtMap[custumer?._id] &&
-                    Intl.NumberFormat("ru-RU").format(
-                      debtMap[custumer?._id]
-                    )) ||
-                    0}
-                </td>
-                <td className={styles.action}>
-                  <Link
-                    href={{
-                      pathname: "/custumers/single-custumer",
-                      query: { custumerId: custumer._id },
-                    }}
-                  >
-                    <ArrowRightAlt />
-                  </Link>
-                </td>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Клиент</td>
+                <td>Номер тел.</td>
+                <td>Адрес</td>
+                <td>Лимит</td>
+                <td>Долги</td>
+                <td></td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {custumers?.map((custumer) => (
+                <tr key={custumer._id}>
+                  <td>{custumer.fullname}</td>
+                  <td>{custumer.phone}</td>
+                  <td>{custumer.address}</td>
+                  <td>
+                    {custumer.limit === -1
+                      ? "Безлимитный"
+                      : Intl.NumberFormat("ru-RU").format(custumer.limit)}
+                  </td>
+                  <td>
+                    {(debtMap[custumer?._id] &&
+                      Intl.NumberFormat("ru-RU").format(
+                        debtMap[custumer?._id]
+                      )) ||
+                      0}
+                  </td>
+                  <td className={styles.action}>
+                    <Link
+                      href={{
+                        pathname: "/custumers/single-custumer",
+                        query: { custumerId: custumer._id },
+                      }}
+                    >
+                      <ArrowRightAlt />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {custumers.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}

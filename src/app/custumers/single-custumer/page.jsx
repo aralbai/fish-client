@@ -55,15 +55,10 @@ export default function SingleCustumer() {
       <div className={styles.title}>
         <h1>Единый клиент</h1>
 
-        <PrimaryBtn
-          type="link"
-          fullname="Вернуться к списку"
-          url="/custumers"
-          icon={<KeyboardBackspace />}
-        >
+        <Link href="/custumers">
           <KeyboardBackspace />
-          Вернуться к списку
-        </PrimaryBtn>
+          <p>Вернуться к списку</p>
+        </Link>
       </div>
 
       <div className={styles.custumerInfo}>
@@ -186,42 +181,44 @@ export default function SingleCustumer() {
       <div className={styles.repays}>
         <h2>Список долгов</h2>
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Продукта</td>
-              <td>Amount</td>
-              <td>Debt</td>
-              <td>Дата</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {custumerDebts.length > 0 &&
-              custumerDebts.map((sell) => (
-                <tr key={sell._id}>
-                  <td>{sell.product?.title}</td>
-                  <td>{sell.amount}</td>
-                  <td>{Intl.NumberFormat("ru-RU").format(sell.debt)}</td>
-                  <td>
-                    {format(new Date(sell.addedDate), "dd.MM.yyyy HH:mm")}
-                  </td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/sells/single-sell",
-                        query: {
-                          sellId: sell._id,
-                        },
-                      }}
-                    >
-                      <ArrowRightAlt />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Продукта</td>
+                <td>Amount</td>
+                <td>Debt</td>
+                <td>Дата</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {custumerDebts.length > 0 &&
+                custumerDebts.map((sell) => (
+                  <tr key={sell._id}>
+                    <td>{sell.product?.title}</td>
+                    <td>{sell.amount}</td>
+                    <td>{Intl.NumberFormat("ru-RU").format(sell.debt)}</td>
+                    <td>
+                      {format(new Date(sell.addedDate), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/sells/single-sell",
+                          query: {
+                            sellId: sell._id,
+                          },
+                        }}
+                      >
+                        <ArrowRightAlt />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
 
         {custumerDebts.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>

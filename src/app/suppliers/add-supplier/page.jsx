@@ -8,6 +8,7 @@ import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AddSupplier() {
   const router = useRouter();
@@ -41,47 +42,52 @@ export default function AddSupplier() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Создать новый поставщик</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/suppliers"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/suppliers">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
           <div className={styles.inputGroup}>
-            <Input
-              type="text"
-              name="title"
-              placeholder="Название поставщика"
-              value={supplier.title}
-              setData={setSupplier}
-              required={true}
-            />
-            <Input
-              type="text"
-              name="phone"
-              placeholder="Номер телефона"
-              value={supplier.phone}
-              setData={setSupplier}
-              required={false}
-            />
-            <Input
-              type="text"
-              name="address"
-              placeholder="Адрес"
-              value={supplier.address}
-              setData={setSupplier}
-              required={false}
-            />
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="title"
+                placeholder="Название поставщика"
+                value={supplier.title}
+                setData={setSupplier}
+                required={true}
+              />
+            </div>
+
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="phone"
+                placeholder="Номер телефона"
+                value={supplier.phone}
+                setData={setSupplier}
+                required={false}
+              />
+            </div>
+
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="address"
+                placeholder="Адрес"
+                value={supplier.address}
+                setData={setSupplier}
+                required={false}
+              />
+            </div>
           </div>
 
           <div className={styles.inputGroup}>
-            <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
           </div>
         </form>
       </div>

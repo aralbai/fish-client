@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 export default function EditCustumer() {
   const { user } = useContext(AuthContext);
@@ -49,49 +50,56 @@ export default function EditCustumer() {
 
   return (
     <div className={styles.editProduct}>
-      <h1>Поставщики</h1>
+      <h1>Клиенты</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
-          <PrimaryBtn
-            type="link"
-            fullname="Вернуться к списку"
-            url="/custumers"
-            icon={<KeyboardBackspace />}
-          >
+          <h1>Изменить клиент</h1>
+          <Link href="/custumers">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
-          <Input
-            type="text"
-            name="fullname"
-            placeholder="Название поставщика"
-            value={changedCustumer.fullname}
-            setData={setChangedCustumer}
-            required={true}
-          />
-          <Input
-            type="text"
-            name="phone"
-            placeholder="Номер телефона"
-            value={changedCustumer.phone}
-            setData={setChangedCustumer}
-            required={false}
-          />
-          <Input
-            type="text"
-            name="address"
-            placeholder="Адрес"
-            value={changedCustumer.address}
-            setData={setChangedCustumer}
-            required={false}
-          />
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="fullname"
+                placeholder="Название поставщика"
+                value={changedCustumer.fullname}
+                setData={setChangedCustumer}
+                required={true}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="phone"
+                placeholder="Номер телефона"
+                value={changedCustumer.phone}
+                setData={setChangedCustumer}
+                required={false}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="address"
+                placeholder="Адрес"
+                value={changedCustumer.address}
+                setData={setChangedCustumer}
+                required={false}
+              />
+            </div>
+          </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+          </div>
         </form>
       </div>
     </div>

@@ -5,6 +5,7 @@ import {
   AccountBox,
   Archive,
   ChevronRight,
+  Close,
   Dashboard,
   DisabledByDefault,
   FileUpload,
@@ -16,9 +17,28 @@ import {
   Unarchive,
 } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
-export default function Sidebar() {
+export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
+  const { user } = useContext(AuthContext);
+  const [windowMobile, setWindowMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1200) {
+        setWindowMobile(true);
+      } else {
+        setWindowMobile(false);
+      }
+    };
+
+    handleResize(); // Set initial size
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const pathname = usePathname();
 
   const [financeDropdown, setFinanaceDropdown] = useState(false);
@@ -30,21 +50,37 @@ export default function Sidebar() {
   }, [pathname]);
 
   return (
-    <div className={styles.sidebar}>
+    <div
+      className={`${styles.sidebar} ${isMobile && styles.sidebarMobile}`}
+      ref={popupRef}
+    >
       <div className={styles.container}>
         <div className={styles.top}>
           <h1>FISH</h1>
+          <span onClick={() => setIsMobile(!isMobile)}>
+            <Close />
+          </span>
         </div>
 
         <div className={styles.bottom}>
           <ul>
-            <li onClick={() => setFinanaceDropdown(false)}>
+            <li
+              onClick={() => {
+                setFinanaceDropdown(false),
+                  windowMobile && setIsMobile(!isMobile);
+              }}
+            >
               <Link href="/" className={pathname === "/" ? styles.active : ""}>
                 <Dashboard /> Statistika
               </Link>
             </li>
 
-            <li onClick={() => setFinanaceDropdown(false)}>
+            <li
+              onClick={() => {
+                setFinanaceDropdown(false),
+                  windowMobile && setIsMobile(!isMobile);
+              }}
+            >
               <Link
                 href="/purchases"
                 className={pathname.includes("/purchases") ? styles.active : ""}
@@ -53,7 +89,12 @@ export default function Sidebar() {
               </Link>
             </li>
 
-            <li onClick={() => setFinanaceDropdown(false)}>
+            <li
+              onClick={() => {
+                setFinanaceDropdown(false),
+                  windowMobile && setIsMobile(!isMobile);
+              }}
+            >
               <Link
                 href="/sells"
                 className={pathname.includes("/sells") ? styles.active : ""}
@@ -62,7 +103,12 @@ export default function Sidebar() {
               </Link>
             </li>
 
-            <li onClick={() => setFinanaceDropdown(false)}>
+            <li
+              onClick={() => {
+                setFinanaceDropdown(false),
+                  windowMobile && setIsMobile(!isMobile);
+              }}
+            >
               <Link
                 href="/products"
                 className={pathname.includes("/products") ? styles.active : ""}
@@ -71,7 +117,12 @@ export default function Sidebar() {
               </Link>
             </li>
 
-            <li onClick={() => setFinanaceDropdown(false)}>
+            <li
+              onClick={() => {
+                setFinanaceDropdown(false),
+                  windowMobile && setIsMobile(!isMobile);
+              }}
+            >
               <Link
                 href="/custumers"
                 className={pathname.includes("/custumers") ? styles.active : ""}
@@ -81,7 +132,12 @@ export default function Sidebar() {
               </Link>
             </li>
 
-            <li onClick={() => setFinanaceDropdown(false)}>
+            <li
+              onClick={() => {
+                setFinanaceDropdown(false),
+                  windowMobile && setIsMobile(!isMobile);
+              }}
+            >
               <Link
                 href="/suppliers"
                 className={pathname.includes("/suppliers") ? styles.active : ""}
@@ -111,7 +167,7 @@ export default function Sidebar() {
                     : `${styles.dropdownBody} ${styles.dropdownClose}`
                 }
               >
-                <li>
+                <li onClick={() => windowMobile && setIsMobile(!isMobile)}>
                   <Link
                     href="/finance/outcomes"
                     className={
@@ -125,7 +181,7 @@ export default function Sidebar() {
                   </Link>
                 </li>
 
-                <li>
+                <li onClick={() => windowMobile && setIsMobile(!isMobile)}>
                   <Link
                     href="/finance/deposits"
                     className={
@@ -139,7 +195,7 @@ export default function Sidebar() {
                   </Link>
                 </li>
 
-                <li>
+                <li onClick={() => windowMobile && setIsMobile(!isMobile)}>
                   <Link
                     href="/finance/withdraws"
                     className={
@@ -155,15 +211,22 @@ export default function Sidebar() {
               </ul>
             </li>
 
-            <li onClick={() => setFinanaceDropdown(false)}>
-              <Link
-                href="/users"
-                className={pathname === "/users" ? styles.active : ""}
+            {user?.role === "superadmin" && (
+              <li
+                onClick={() => {
+                  setFinanaceDropdown(false),
+                    windowMobile && setIsMobile(!isMobile);
+                }}
               >
-                <PermContactCalendar />
-                Пользователи
-              </Link>
-            </li>
+                <Link
+                  href="/users"
+                  className={pathname === "/users" ? styles.active : ""}
+                >
+                  <PermContactCalendar />
+                  Пользователи
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -23,51 +23,55 @@ export default function Users() {
       <div className={styles.table}>
         <div className={styles.top}>
           <h1>Все пользователи</h1>
+
           <Link href="/users/add-user">
             <Add />
-            Создать новый
+            <p>Создать новый</p>
           </Link>
         </div>
 
         <TableTop tableRef={tableRef} />
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Полное имя</td>
-              <td>Имя пользователя</td>
-              <td>Роль</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {users?.map((user) => (
-              <tr key={user._id}>
-                <td>{user.fullname}</td>
-                <td>{user.username}</td>
-                <td>{user.role}</td>
-                <td className={styles.action}>
-                  <Link
-                    href={{
-                      pathname: "/users/edit-user",
-                      query: { userId: user._id },
-                    }}
-                  >
-                    <Edit />
-                  </Link>
-
-                  <button
-                    onClick={() =>
-                      handleDelete("/users", user._id, users, setUsers)
-                    }
-                  >
-                    <Delete />
-                  </button>
-                </td>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Полное имя</td>
+                <td>Имя пользователя</td>
+                <td>Роль</td>
+                <td></td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users?.map((user) => (
+                <tr key={user._id}>
+                  <td>{user.fullname}</td>
+                  <td>{user.username}</td>
+                  <td>{user.role}</td>
+                  <td className={styles.action}>
+                    <Link
+                      href={{
+                        pathname: "/users/edit-user",
+                        query: { userId: user._id },
+                      }}
+                    >
+                      <Edit />
+                    </Link>
+
+                    <button
+                      onClick={() =>
+                        handleDelete("/users", user._id, users, setUsers)
+                      }
+                    >
+                      <Delete />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         {users.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}

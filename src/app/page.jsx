@@ -6,6 +6,7 @@ import {
   AccountBalanceWallet,
   AssuredWorkload,
   Paid,
+  PermContactCalendar,
 } from "@mui/icons-material";
 import Link from "next/link";
 import { fetchData } from "@/utils/fetchData";
@@ -21,6 +22,7 @@ export default function Home() {
   const [withdraws, setWithdraws] = useState([]);
   const [purchaseAmount, setPurchaseAmount] = useState([]);
   const [totalDebts, setTotalDebts] = useState(0);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     fetchData("/purchases/total/price", setPurchases);
@@ -30,6 +32,7 @@ export default function Home() {
     fetchData("/withdraws/total", setWithdraws);
     fetchData("/purchases/total/amount", setPurchaseAmount);
     fetchData("/sells/total/debts", setTotalDebts);
+    fetchData("/users", setUsers);
   }, []);
 
   const balance =
@@ -45,52 +48,67 @@ export default function Home() {
         <h1 className={styles.title}>Statiska</h1>
 
         <div className={styles.cards}>
-          {/* <div className={styles.card}> */}
-          <Link href="/cards/flow" className={styles.card}>
-            <div className={styles.left}>
-              <AssuredWorkload className={styles.icon} />
-            </div>
-            <div className={styles.right}>
-              <h2>
-                {purchaseAmount.totalAmount ? purchaseAmount.totalAmount : 0}
-              </h2>
-              <p>Sklad</p>
-            </div>
-          </Link>
-          {/* </div> */}
-          <Link href="/cards/balance" className={styles.card}>
-            <div className={styles.left}>
-              <AccountBalanceWallet className={styles.icon} />
-            </div>
-            <div className={styles.right}>
-              <h2>
-                {balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}
-              </h2>
-              <p>Баланс</p>
-            </div>
-          </Link>
-          <Link href="/cards/debts" className={styles.card}>
-            <div className={styles.left}>
-              <Paid className={`${styles.icon} ${styles.success}`} />
-            </div>
-            <div className={styles.right}>
-              <h2>
-                {totalDebts.totalDebts
-                  ? Intl.NumberFormat("ru-RU").format(totalDebts.totalDebts)
-                  : 0}
-              </h2>
-              <p>Долги</p>
-            </div>
-          </Link>
-          <Link href="/cards/ourDebts" className={styles.card}>
-            <div className={styles.left}>
-              <Paid className={`${styles.icon} ${styles.danger}`} />
-            </div>
-            <div className={styles.right}>
-              <h2>{Intl.NumberFormat("ru-RU").format(0)}</h2>
-              <p>Наши долги</p>
-            </div>
-          </Link>
+          <div className={styles.row}>
+            <Link href="/cards/flow" className={styles.card}>
+              <div className={styles.left}>
+                <AssuredWorkload className={styles.icon} />
+              </div>
+              <div className={styles.right}>
+                <h2>
+                  {purchaseAmount.totalAmount
+                    ? Intl.NumberFormat("ru-RU").format(
+                        purchaseAmount.totalAmount
+                      )
+                    : 0}
+                </h2>
+                <p>Sklad</p>
+              </div>
+            </Link>
+
+            <Link
+              href={user?.role === "superadmin" ? "/cards/balance" : "/"}
+              className={styles.card}
+            >
+              <div className={styles.left}>
+                <AccountBalanceWallet className={styles.icon} />
+              </div>
+              <div className={styles.right}>
+                <h2>
+                  {balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}
+                </h2>
+                <p>Баланс</p>
+              </div>
+            </Link>
+          </div>
+
+          <div className={styles.row}>
+            <Link href="/cards/debts" className={styles.card}>
+              <div className={styles.left}>
+                <Paid className={`${styles.icon} ${styles.success}`} />
+              </div>
+              <div className={styles.right}>
+                <h2>
+                  {totalDebts.totalDebts
+                    ? Intl.NumberFormat("ru-RU").format(totalDebts.totalDebts)
+                    : 0}
+                </h2>
+                <p>Долги</p>
+              </div>
+            </Link>
+
+            <Link
+              href={user?.role === "superadmin" ? "/users" : ""}
+              className={styles.card}
+            >
+              <div className={styles.left}>
+                <PermContactCalendar className={styles.icon} />
+              </div>
+              <div className={styles.right}>
+                <h2>{users.length > 0 ? users.length : 0}</h2>
+                <p>Пользователи</p>
+              </div>
+            </Link>
+          </div>
         </div>
 
         {user?.role && user?.role === "superadmin" && (

@@ -22,7 +22,6 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px;
-      padding-bottom: 0;
 
       h1 {
         font-weight: 500;
@@ -41,43 +40,63 @@
       }
     }
 
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
+    .tableContainer {
+      overflow-x: auto;
 
-      tr {
-        td {
-          padding: 10px;
-          border-bottom: 1px solid $border-bottom-color;
+      table {
+        width: 100%;
+        border-collapse: collapse;
 
-          &:first-child {
-            padding-left: 20px;
-          }
-
-          &:last-child {
-            padding-right: 20px;
-          }
-        }
-
-        .action {
-          display: flex;
-          align-items: center;
-
-          button,
-          a {
-            background: none;
-            border: none;
-            cursor: pointer;
-            border-radius: 50%;
+        tr {
+          td {
             padding: 10px;
+            border-bottom: 1px solid $border-bottom-color;
+            white-space: nowrap;
+
+            &:first-child {
+              padding-left: 20px;
+            }
+
+            &:last-child {
+              padding-right: 20px;
+            }
+          }
+
+          .action {
             display: flex;
             align-items: center;
-            justify-content: center;
 
-            &:hover {
-              background-color: $button-hover-color;
+            button,
+            a {
+              background: none;
+              border: none;
+              cursor: pointer;
+              border-radius: 50%;
+              padding: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              &:hover {
+                background-color: $button-hover-color;
+              }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .products {
+    .table {
+      .top {
+        a {
+          padding: 5px 15px;
+
+          p {
+            display: none;
           }
         }
       }

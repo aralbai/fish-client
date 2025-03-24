@@ -61,19 +61,19 @@ export default function Password() {
         <li className={pathname === "/profile" ? styles.active : ""}>
           <Link href="/profile">
             <Info />
-            Basic info
+            <p>Информация</p>
           </Link>
         </li>
         <li className={pathname === "/profile/change" ? styles.active : ""}>
           <Link href="/profile/change">
             <Settings />
-            Change account
+            <p>Изменить аккаунт</p>
           </Link>
         </li>
         <li className={pathname === "/profile/password" ? styles.active : ""}>
           <Link href="/profile/password">
             <Lock />
-            Change password
+            <p>Изменить пароль</p>
           </Link>
         </li>
       </ul>
@@ -82,7 +82,7 @@ export default function Password() {
         <div className={styles.top}></div>
 
         <div className={styles.title}>
-          <h2>Change information</h2>
+          <h2>Изменить информацию</h2>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -90,7 +90,7 @@ export default function Password() {
             <span>
               <input
                 type={show ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Текущий пароль"
                 value={password.current1}
                 onChange={(e) =>
                   setPassword((prev) => ({
@@ -110,7 +110,7 @@ export default function Password() {
             <span>
               <input
                 type={show ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Текущий пароль"
                 value={password.current2}
                 onChange={(e) =>
                   setPassword((prev) => ({
@@ -130,7 +130,7 @@ export default function Password() {
             <span>
               <input
                 type={show ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Новый пароль"
                 value={password.new}
                 onChange={(e) =>
                   setPassword((prev) => ({

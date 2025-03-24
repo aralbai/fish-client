@@ -7,5 +7,35 @@
     margin-left: 17%;
     width: 83%;
     background-color: #fafafa;
+    transition: all 0.3s ease;
+  }
+
+  .mobileMain {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .layout {
+    padding: 0;
+
+    .main {
+      width: 100%;
+      margin-left: 0;
+      padding: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .layout {
+    padding: 0;
+
+    .main {
+      width: 100%;
+      margin-left: 0;
+      padding: 0;
+    }
   }
 }

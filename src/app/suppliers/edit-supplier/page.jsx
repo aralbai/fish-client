@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Link from "next/link";
 
 export default function EditSupplier() {
   const { user } = useContext(AuthContext);
@@ -57,41 +58,48 @@ export default function EditSupplier() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Создать новый поставщик</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/suppliers"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/suppliers">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
-          <Input
-            type="text"
-            name="title"
-            placeholder="Название поставщика"
-            value={changedSupplier.title}
-            setData={setChangedSupplier}
-          />
-          <Input
-            type="text"
-            name="phone"
-            placeholder="Номер телефона"
-            value={changedSupplier.phone}
-            setData={setChangedSupplier}
-          />
-          <Input
-            type="text"
-            name="address"
-            placeholder="Адрес"
-            value={changedSupplier.address}
-            setData={setChangedSupplier}
-          />
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="title"
+                placeholder="Название поставщика"
+                value={changedSupplier.title}
+                setData={setChangedSupplier}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="phone"
+                placeholder="Номер телефона"
+                value={changedSupplier.phone}
+                setData={setChangedSupplier}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="address"
+                placeholder="Адрес"
+                value={changedSupplier.address}
+                setData={setChangedSupplier}
+              />
+            </div>
+          </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+          </div>
         </form>
       </div>
     </div>

@@ -52,77 +52,80 @@ export default function Products() {
         <div className={styles.table}>
           <div className={styles.top}>
             <h1>Все продукты</h1>
+
             <Link href="/products/add-product">
               <Add />
-              Создать новый
+              <p>Создать новый</p>
             </Link>
           </div>
 
           <TableTop tableRef={tableRef} />
 
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Название продукта</td>
-                <td>Добавлен</td>
-                <td>Последнее изменение</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product.title}</td>
-                  <td>
-                    {user?.role === "superadmin"
-                      ? users?.map((user) =>
-                          user._id === product.addedUserId ? (
-                            <Link
-                              href="/users"
-                              key={user._id}
-                              style={{ color: "#1976D2" }}
-                            >
-                              {user.username} {" - "}
-                            </Link>
-                          ) : null
-                        )
-                      : ""}
-                    {format(new Date(product.createdAt), "dd.MM.yyyy HH:mm")}
-                  </td>
-                  <td>
-                    {user?.role === "superadmin"
-                      ? users?.map((user) =>
-                          user._id === product.changedUserId ? (
-                            <Link
-                              href="/users"
-                              key={user._id}
-                              style={{ color: "#1976D2" }}
-                            >
-                              {user.username} {" - "}
-                            </Link>
-                          ) : null
-                        )
-                      : ""}
-                    {format(new Date(product.updatedAt), "dd.MM.yyyy HH:mm")}
-                  </td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/products/edit-product",
-                        query: { productId: product._id },
-                      }}
-                    >
-                      <Edit />
-                    </Link>
-
-                    <button onClick={() => handleDeleteClick(product._id)}>
-                      <Delete />
-                    </button>
-                  </td>
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Продукта</td>
+                  <td>Добавление</td>
+                  <td>Изменение</td>
+                  <td></td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product._id}>
+                    <td>{product.title}</td>
+                    <td>
+                      {user?.role === "superadmin"
+                        ? users?.map((user) =>
+                            user._id === product.addedUserId ? (
+                              <Link
+                                href="/users"
+                                key={user._id}
+                                style={{ color: "#1976D2" }}
+                              >
+                                {user.username} {" - "}
+                              </Link>
+                            ) : null
+                          )
+                        : ""}
+                      {format(new Date(product.createdAt), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td>
+                      {user?.role === "superadmin"
+                        ? users?.map((user) =>
+                            user._id === product.changedUserId ? (
+                              <Link
+                                href="/users"
+                                key={user._id}
+                                style={{ color: "#1976D2" }}
+                              >
+                                {user.username} {" - "}
+                              </Link>
+                            ) : null
+                          )
+                        : ""}
+                      {format(new Date(product.updatedAt), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/products/edit-product",
+                          query: { productId: product._id },
+                        }}
+                      >
+                        <Edit />
+                      </Link>
+
+                      <button onClick={() => handleDeleteClick(product._id)}>
+                        <Delete />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {products.length < 1 && (
             <div className={styles.empty}>Этот раздел пуст.</div>
           )}

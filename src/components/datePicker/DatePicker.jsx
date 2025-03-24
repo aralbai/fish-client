@@ -13,6 +13,7 @@ export default function DatePick({ defDate, setDate }) {
             addedDate: date,
           }))
         }
+        dateFormat="dd.MM.yyyy"
         className={styles.dateInput}
         wrapperClassName={styles.wrappedDateInput}
       />

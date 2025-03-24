@@ -23,19 +23,19 @@ export default function Profile() {
         <li className={pathname === "/profile" ? styles.active : ""}>
           <Link href="/profile">
             <Info />
-            Basic info
+            <p>Информация</p>
           </Link>
         </li>
         <li className={pathname === "/profile/change" ? styles.active : ""}>
           <Link href="/profile/change">
             <Settings />
-            Change account
+            <p>Изменить аккаунт</p>
           </Link>
         </li>
         <li className={pathname === "/profile/password" ? styles.active : ""}>
           <Link href="/profile/password">
             <Lock />
-            Change password
+            <p>Изменить пароль</p>
           </Link>
         </li>
       </ul>

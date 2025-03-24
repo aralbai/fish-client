@@ -40,6 +40,25 @@
       }
     }
 
+    .tableTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-left: 20px;
+
+      button {
+        background: none;
+        color: $primary-color;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+    }
+
     table {
       width: 100%;
       margin-top: 20px;

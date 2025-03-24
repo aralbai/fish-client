@@ -10,7 +10,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 
-export default function Navbar() {
+export default function Navbar({ isMobile, setIsMobile, tgPopup }) {
   const { user, logout } = useContext(AuthContext);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -37,8 +37,8 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className={styles.navbar}>
-      <div className={styles.menu}>
+    <div className={`${styles.navbar} ${isMobile && styles.navbarMobile}`}>
+      <div className={styles.menu} onClick={tgPopup}>
         <Menu className={styles.menuIcon} />
       </div>
 
@@ -59,12 +59,12 @@ export default function Navbar() {
             <li>
               <Link href="/profile">
                 <Settings />
-                Settings
+                Настройки
               </Link>
             </li>
             <li onClick={logout}>
               <PowerSettingsNew />
-              Logout
+              Выход
             </li>
           </ul>
         )}

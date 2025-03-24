@@ -9,6 +9,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 export default function AddCustumer() {
   const { user } = useContext(AuthContext);
@@ -42,46 +43,51 @@ export default function AddCustumer() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Создать новый клиент</h1>
-          <PrimaryBtn
-            type="link"
-            fullname="Вернуться к списку"
-            url="/custumers"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/custumers">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
           <div className={styles.inputGroup}>
-            <Input
-              type="text"
-              name="fullname"
-              placeholder="Имя клиента"
-              value={custumer.fullname}
-              setData={setCustumer}
-              required={true}
-            />
-            <Input
-              type="text"
-              name="phone"
-              placeholder="Номер телефона"
-              value={custumer.phone}
-              setData={setCustumer}
-              required={false}
-            />
-            <Input
-              type="text"
-              name="address"
-              placeholder="Адрес"
-              value={custumer.address}
-              setData={setCustumer}
-              required={false}
-            />
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="fullname"
+                placeholder="Имя клиента"
+                value={custumer.fullname}
+                setData={setCustumer}
+                required={false}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="phone"
+                placeholder="Номер телефона"
+                value={custumer.phone}
+                setData={setCustumer}
+                required={false}
+              />
+            </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="address"
+                placeholder="Адрес"
+                value={custumer.address}
+                setData={setCustumer}
+                required={false}
+              />
+            </div>
           </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+          </div>
         </form>
       </div>
     </div>

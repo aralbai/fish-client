@@ -1,12 +1,14 @@
+@import "../../app/styles/variables.module.scss";
+
 .sidebar {
   width: 17%;
-  background-color: red;
   background-image: url("/sidebar-bg-dark.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   position: fixed;
   height: 100vh;
   z-index: 2;
+  transition: all 0.3s ease;
 
   .container {
     width: 100%;
@@ -21,10 +23,25 @@
       height: 65px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 30px;
 
       h1 {
         font-size: 25px;
+      }
+
+      span {
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+
+        &:hover {
+          background-color: $button-hover-color;
+          color: $font-color;
+        }
       }
     }
 
@@ -112,5 +129,57 @@
         display: none;
       }
     }
+  }
+}
+
+.sidebarMobile {
+  margin-left: -300px;
+}
+
+@media screen and (max-width: 1200px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin-left: -300px;
+    transition: all 1s ease;
+
+    .container {
+      .top {
+        span {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  .sidebarMobile {
+    width: 300px;
+    margin-left: 0px;
+    transition: all 0.3s ease;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin-left: -300px;
+    transition: all 1s ease;
+
+    .container {
+      .top {
+        span {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  .sidebarMobile {
+    width: 300px;
+    margin-left: 0px;
+    transition: all 0.3s ease;
   }
 }

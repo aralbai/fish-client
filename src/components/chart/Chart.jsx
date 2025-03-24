@@ -13,6 +13,26 @@ import {
 } from "recharts";
 
 const Chart = () => {
+  const [barSize, setBarSize] = useState(20);
+  const [fontSize, setFontSize] = useState(15);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 600) {
+        setBarSize(10); // Smaller bars on mobile
+        setFontSize(12); // Smaller font size on mobile
+      } else {
+        setBarSize(20);
+        setFontSize(15);
+      }
+    };
+
+    handleResize(); // Set initial size
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const [sells, setSells] = useState([]);
   const [outcomes, setOutcomes] = useState([]);
   const [purchases, setPurchases] = useState([]);
@@ -78,6 +98,8 @@ const Chart = () => {
     );
   }, []);
 
+  console.log(purchases);
+
   for (let i = 0; i < 6; i++) {
     data[5 - i].month.setMonth(firstDate.getMonth() - i); // Move back 5 months
     data[5 - i].month.setDate(1); // Set to first day of the month
@@ -104,7 +126,7 @@ const Chart = () => {
     );
 
     const totalPurchase = monthPurchases.reduce(
-      (sum, purchase) => sum + purchase.given,
+      (sum, purchase) => sum + purchase.totalPrice,
       0
     );
 
@@ -129,18 +151,21 @@ const Chart = () => {
           dataKey="name"
           stroke="#ccc"
           strokeWidth={0.5}
-          tick={{ fill: "#808080", fontSize: 15 }}
+          tick={{ fill: "#808080", fontSize }}
         />
-        <YAxis
-          tickFormatter={(value) => {
-            if (value >= 1000000) return `${value / 1000000}M`;
-            if (value >= 1000) return `${value / 1000}K`;
-            return value;
-          }}
-          stroke="#ccc"
-          strokeWidth={0.5} // Set the Y-axis line color
-          tick={{ fill: "#808080", fontSize: 15 }} // Y-axis ticks color and font size
-        />
+        {barSize > 10 && (
+          <YAxis
+            tickFormatter={(value) => {
+              if (value >= 1_000_000_000) return `${value / 1_000_000_000}B`;
+              if (value >= 1_000_000) return `${value / 1_000_000}M`;
+              if (value >= 1_000) return `${value / 1_000}K`;
+              return value;
+            }}
+            stroke="#ccc"
+            strokeWidth={0.5} // Set the Y-axis line color
+            tick={{ fill: "#808080", fontSize }} // Y-axis ticks color and font size
+          />
+        )}
         <Tooltip
           contentStyle={{
             borderRadius: "5px",
@@ -154,13 +179,13 @@ const Chart = () => {
         <Bar
           dataKey="Расход"
           fill="#FF6378"
-          barSize={20}
+          barSize={barSize}
           radius={[10, 10, 0, 0]}
         />
         <Bar
           dataKey="Доход"
           fill="#28A745"
-          barSize={20}
+          barSize={barSize}
           radius={[10, 10, 0, 0]}
         />
       </BarChart>

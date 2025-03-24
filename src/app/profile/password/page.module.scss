@@ -1,11 +1,11 @@
 @import "../../styles/variables.module.scss";
 
 .password {
-  padding: 20px;
+  margin: 20px;
+  margin-top: 40px;
   color: $font-color;
   display: flex;
   gap: 20px;
-  padding-top: 40px;
 
   .bar {
     width: 20%;
@@ -121,6 +121,88 @@
         border-radius: 5px;
         margin-top: 20px;
         font-size: 15px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .password {
+    background-color: #fff;
+    box-shadow: $card-box-shadow;
+    gap: 0;
+    border-radius: 5px;
+
+    .bar {
+      box-shadow: none;
+      width: 10%;
+
+      a {
+        display: flex;
+        justify-content: center;
+
+        p {
+          display: none;
+        }
+      }
+    }
+
+    .change {
+      width: 90%;
+      box-shadow: none;
+      border-radius: 0;
+      border-top-right-radius: 5px;
+
+      .top {
+        border-radius: 0;
+        border-top-right-radius: 5px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .password {
+    margin-top: 20px;
+
+    .bar {
+      width: 15%;
+    }
+
+    .change {
+      width: 85%;
+
+      .top {
+        height: 30vh;
+      }
+
+      .title {
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        padding-bottom: 20px;
+        border-bottom: none;
+      }
+
+      form {
+        padding: 0;
+
+        div {
+          flex-direction: column;
+
+          span {
+            width: 100%;
+
+            input {
+              width: 100%;
+            }
+          }
+        }
+
+        .submit {
+          padding: 15px;
+          width: 100%;
+        }
       }
     }
   }

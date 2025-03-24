@@ -8,6 +8,7 @@ import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AddProduct() {
   const { user } = useContext(AuthContext);
@@ -43,30 +44,29 @@ export default function AddProduct() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Создать новый продукт</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/products"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/products">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
           <div className={styles.inputGroup}>
-            <Input
-              type="text"
-              name="title"
-              placeholder="Количество"
-              value={product.title}
-              setData={setProduct}
-              required={true}
-            />
-          </div>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="title"
+                placeholder="Название продукта"
+                value={product.title}
+                setData={setProduct}
+                required={true}
+              />
+            </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+          </div>
         </form>
       </div>
     </div>

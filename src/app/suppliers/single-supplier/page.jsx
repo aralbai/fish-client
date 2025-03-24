@@ -68,15 +68,10 @@ export default function SingleSupplier() {
       <div className={styles.title}>
         <h1>Единый клиент</h1>
 
-        <PrimaryBtn
-          type="link"
-          fullname="Вернуться к списку"
-          url="/suppliers"
-          icon={<KeyboardBackspace />}
-        >
+        <Link href="/suppliers">
           <KeyboardBackspace />
-          Вернуться к списку
-        </PrimaryBtn>
+          <p>Вернуться к списку</p>
+        </Link>
       </div>
 
       <div className={styles.supplierInfo}>
@@ -188,42 +183,44 @@ export default function SingleSupplier() {
       <div className={styles.repays}>
         <h2>Покупки</h2>
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Продукта</td>
-              <td>Amount</td>
-              <td>Debt</td>
-              <td>Дата</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {purchases.length > 0 &&
-              purchases.map((purchase) => (
-                <tr key={purchase._id}>
-                  <td>{purchase.product?.title}</td>
-                  <td>{purchase.amount}</td>
-                  <td>{Intl.NumberFormat("ru-RU").format(purchase.debt)}</td>
-                  <td>
-                    {format(new Date(purchase.addedDate), "dd.MM.yyyy HH:mm")}
-                  </td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/purchases/single-purchase",
-                        query: {
-                          purchaseId: purchase._id,
-                        },
-                      }}
-                    >
-                      <ArrowRightAlt />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Продукта</td>
+                <td>Amount</td>
+                <td>Debt</td>
+                <td>Дата</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {purchases.length > 0 &&
+                purchases.map((purchase) => (
+                  <tr key={purchase._id}>
+                    <td>{purchase.product?.title}</td>
+                    <td>{purchase.amount}</td>
+                    <td>{Intl.NumberFormat("ru-RU").format(purchase.debt)}</td>
+                    <td>
+                      {format(new Date(purchase.addedDate), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/purchases/single-purchase",
+                          query: {
+                            purchaseId: purchase._id,
+                          },
+                        }}
+                      >
+                        <ArrowRightAlt />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
 
         {purchases.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>

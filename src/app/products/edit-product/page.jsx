@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 export default function EditProduct() {
   const { user } = useContext(AuthContext);
@@ -49,28 +50,29 @@ export default function EditProduct() {
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый продукт</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/products"
-            icon={<KeyboardBackspace />}
-          >
+          <h1>Изменить продукт</h1>
+          <Link href="/products">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
-          <Input
-            type="text"
-            name="title"
-            placeholder="Количество"
-            value={changedProduct.title}
-            setData={setChangedProduct}
-          />
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <Input
+                type="text"
+                name="title"
+                placeholder="Количество"
+                value={changedProduct.title}
+                setData={setChangedProduct}
+              />
+            </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+          </div>
         </form>
       </div>
     </div>

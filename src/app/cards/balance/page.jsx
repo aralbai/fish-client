@@ -1,10 +1,9 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { ArrowRightAlt } from "@mui/icons-material";
+import { ArrowRightAlt, KeyboardBackspace } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
-import TableTop from "@/components/tableTop/TableTop";
 
 export default function Balance() {
   const [deposits, setDeposits] = useState([]);
@@ -12,7 +11,6 @@ export default function Balance() {
   const [outcomes, setOutcomes] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
-  const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/purchases/total/price", setPurchases);
@@ -38,116 +36,127 @@ export default function Balance() {
       <div className={styles.table}>
         <div className={styles.top}>
           <h1>Баланс</h1>
+
+          <Link href="/">
+            <KeyboardBackspace />
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
-        <TableTop tableRef={tableRef} />
-
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Название</td>
-              <td>Сумма</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-              <td>Баланс</td>
-              <td>
-                {balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}
-              </td>
-              <td></td>
-              <td style={{ padding: "30px" }}></td>
-            </tr>
-            <tr>
-              <td>Покупки</td>
-              <td>
-                {purchases.totalPurchases
-                  ? Intl.NumberFormat("ru-RU").format(purchases.totalPurchases)
-                  : 0}
-              </td>
-              <td>
-                <Link href="/purchases">
-                  <div>
-                    <ArrowRightAlt />
-                  </div>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Продажи</td>
-              <td>
-                {sells.totalSales
-                  ? Intl.NumberFormat("ru-RU").format(sells.totalSales)
-                  : 0}
-              </td>
-              <td>
-                <Link href="/sells">
-                  <div>
-                    <ArrowRightAlt />
-                  </div>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Расходы</td>
-              <td>
-                {outcomes.totalOutcomes
-                  ? Intl.NumberFormat("ru-RU").format(outcomes.totalOutcomes)
-                  : 0}
-              </td>
-              <td>
-                <Link href="/finance/outcomes">
-                  <div>
-                    <ArrowRightAlt />
-                  </div>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Пополнение</td>
-              <td>
-                {deposits.totalDeposits
-                  ? Intl.NumberFormat("ru-RU").format(deposits.totalDeposits)
-                  : 0}
-              </td>
-              <td>
-                <Link href="/finance/deposits">
-                  <div>
-                    <ArrowRightAlt />
-                  </div>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Снимать</td>
-              <td>
-                {withdraws.totalWithdraws
-                  ? Intl.NumberFormat("ru-RU").format(withdraws.totalWithdraws)
-                  : 0}
-              </td>
-              <td>
-                <Link href="/finance/withdraws">
-                  <div>
-                    <ArrowRightAlt />
-                  </div>
-                </Link>
-              </td>
-            </tr>
-            <tr
-              style={
-                profit < 0
-                  ? { backgroundColor: "#FF6378", color: "#fff" }
-                  : { backgroundColor: "#28A745", color: "#fff" }
-              }
-            >
-              <td>Прибыль</td>
-              <td>{profit ? Intl.NumberFormat("ru-RU").format(profit) : 0}</td>
-              <td></td>
-              <td style={{ padding: "30px" }}></td>
-            </tr>
-          </tbody>
-        </table>
+        <div className={styles.tableContainer}>
+          <table>
+            <thead>
+              <tr>
+                <td>Название</td>
+                <td>Сумма</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
+                <td>Баланс</td>
+                <td>
+                  {balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}
+                </td>
+                <td></td>
+                <td style={{ padding: "30px" }}></td>
+              </tr>
+              <tr>
+                <td>Покупки</td>
+                <td>
+                  {purchases.totalPurchases
+                    ? Intl.NumberFormat("ru-RU").format(
+                        purchases.totalPurchases
+                      )
+                    : 0}
+                </td>
+                <td>
+                  <Link href="/purchases">
+                    <div>
+                      <ArrowRightAlt />
+                    </div>
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td>Продажи</td>
+                <td>
+                  {sells.totalSales
+                    ? Intl.NumberFormat("ru-RU").format(sells.totalSales)
+                    : 0}
+                </td>
+                <td>
+                  <Link href="/sells">
+                    <div>
+                      <ArrowRightAlt />
+                    </div>
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td>Расходы</td>
+                <td>
+                  {outcomes.totalOutcomes
+                    ? Intl.NumberFormat("ru-RU").format(outcomes.totalOutcomes)
+                    : 0}
+                </td>
+                <td>
+                  <Link href="/finance/outcomes">
+                    <div>
+                      <ArrowRightAlt />
+                    </div>
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td>Пополнение</td>
+                <td>
+                  {deposits.totalDeposits
+                    ? Intl.NumberFormat("ru-RU").format(deposits.totalDeposits)
+                    : 0}
+                </td>
+                <td>
+                  <Link href="/finance/deposits">
+                    <div>
+                      <ArrowRightAlt />
+                    </div>
+                  </Link>
+                </td>
+              </tr>
+              <tr>
+                <td>Снимать</td>
+                <td>
+                  {withdraws.totalWithdraws
+                    ? Intl.NumberFormat("ru-RU").format(
+                        withdraws.totalWithdraws
+                      )
+                    : 0}
+                </td>
+                <td>
+                  <Link href="/finance/withdraws">
+                    <div>
+                      <ArrowRightAlt />
+                    </div>
+                  </Link>
+                </td>
+              </tr>
+              <tr
+                style={
+                  profit < 0
+                    ? { backgroundColor: "#FF6378", color: "#fff" }
+                    : { backgroundColor: "#28A745", color: "#fff" }
+                }
+              >
+                <td>Прибыль</td>
+                <td>
+                  {profit ? Intl.NumberFormat("ru-RU").format(profit) : 0}
+                </td>
+                <td></td>
+                <td style={{ padding: "30px" }}></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

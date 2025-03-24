@@ -14,41 +14,51 @@
     display: flex;
     gap: 20px;
 
-    .card {
+    .row {
+      width: 50%;
       display: flex;
-      align-items: center;
       gap: 20px;
-      padding: 30px 20px;
-      width: 25%;
-      background-color: $color-white;
-      border-radius: 10px;
-      box-shadow: $card-box-shadow;
 
-      .left {
-        background-color: $hovered-bg-color;
-        padding: 10px;
-        border-radius: 50%;
+      .card {
         display: flex;
         align-items: center;
-        justify-content: center;
+        gap: 15px;
+        padding: 30px 20px;
+        width: 50%;
+        background-color: $color-white;
+        border-radius: 10px;
+        box-shadow: $card-box-shadow;
 
-        .icon {
-          color: $primary-color;
+        .left {
+          background-color: $hovered-bg-color;
+          padding: 10px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .icon {
+            color: $primary-color;
+          }
+
+          .success {
+            color: $success-color;
+          }
+
+          .danger {
+            color: $danger-color;
+          }
         }
 
-        .success {
-          color: $success-color;
-        }
+        .right {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
 
-        .danger {
-          color: $danger-color;
+          h2 {
+            font-size: 20px;
+          }
         }
-      }
-
-      .right {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
       }
     }
   }
@@ -67,6 +77,52 @@
         text-align: center;
         font-weight: 500;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .home {
+    padding: 20px;
+    margin: 0;
+
+    .cards {
+      flex-direction: column;
+
+      .row {
+        width: 100%;
+
+        .card {
+          width: 100%;
+        }
+      }
+    }
+
+    .incomeOutcomChart {
+      padding: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .home {
+    padding: 20px;
+    margin: 0;
+
+    .cards {
+      flex-direction: column;
+
+      .row {
+        flex-direction: column;
+
+        .card {
+          width: 100%;
+        }
+      }
+    }
+
+    .incomeOutcomChart {
+      padding: 0;
     }
   }
 }
