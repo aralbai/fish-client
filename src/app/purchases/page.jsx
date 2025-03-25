@@ -47,7 +47,7 @@ export default function Purchases() {
           <h1>Все покупки</h1>
           <Link href="/purchases/add-purchase">
             <Add />
-            Создать новый
+            <p>Создать новый</p>
           </Link>
         </div>
 
@@ -68,58 +68,61 @@ export default function Purchases() {
           <TableTop tableRef={tableRef} />
         </div>
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Продукта</td>
-              <td>Поставщик</td>
-              <td>Количество</td>
-              <td>Скидка</td>
-              <td>Сумма</td>
-              <td>Недостаток</td>
-              <td>Остальные</td>
-              <td>Дата</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {purchases?.map((purchase) => (
-              <tr key={purchase._id}>
-                <td>{purchase.product?.title}</td>
-                <td>{purchase.supplier?.title}</td>
-                <td>{purchase.amount}</td>
-
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.discount)
-                    .replace(/,/g, " ")}
-                </td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.totalPrice)
-                    .replace(/,/g, " ")}
-                </td>
-                <td>{purchase.shortage}</td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(purchase.remainingAmount)
-                    .replace(/,/g, " ")}
-                </td>
-                <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
-                <td className={styles.action}>
-                  <Link
-                    href={{
-                      pathname: "/purchases/single-purchase",
-                      query: { purchaseId: purchase._id },
-                    }}
-                  >
-                    <ArrowRightAlt />
-                  </Link>
-                </td>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Продукта</td>
+                <td>Поставщик</td>
+                <td>Количество</td>
+                <td>Скидка</td>
+                <td>Сумма</td>
+                <td>Недостаток</td>
+                <td>Остальные</td>
+                <td>Дата</td>
+                <td></td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {purchases?.map((purchase) => (
+                <tr key={purchase._id}>
+                  <td>{purchase.product?.title}</td>
+                  <td>{purchase.supplier?.title}</td>
+                  <td>{purchase.amount}</td>
+
+                  <td>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(purchase.discount)
+                      .replace(/,/g, " ")}
+                  </td>
+                  <td>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(purchase.totalPrice)
+                      .replace(/,/g, " ")}
+                  </td>
+                  <td>{purchase.shortage}</td>
+                  <td>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(purchase.remainingAmount)
+                      .replace(/,/g, " ")}
+                  </td>
+                  <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
+                  <td className={styles.action}>
+                    <Link
+                      href={{
+                        pathname: "/purchases/single-purchase",
+                        query: { purchaseId: purchase._id },
+                      }}
+                    >
+                      <ArrowRightAlt />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         {purchases.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}

@@ -49,7 +49,7 @@ export default function Sells() {
           <h1>Все продажи</h1>
           <Link href="/sells/add-sell">
             <Add />
-            Создать новый
+            <p>Создать новый</p>
           </Link>
         </div>
 
@@ -70,57 +70,60 @@ export default function Sells() {
           <TableTop tableRef={tableRef} />
         </div>
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Продукта</td>
-              <td>Клиент</td>
-              <td>Количество</td>
-              <td>Скидка</td>
-              <td>Сумма</td>
-              <td>Долг</td>
-              <td>Дата</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {sells.map((sell) => (
-              <tr key={sell._id}>
-                <td>{sell.product.title}</td>
-                <td>{sell.custumer?.fullname}</td>
-                <td>{sell.amount}</td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(sell.discount)
-                    .replace(/,/g, " ")}
-                </td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(sell.totalPrice)
-                    .replace(/,/g, " ")}{" "}
-                </td>
-                <td>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(sell.debt)
-                    .replace(/,/g, " ")}{" "}
-                </td>
-                <td>{format(sell.addedDate, "dd.MM.yyyy")}</td>
-                <td className={styles.action}>
-                  <Link
-                    href={{
-                      pathname: "/sells/single-sell",
-                      query: {
-                        sellId: sell._id,
-                      },
-                    }}
-                  >
-                    <ArrowRightAlt />
-                  </Link>
-                </td>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Продукта</td>
+                <td>Клиент</td>
+                <td>Количество</td>
+                <td>Скидка</td>
+                <td>Сумма</td>
+                <td>Долг</td>
+                <td>Дата</td>
+                <td></td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sells.map((sell) => (
+                <tr key={sell._id}>
+                  <td>{sell.product.title}</td>
+                  <td>{sell.custumer?.fullname}</td>
+                  <td>{sell.amount}</td>
+                  <td>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(sell.discount)
+                      .replace(/,/g, " ")}
+                  </td>
+                  <td>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(sell.totalPrice)
+                      .replace(/,/g, " ")}{" "}
+                  </td>
+                  <td>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(sell.debt)
+                      .replace(/,/g, " ")}{" "}
+                  </td>
+                  <td>{format(sell.addedDate, "dd.MM.yyyy")}</td>
+                  <td className={styles.action}>
+                    <Link
+                      href={{
+                        pathname: "/sells/single-sell",
+                        query: {
+                          sellId: sell._id,
+                        },
+                      }}
+                    >
+                      <ArrowRightAlt />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         {sells.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}

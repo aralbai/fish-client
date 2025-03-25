@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
+import Link from "next/link";
 
 export default function EditSupplier() {
   const { user } = useContext(AuthContext);
@@ -26,7 +27,6 @@ export default function EditSupplier() {
     carNumber: "",
     addedDate: new Date(),
     discount: "",
-    debt: "",
     minAmount: "",
   });
 
@@ -102,15 +102,10 @@ export default function EditSupplier() {
         {/* Title and back button  */}
         <div className={styles.top}>
           <h1>Создать новый поставщик</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/purchases"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/purchases">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
@@ -120,6 +115,7 @@ export default function EditSupplier() {
               <label htmlFor="">Product</label>
               <select
                 name="product"
+                required
                 value={changedPurchase?.product?.id}
                 onChange={(e) => handleChange(e)}
               >
@@ -142,6 +138,7 @@ export default function EditSupplier() {
                 name="supplier"
                 value={changedPurchase?.supplier?.id}
                 onChange={(e) => handleChange(e)}
+                required
               >
                 <option value={changedPurchase?.supplier?.id} hidden>
                   {changedPurchase?.supplier?.title}
@@ -165,6 +162,7 @@ export default function EditSupplier() {
               <input
                 type="number"
                 name="Amount"
+                required
                 min={changedPurchase.minAmount}
                 value={changedPurchase.amount}
                 onChange={(e) =>
@@ -181,6 +179,7 @@ export default function EditSupplier() {
               <input
                 type="number"
                 name="Amount"
+                required
                 value={changedPurchase.price}
                 onChange={(e) =>
                   setChangedPurchase((prev) => ({
@@ -198,6 +197,7 @@ export default function EditSupplier() {
               <label htmlFor="">Car Number</label>
               <input
                 type="text"
+                required
                 value={changedPurchase.carNumber}
                 onChange={(e) =>
                   setChangedPurchase((prev) => ({
@@ -223,6 +223,7 @@ export default function EditSupplier() {
               <label htmlFor="">Discount</label>
               <input
                 type="number"
+                required
                 value={changedPurchase.discount}
                 onChange={(e) =>
                   setChangedPurchase((prev) => ({
@@ -232,20 +233,7 @@ export default function EditSupplier() {
                 }
               />
             </div>
-
-            <div className={styles.input}>
-              <label htmlFor="">Debt</label>
-              <input
-                type="number"
-                value={changedPurchase.debt}
-                onChange={(e) =>
-                  setChangedPurchase((prev) => ({
-                    ...prev,
-                    debt: e.target.value,
-                  }))
-                }
-              />
-            </div>
+            <div className={styles.input}></div>
           </div>
 
           {/* Calculate total */}
@@ -260,7 +248,6 @@ export default function EditSupplier() {
                         parseFloat(changedPurchase.price)
                     )
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
 
@@ -270,36 +257,17 @@ export default function EditSupplier() {
                   {Intl.NumberFormat("uz-UZ")
                     .format(changedPurchase.discount)
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
-                </b>
-              </div>
-            </div>
-            <div className={styles.row}>
-              <div className={styles.calc}>
-                <p>Оплачено:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(
-                      changedPurchase.amount * changedPurchase.price -
-                        changedPurchase.discount -
-                        changedPurchase.debt
-                    )
-                    .replace(/,/g, " ")}
-                  <b> SWM</b>
-                </b>
-              </div>
-              <div className={styles.calc}>
-                <p>Долг:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(changedPurchase.debt)
-                    .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
             </div>
           </div>
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+
+          <div className={styles.inputGroup}>
+            <div className={styles.input}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+            <div className={styles.input}></div>
+          </div>
         </form>
       </div>
     </div>

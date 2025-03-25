@@ -44,7 +44,7 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Login"
+            placeholder="Имя пользователя"
             value={user.username}
             onChange={(e) =>
               setUser((prev) => ({
@@ -56,7 +56,7 @@ export default function Login() {
           <span>
             <input
               type={type ? "password" : "text"}
-              placeholder="Password"
+              placeholder="Пароль"
               value={user.password}
               onChange={(e) =>
                 setUser((prev) => ({
@@ -74,10 +74,10 @@ export default function Login() {
             </button>
           </span>
 
-          <p>Forgot password?</p>
+          <p>Забыли пароль?</p>
 
           <button className={styles.submit} type="submit">
-            Login
+            Войти
           </button>
         </form>
       </div>

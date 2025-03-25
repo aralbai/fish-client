@@ -11,6 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import { format } from "date-fns";
+import Link from "next/link";
 
 export default function EditSell() {
   const { user } = useContext(AuthContext);
@@ -119,15 +120,10 @@ export default function EditSell() {
         {/* Title and back button  */}
         <div className={styles.top}>
           <h1>Редактировать продаж</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/sells"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/sells">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
@@ -276,21 +272,9 @@ export default function EditSell() {
                         parseFloat(changedSell.price)
                     )
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
 
-              <div className={styles.calc}>
-                <p>Скидка:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(changedSell.discount)
-                    .replace(/,/g, " ")}
-                  <b> SWM</b>
-                </b>
-              </div>
-            </div>
-            <div className={styles.row}>
               <div className={styles.calc}>
                 <p>Оплачено:</p>
                 <b>
@@ -301,21 +285,37 @@ export default function EditSell() {
                         changedSell.debt
                     )
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
+            </div>
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Скидка:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(changedSell.discount)
+                    .replace(/,/g, " ")}
+                </b>
+              </div>
+
               <div className={styles.calc}>
                 <p>Долг:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
                     .format(changedSell.debt)
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
             </div>
           </div>
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+
+          <div className={styles.inputGroup}>
+            <div className={styles.input}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+
+            <div className={styles.input}></div>
+          </div>
         </form>
       </div>
     </div>

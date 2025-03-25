@@ -13,6 +13,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AddSell() {
   const { user } = useContext(AuthContext);
@@ -109,15 +110,10 @@ export default function AddSell() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Добавить новую продажу</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/sells"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/sells">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
@@ -270,22 +266,9 @@ export default function AddSell() {
                   {Intl.NumberFormat("uz-UZ")
                     .format(sell.amount * sell.price)
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
 
-              <div className={styles.calc}>
-                <p>Скидка:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(sell.discount)
-                    .replace(/,/g, " ")}
-                  <b> SWM</b>
-                </b>
-              </div>
-            </div>
-
-            <div className={styles.row}>
               <div className={styles.calc}>
                 <p>Оплачено:</p>
                 <b>
@@ -294,16 +277,26 @@ export default function AddSell() {
                       sell.amount * sell.price - sell.discount - sell.debt
                     )
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.calc}>
+                <p>Скидка:</p>
+                <b>
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(sell.discount)
+                    .replace(/,/g, " ")}
+                </b>
+              </div>
+
               <div className={styles.calc}>
                 <p>Долг:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
                     .format(sell.debt)
                     .replace(/,/g, " ")}
-                  <b> SWM</b>
                 </b>
               </div>
             </div>

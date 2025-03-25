@@ -63,15 +63,10 @@ export default function SinglePurchase() {
       <div className={styles.title}>
         <h1>Разовая покупка</h1>
 
-        <PrimaryBtn
-          type="link"
-          fullname="Вернуться к списку"
-          url="/purchases"
-          icon={<KeyboardBackspace />}
-        >
+        <Link href="/purchases">
           <KeyboardBackspace />
-          Вернуться к списку
-        </PrimaryBtn>
+          <p>Вернуться к списку</p>
+        </Link>
       </div>
 
       <div className={styles.purchaseInfo}>
@@ -120,32 +115,42 @@ export default function SinglePurchase() {
             </li>
             <li>
               <p>Количество</p>
-              <p>{purchase?.amount}</p>
+              <p>
+                {purchase?.amount
+                  ? Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)
+                  : 0}
+              </p>
             </li>
             <li>
               <p>Цена</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.price)}</p>
+              <p>
+                {purchase?.price
+                  ? Intl.NumberFormat("ru-RU").format(purchase?.price)
+                  : 0}
+              </p>
             </li>
             <li>
               <p>Сумма</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)}</p>
+              <p>
+                {purchase?.totalPrice
+                  ? Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)
+                  : 0}
+              </p>
             </li>
             <li>
               <p>Скидка</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.discount)}</p>
-            </li>
-            <li>
-              <p>Долг</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.debt)}</p>
-            </li>
-            <li>
-              <p>Оплачено</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.given)}</p>
+              <p>
+                {purchase?.discount
+                  ? Intl.NumberFormat("ru-RU").format(purchase?.discount)
+                  : 0}
+              </p>
             </li>
             <li>
               <p>Остальные</p>
               <p>
-                {Intl.NumberFormat("ru-RU").format(purchase?.remainingAmount)}
+                {purchase?.remainingAmount
+                  ? Intl.NumberFormat("ru-RU").format(purchase?.remainingAmount)
+                  : 0}
               </p>
             </li>
             <li>
@@ -232,44 +237,48 @@ export default function SinglePurchase() {
       <div className={styles.repays}>
         <h2>Список продаж</h2>
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Продукта</td>
-              <td>Клиент</td>
-              <td>Amount</td>
-              <td>Сумма</td>
-              <td>Дата</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {purchaseSells.length > 0 &&
-              purchaseSells.map((sell) => (
-                <tr key={sell?._id}>
-                  <td>{sell?.product?.title}</td>
-                  <td>{sell?.custumer?.fullname}</td>
-                  <td>{sell?.amount}</td>
-                  <td>{Intl.NumberFormat("ru-RU").format(sell?.totalPrice)}</td>
-                  <td>
-                    {format(new Date(sell?.addedDate), "dd.MM.yyyy HH:mm")}
-                  </td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/sells/single-sell",
-                        query: {
-                          sellId: sell?._id,
-                        },
-                      }}
-                    >
-                      <ArrowRightAlt />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Продукта</td>
+                <td>Клиент</td>
+                <td>Amount</td>
+                <td>Сумма</td>
+                <td>Дата</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {purchaseSells.length > 0 &&
+                purchaseSells.map((sell) => (
+                  <tr key={sell?._id}>
+                    <td>{sell?.product?.title}</td>
+                    <td>{sell?.custumer?.fullname}</td>
+                    <td>{sell?.amount}</td>
+                    <td>
+                      {Intl.NumberFormat("ru-RU").format(sell?.totalPrice)}
+                    </td>
+                    <td>
+                      {format(new Date(sell?.addedDate), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/sells/single-sell",
+                          query: {
+                            sellId: sell?._id,
+                          },
+                        }}
+                      >
+                        <ArrowRightAlt />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
 
         {purchaseSells.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>

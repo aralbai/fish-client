@@ -12,7 +12,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function AddUser() {
+export default function EditUser() {
   const router = useRouter();
   const [type, setType] = useState(true);
   const [user, setUser] = useState({

@@ -4,7 +4,12 @@ import styles from "./page.module.scss";
 import { fetchData } from "@/utils/fetchData";
 import { format } from "date-fns";
 import Link from "next/link";
-import { AccountBalanceWallet, Delete, Edit } from "@mui/icons-material";
+import {
+  AccountBalanceWallet,
+  Delete,
+  Edit,
+  KeyboardBackspace,
+} from "@mui/icons-material";
 import RepayModal from "@/components/repayModal/RepayModal";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -73,7 +78,14 @@ export default function SingleSell() {
 
   return (
     <div className={styles.singleSell}>
-      <h1>Единая продажа</h1>
+      <div className={styles.title}>
+        <h1>Единая продажа</h1>
+
+        <Link href="/sells">
+          <KeyboardBackspace />
+          <p>Вернуться к списку</p>
+        </Link>
+      </div>
 
       <div className={styles.sellInfo}>
         <div className={styles.left}>
@@ -115,7 +127,11 @@ export default function SingleSell() {
             </li>
             <li>
               <p>Количество</p>
-              <p>{sell?.amount ? sell.amount : 0}</p>
+              <p>
+                {sell?.amount
+                  ? Intl.NumberFormat("ru-RU").format(sell.amount)
+                  : 0}
+              </p>
             </li>
 
             <li>
@@ -226,77 +242,79 @@ export default function SingleSell() {
       <div className={styles.repays}>
         <h2>Погашение долга</h2>
 
-        <table ref={tableRef}>
-          <thead>
-            <tr>
-              <td>Сумма</td>
-              <td>Дата</td>
-              <td>Кто принял</td>
-              <td>Кто изменился</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {repays?.length > 0 &&
-              repays?.map((repay) => (
-                <tr key={repay._id}>
-                  <td>
-                    {(repay.amount &&
-                      Intl.NumberFormat("ru-RU").format(repay.amount)) ||
-                      0}
-                  </td>
-                  <td>
-                    {repay?.addedDate &&
-                      format(new Date(repay?.addedDate), "dd.MM.yyyy HH:mm")}
-                  </td>
-                  <td>
-                    {users?.map(
-                      (user) =>
-                        user._id === repay?.addedUserId && (
-                          <Link
-                            href="/users"
-                            key={user._id}
-                            style={{ color: "#1976D2" }}
-                          >
-                            {user?.username}
-                          </Link>
-                        )
-                    )}
-                  </td>
-                  <td>
-                    {users?.map(
-                      (user) =>
-                        user._id === repay?.changedUserId && (
-                          <Link
-                            href="/users"
-                            key={user._id}
-                            style={{ color: "#1976D2" }}
-                          >
-                            {user?.username}
-                          </Link>
-                        )
-                    )}
-                  </td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/repays/edit-supplier",
-                        query: {
-                          repayId: repay._id,
-                        },
-                      }}
-                    >
-                      <Edit />
-                    </Link>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr>
+                <td>Сумма</td>
+                <td>Дата</td>
+                <td>Кто принял</td>
+                <td>Кто изменился</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {repays?.length > 0 &&
+                repays?.map((repay) => (
+                  <tr key={repay._id}>
+                    <td>
+                      {(repay.amount &&
+                        Intl.NumberFormat("ru-RU").format(repay.amount)) ||
+                        0}
+                    </td>
+                    <td>
+                      {repay?.addedDate &&
+                        format(new Date(repay?.addedDate), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td>
+                      {users?.map(
+                        (user) =>
+                          user._id === repay?.addedUserId && (
+                            <Link
+                              href="/users"
+                              key={user._id}
+                              style={{ color: "#1976D2" }}
+                            >
+                              {user?.username}
+                            </Link>
+                          )
+                      )}
+                    </td>
+                    <td>
+                      {users?.map(
+                        (user) =>
+                          user._id === repay?.changedUserId && (
+                            <Link
+                              href="/users"
+                              key={user._id}
+                              style={{ color: "#1976D2" }}
+                            >
+                              {user?.username}
+                            </Link>
+                          )
+                      )}
+                    </td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/repays/edit-supplier",
+                          query: {
+                            repayId: repay._id,
+                          },
+                        }}
+                      >
+                        <Edit />
+                      </Link>
 
-                    <button onClick={(e) => handleRepayDelete(e, repay._id)}>
-                      <Delete />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                      <button onClick={(e) => handleRepayDelete(e, repay._id)}>
+                        <Delete />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {sell?.repays?.length < 1 && (

@@ -1,20 +1,44 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { Add, Delete, Edit, FormatColorReset } from "@mui/icons-material";
+import { Add, Delete, Edit } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
-import { handleDelete } from "@/utils/handleDelete";
 import TableTop from "@/components/tableTop/TableTop";
+import axios from "axios";
+import { toast } from "react-toastify";
+import DeleteModal from "@/components/deleteModal/DeleteModal";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/users", setUsers);
-  }, []);
+  }, [deleteModalOpen]);
+
+  const handleDeleteClick = (id) => {
+    setUserId(id);
+
+    setDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    await axios
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`)
+      .then((res) => {
+        toast.success(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+        console.log(err);
+      });
+
+    setDeleteModalOpen(false);
+  };
 
   return (
     <div className={styles.users}>
@@ -58,11 +82,7 @@ export default function Users() {
                       <Edit />
                     </Link>
 
-                    <button
-                      onClick={() =>
-                        handleDelete("/users", user._id, users, setUsers)
-                      }
-                    >
+                    <button onClick={() => handleDeleteClick(user._id)}>
                       <Delete />
                     </button>
                   </td>
@@ -76,6 +96,12 @@ export default function Users() {
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}
       </div>
+
+      <DeleteModal
+        isModalOpen={deleteModalOpen}
+        setIsModalOpen={setDeleteModalOpen}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 }

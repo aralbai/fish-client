@@ -75,7 +75,7 @@ export default function AddPurchase() {
       .then((res) => {
         toast.success(res.data);
 
-        // router.push("/purchases");
+        router.push("/purchases");
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);

@@ -85,3 +85,49 @@
     }
   }
 }
+
+@media screen and (max-width: 900px) {
+  .addProduct {
+    .form {
+      form {
+        width: 100%;
+
+        .inputGroup {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .addProduct {
+    .form {
+      .top {
+        margin-bottom: 0;
+
+        a {
+          font-size: 13px;
+          padding: 5px 15px;
+
+          p {
+            display: none;
+          }
+        }
+      }
+
+      form {
+        width: 100%;
+
+        .inputGroup {
+          width: 100%;
+          flex-direction: column;
+
+          .formInput {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
