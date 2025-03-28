@@ -5,7 +5,7 @@
   color: $font-color;
 
   h1 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     font-size: 18px;
     font-weight: 500;
   }
@@ -27,6 +27,17 @@
       h1 {
         font-size: 18px;
         font-weight: 500;
+      }
+
+      a {
+        background-color: $primary-color;
+        color: $color-white;
+        padding: 10px 20px;
+        font-size: 15px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
     }
 
@@ -50,6 +61,30 @@
             border-radius: 5px;
             font-size: 15px;
             margin-bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .editOutcome {
+    .form {
+      .top {
+        a {
+          p {
+            display: none;
+          }
+        }
+      }
+
+      form {
+        .inputGroup {
+          flex-direction: column;
+
+          .formInput {
+            width: 100%;
           }
         }
       }

@@ -6,29 +6,39 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { fetchData } from "@/utils/fetchData";
 
 export default function EditUser() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId");
   const [type, setType] = useState(true);
+  const [newPassword, setNewPassword] = useState("");
   const [user, setUser] = useState({
     fullname: "",
     username: "",
     role: "",
-    password: "",
   });
 
   const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
+    const data = {
+      fullname: user.fullname,
+      username: user.username,
+      role: user.role,
+      password: newPassword,
+    };
+
     await axios
-      .post(`http://localhost:5000/api/users/register`, user)
+      .put(`http://localhost:5000/api/users/${userId}`, data)
       .then((res) => {
-        toast.success(res?.data?.message);
+        toast.success(res.data);
 
         router.push("/users");
       })
@@ -37,6 +47,12 @@ export default function EditUser() {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    fetchData(`/users/${userId}`, setUser);
+  }, [userId]);
+
+  console.log(newPassword);
 
   return (
     <div className={styles.addProduct}>
@@ -90,14 +106,8 @@ export default function EditUser() {
                 <input
                   type={type ? "password" : "text"}
                   placeholder="Пароль"
-                  value={user.password}
-                  onChange={(e) =>
-                    setUser((prev) => ({
-                      ...prev,
-                      password: e.target.value,
-                    }))
-                  }
-                  required
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
                 <button
                   className={styles.show}

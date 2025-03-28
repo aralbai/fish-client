@@ -57,87 +57,90 @@ export default function Deposits() {
           <h1>Все депозиты</h1>
           <Link href="/finance/deposits/add-deposit">
             <Add />
-            Создать новый
+            <p>Создать новый</p>
           </Link>
         </div>
 
         <TableTop tableRef={tableRef} />
 
-        <table ref={tableRef}>
-          <thead>
-            <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-              <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td style={{ padding: "30px" }}></td>
-            </tr>
-            <tr>
-              <td>Сумма</td>
-              <td>От кого</td>
-              <td>Дата</td>
-              <td>Добавление</td>
-              <td>Последнее изменение</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            {deposites?.map((deposit) => (
-              <tr key={deposit._id}>
-                <td>{Intl.NumberFormat("ru-RU").format(deposit.amount)}</td>
-                <td>{deposit.fromWhom}</td>
-                <td>{format(deposit.addedDate, "dd.MM.yyyy HH:mm")}</td>
-                <td>
-                  {user?.role === "superadmin"
-                    ? users?.map((user) =>
-                        user._id === deposit?.addedUserId ? (
-                          <Link
-                            href="/users"
-                            key={user._id}
-                            style={{ color: "#1976D2" }}
-                          >
-                            {user.username} {" - "}
-                          </Link>
-                        ) : null
-                      )
-                    : ""}
-                  {format(new Date(deposit?.createdAt), "dd.MM.yyyy HH:mm")}
-                </td>
-                <td>
-                  {user?.role === "superadmin"
-                    ? users?.map((user) =>
-                        user._id === deposit?.changedUserId ? (
-                          <Link
-                            href="/users"
-                            key={user._id}
-                            style={{ color: "#1976D2" }}
-                          >
-                            {user.username} {" - "}
-                          </Link>
-                        ) : null
-                      )
-                    : ""}
-                  {format(new Date(deposit?.updatedAt), "dd.MM.yyyy HH:mm")}
-                </td>
-                <td className={styles.action}>
-                  <Link
-                    href={{
-                      pathname: "/finance/deposits/edit-deposit",
-                      query: { depositId: deposit._id },
-                    }}
-                  >
-                    <Edit />
-                  </Link>
-
-                  <button onClick={() => handleDeleteClick(deposit._id)}>
-                    <Delete />
-                  </button>
-                </td>
+        <div className={styles.tableContainer}>
+          <table ref={tableRef}>
+            <thead>
+              <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
+                <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style={{ padding: "30px" }}></td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+              <tr>
+                <td>Сумма</td>
+                <td>От кого</td>
+                <td>Дата</td>
+                <td>Добавление</td>
+                <td>Последнее изменение</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {deposites?.map((deposit) => (
+                <tr key={deposit._id}>
+                  <td>{Intl.NumberFormat("ru-RU").format(deposit.amount)}</td>
+                  <td>{deposit.fromWhom}</td>
+                  <td>{format(deposit.addedDate, "dd.MM.yyyy HH:mm")}</td>
+                  <td>
+                    {user?.role === "superadmin"
+                      ? users?.map((user) =>
+                          user._id === deposit?.addedUserId ? (
+                            <Link
+                              href="/users"
+                              key={user._id}
+                              style={{ color: "#1976D2" }}
+                            >
+                              {user.username} {" - "}
+                            </Link>
+                          ) : null
+                        )
+                      : ""}
+                    {format(new Date(deposit?.createdAt), "dd.MM.yyyy HH:mm")}
+                  </td>
+                  <td>
+                    {user?.role === "superadmin"
+                      ? users?.map((user) =>
+                          user._id === deposit?.changedUserId ? (
+                            <Link
+                              href="/users"
+                              key={user._id}
+                              style={{ color: "#1976D2" }}
+                            >
+                              {user.username} {" - "}
+                            </Link>
+                          ) : null
+                        )
+                      : ""}
+                    {format(new Date(deposit?.updatedAt), "dd.MM.yyyy HH:mm")}
+                  </td>
+                  <td className={styles.action}>
+                    <Link
+                      href={{
+                        pathname: "/finance/deposits/edit-deposit",
+                        query: { depositId: deposit._id },
+                      }}
+                    >
+                      <Edit />
+                    </Link>
+
+                    <button onClick={() => handleDeleteClick(deposit._id)}>
+                      <Delete />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         {deposites.length < 1 && (
           <div className={styles.empty}>Этот раздел пуст.</div>
         )}

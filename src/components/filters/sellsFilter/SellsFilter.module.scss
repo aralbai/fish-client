@@ -18,6 +18,10 @@
       button {
         padding: 10px;
         border-radius: 50%;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: $primary-color;
 
         &:hover {
           background-color: $button-hover-color;

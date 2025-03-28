@@ -42,6 +42,7 @@ export default function Home() {
     purchases.totalPurchases -
     withdraws.totalWithdraws;
 
+  console.log(outcomes.totalOutcomes);
   return (
     <ProtectedRoute>
       <div className={styles.home}>
@@ -104,7 +105,11 @@ export default function Home() {
                 <PermContactCalendar className={styles.icon} />
               </div>
               <div className={styles.right}>
-                <h2>{users.length > 0 ? users.length : 0}</h2>
+                <h2>
+                  {users.length > 0 && user?.role === "superadmin"
+                    ? users.length
+                    : 0}
+                </h2>
                 <p>Пользователи</p>
               </div>
             </Link>

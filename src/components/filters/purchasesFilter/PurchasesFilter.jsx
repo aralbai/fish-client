@@ -126,7 +126,7 @@ export default function PurchasesFilter({
           wrapperClassName={styles.wrappedDateInput}
         />
       </li>
-      <li>
+      <li className={styles.close}>
         <button onClick={() => setIsModalOpen((prev) => !prev)}>
           <Close />
         </button>

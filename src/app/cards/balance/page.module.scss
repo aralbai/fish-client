@@ -40,6 +40,26 @@
       }
     }
 
+    .tableTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-left: 20px;
+      margin-bottom: 10px;
+
+      button {
+        background: none;
+        color: $primary-color;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+    }
+
     .tableContainer {
       overflow-x: auto;
 

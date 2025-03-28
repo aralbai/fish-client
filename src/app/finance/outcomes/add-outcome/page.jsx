@@ -9,6 +9,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 export default function AddOutcome() {
   const { user } = useContext(AuthContext);
@@ -47,15 +48,10 @@ export default function AddOutcome() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Добавить новый расход</h1>
-          <PrimaryBtn
-            type="link"
-            fullname="Вернуться к списку"
-            url="/finance/outcomes"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/finance/outcomes">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
@@ -92,7 +88,13 @@ export default function AddOutcome() {
             </div>
           </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+            <div className={styles.formInput}></div>
+            <div className={styles.formInput}></div>
+          </div>
         </form>
       </div>
     </div>

@@ -8,7 +8,7 @@ import DatePick from "@/components/datePicker/DatePicker";
 import { fetchData } from "@/utils/fetchData";
 import CheckBox from "@/components/checkBox/CheckBox";
 import CustumerModal from "@/components/custumerModal/CustumerModal";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -20,6 +20,8 @@ export default function AddSell() {
   const router = useRouter();
   const [purchases, setPurchases] = useState([]);
   const [custumers, setCustumers] = useState([]);
+  const [custumerId, setCustumerId] = useState("");
+  const [custumerDebts, setCustumedebts] = useState([]);
   const [sell, setSell] = useState({
     purchaseId: "Выберите поток",
     product: {
@@ -42,10 +44,23 @@ export default function AddSell() {
   const [isModalOPen, setIsModalOpen] = useState(false);
   const [checkAmount, setCheckAmount] = useState(9999999999999999999999999999n);
 
+  let totalCustumerDebt = 0;
+  custumerDebts?.forEach((sell) => {
+    totalCustumerDebt += sell?.debt;
+  });
+  const maxDiscount = sell?.price * sell?.amount;
+  const maxDebt = sell?.price * sell?.amount - sell?.discount;
+
+  console.log(maxDiscount, "disc");
+  console.log(maxDebt, "debt");
+
   useEffect(() => {
     fetchData("/custumers", setCustumers);
 
     fetchData("/purchases/active", setPurchases);
+
+    custumerId &&
+      fetchData(`/sells/single/debts/${custumerId}`, setCustumedebts);
   }, [isModalOPen, sell]);
 
   const pageHandleSubmit = async (e) => {
@@ -60,6 +75,14 @@ export default function AddSell() {
       debt: sell.debt === "" ? 0 : parseFloat(sell.debt),
       addedUserId: user?.id,
     };
+
+    const custumer = custumers.find((custumer) => custumerId === custumer._id);
+
+    if (data.debt > custumer?.limit - totalCustumerDebt) {
+      return toast.error(
+        `Custumer limit: ${custumer?.limit - totalCustumerDebt}`
+      );
+    }
 
     await axios
       .post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, data)
@@ -100,6 +123,8 @@ export default function AddSell() {
         },
         custumerName: "Клиент",
       }));
+
+      setCustumerId(values[0]);
     }
   };
 
@@ -243,16 +268,21 @@ export default function AddSell() {
                 value={sell.discount}
                 setData={setSell}
                 required={false}
+                max={maxDiscount}
               />
             </div>
             <div className={styles.formInput}>
-              <Input
+              <input
                 type="number"
-                name="debt"
                 placeholder="Долг"
                 value={sell.debt}
-                setData={setSell}
-                required={false}
+                onChange={(e) =>
+                  setSell((prev) => ({
+                    ...prev,
+                    debt: e.target.value,
+                  }))
+                }
+                max={maxDebt && maxDebt}
               />
             </div>
           </div>
@@ -302,7 +332,12 @@ export default function AddSell() {
             </div>
           </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+            <div className={styles.formInput}></div>
+          </div>
         </form>
       </div>
 

@@ -1,9 +1,14 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.scss";
-import { ArrowRightAlt, KeyboardBackspace } from "@mui/icons-material";
-import { useEffect, useRef, useState } from "react";
+import {
+  ArrowRightAlt,
+  FilterList,
+  KeyboardBackspace,
+} from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
+import BalanceFilter from "@/components/filters/balanceFilter/BalanceFilter";
 
 export default function Balance() {
   const [deposits, setDeposits] = useState([]);
@@ -12,20 +17,34 @@ export default function Balance() {
   const [purchases, setPurchases] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
 
-  useEffect(() => {
-    fetchData("/purchases/total/price", setPurchases);
-    fetchData("/outcomes/total", setOutcomes);
-    fetchData("/sells/total", setSells);
-    fetchData("/deposits/total", setDeposits);
-    fetchData("/withdraws/total", setWithdraws);
-  }, []);
+  const [balanceModalOpen, setBalanceModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    startDate: new Date(2025, 0, 1, 0, 0, 0),
+    endDate: new Date(),
+  });
 
-  const balance =
-    deposits.totalDeposits +
-    sells.totalSales -
-    outcomes.totalOutcomes -
-    purchases.totalPurchases -
-    withdraws.totalWithdraws;
+  useEffect(() => {
+    fetchData(
+      `/purchases/total/price?startDate=${filters?.startDate}&endDate=${filters?.endDate}`,
+      setPurchases
+    );
+    fetchData(
+      `/outcomes/total?startDate=${filters?.startDate}&endDate=${filters?.endDate}`,
+      setOutcomes
+    );
+    fetchData(
+      `/sells/total?startDate=${filters?.startDate}&endDate=${filters?.endDate}`,
+      setSells
+    );
+    fetchData(
+      `/deposits/total?startDate=${filters?.startDate}&endDate=${filters?.endDate}`,
+      setDeposits
+    );
+    fetchData(
+      `/withdraws/total?startDate=${filters?.startDate}&endDate=${filters?.endDate}`,
+      setWithdraws
+    );
+  }, [filters]);
 
   const profit = sells.totalSales - purchases.totalPurchases;
 
@@ -43,6 +62,20 @@ export default function Balance() {
           </Link>
         </div>
 
+        <div className={styles.tableTop}>
+          <div className={styles.filter}>
+            <button onClick={() => setBalanceModalOpen((prev) => !prev)}>
+              <FilterList /> Фильтр
+            </button>
+            <BalanceFilter
+              isModalOpen={balanceModalOpen}
+              setIsModalOpen={setBalanceModalOpen}
+              filters={filters}
+              setFilters={setFilters}
+            />
+          </div>
+        </div>
+
         <div className={styles.tableContainer}>
           <table>
             <thead>
@@ -53,14 +86,6 @@ export default function Balance() {
               </tr>
             </thead>
             <tbody>
-              <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-                <td>Баланс</td>
-                <td>
-                  {balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}
-                </td>
-                <td></td>
-                <td style={{ padding: "30px" }}></td>
-              </tr>
               <tr>
                 <td>Покупки</td>
                 <td>
@@ -151,7 +176,6 @@ export default function Balance() {
                 <td>
                   {profit ? Intl.NumberFormat("ru-RU").format(profit) : 0}
                 </td>
-                <td></td>
                 <td style={{ padding: "30px" }}></td>
               </tr>
             </tbody>

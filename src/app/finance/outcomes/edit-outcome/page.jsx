@@ -11,6 +11,7 @@ import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import DatePick from "@/components/datePicker/DatePicker";
+import Link from "next/link";
 
 export default function EditOutcome() {
   const { user } = useContext(AuthContext);
@@ -57,15 +58,10 @@ export default function EditOutcome() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Изменить расход</h1>
-          <PrimaryBtn
-            type="link"
-            title="Вернуться к списку"
-            url="/finance/outcomes"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/finance/outcomes">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
@@ -105,7 +101,13 @@ export default function EditOutcome() {
             </div>
           </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+            <div className={styles.formInput}></div>
+            <div className={styles.formInput}></div>
+          </div>
         </form>
       </div>
     </div>

@@ -33,6 +33,11 @@ export default function SingleCustumer() {
 
   const tableRef = useRef();
 
+  let totalCustumerDebt = 0;
+  custumerDebts?.forEach((sell) => {
+    totalCustumerDebt += sell?.debt;
+  });
+
   useEffect(() => {
     fetchData(`/custumers/${custumerId}`, setCustumer);
     fetchData(`/users/all`, setUsers);
@@ -102,6 +107,10 @@ export default function SingleCustumer() {
             <li>
               <p>Адрес</p>
               <p>{custumer?.address}</p>
+            </li>
+            <li>
+              <p>Долги</p>
+              <p>{Intl.NumberFormat("ru-RU").format(totalCustumerDebt)}</p>
             </li>
             <li>
               <p>Лимит</p>

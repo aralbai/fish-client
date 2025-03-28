@@ -135,7 +135,6 @@ export default function AddUser() {
               <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
             </div>
             <div className={styles.formInput}></div>
-            <div className={styles.formInput}></div>
           </div>
         </form>
       </div>

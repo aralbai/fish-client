@@ -7,7 +7,6 @@ import { fetchData } from "@/utils/fetchData";
 import { format } from "date-fns";
 import TableTop from "@/components/tableTop/TableTop";
 import PurchasesFilter from "../../components/filters/purchasesFilter/PurchasesFilter";
-import { getFirstDayOfMonthThisYear } from "@/utils/getFirstDay";
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);
@@ -23,7 +22,7 @@ export default function Purchases() {
       title: "Все",
     },
     status: "",
-    startDate: getFirstDayOfMonthThisYear(),
+    startDate: new Date(2025, 0, 1, 0, 0, 0),
     endDate: new Date(),
   });
   const [filterModalOpen, setFilterModalOpen] = useState(false);
@@ -88,16 +87,20 @@ export default function Purchases() {
                 <tr key={purchase._id}>
                   <td>{purchase.product?.title}</td>
                   <td>{purchase.supplier?.title}</td>
-                  <td>{purchase.amount}</td>
+                  <td>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(purchase?.amount)
+                      .replace(/,/g, " ")}
+                  </td>
 
                   <td>
                     {Intl.NumberFormat("uz-UZ")
-                      .format(purchase.discount)
+                      .format(purchase?.discount)
                       .replace(/,/g, " ")}
                   </td>
                   <td>
                     {Intl.NumberFormat("uz-UZ")
-                      .format(purchase.totalPrice)
+                      .format(purchase?.totalPrice)
                       .replace(/,/g, " ")}
                   </td>
                   <td>{purchase.shortage}</td>

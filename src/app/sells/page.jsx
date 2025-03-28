@@ -7,7 +7,6 @@ import { format } from "date-fns";
 import { fetchData } from "@/utils/fetchData";
 import TableTop from "@/components/tableTop/TableTop";
 import SellsFilter from "@/components/filters/sellsFilter/SellsFilter";
-import { getFirstDayOfMonthThisYear } from "@/utils/getFirstDay";
 
 export default function Sells() {
   const [sells, setSells] = useState([]);
@@ -23,7 +22,7 @@ export default function Sells() {
       title: "Все",
     },
     status: "",
-    startDate: getFirstDayOfMonthThisYear(),
+    startDate: new Date(2025, 0, 1, 0, 0, 0),
     endDate: new Date(),
   });
   const [filterModalOpen, setFilterModalOpen] = useState(false);

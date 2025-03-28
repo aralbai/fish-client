@@ -1,31 +1,33 @@
 @import "@/app/styles/variables.module.scss";
 
-.purchasesFilter {
+.balanceFilter {
   position: absolute;
   background-color: #fff;
   box-shadow: $filter-box-shadow;
-  padding: 15px;
+  padding: 20px;
   display: flex;
   gap: 20px;
   border-radius: 5px;
+
+  .topClose {
+    display: none;
+  }
 
   li {
     display: flex;
     flex-direction: column;
     gap: 10px;
 
-    &:last-child {
-      button {
-        padding: 10px;
-        border-radius: 50%;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: $primary-color;
+    button {
+      border: none;
+      background: none;
+      padding: 10px;
+      border-radius: 50%;
+      color: $primary-color;
+      cursor: pointer;
 
-        &:hover {
-          background-color: $button-hover-color;
-        }
+      &:hover {
+        background-color: $button-hover-color;
       }
     }
 
@@ -58,7 +60,7 @@
 }
 
 @media screen and (max-width: 600px) {
-  .purchasesFilter {
+  .balanceFilter {
     flex-direction: column;
 
     .close {

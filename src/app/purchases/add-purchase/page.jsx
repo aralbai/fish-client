@@ -234,6 +234,7 @@ export default function AddPurchase() {
             <div className={styles.formInput}>
               <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
             </div>
+            <div className={styles.formInput}></div>
           </div>
         </form>
       </div>

@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchData } from "@/utils/fetchData";
+import Link from "next/link";
 
 export default function EditDeposit() {
   const { user } = useContext(AuthContext);
@@ -54,15 +55,10 @@ export default function EditDeposit() {
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Добавить новый депозит</h1>
-          <PrimaryBtn
-            type="link"
-            fullname="Вернуться к списку"
-            url="/finance/changedDeposits"
-            icon={<KeyboardBackspace />}
-          >
+          <Link href="/finance/deposits">
             <KeyboardBackspace />
-            Вернуться к списку
-          </PrimaryBtn>
+            <p>Вернуться к списку</p>
+          </Link>
         </div>
 
         <form onSubmit={pageHandleSubmit}>
@@ -102,7 +98,13 @@ export default function EditDeposit() {
             </div>
           </div>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <div className={styles.inputGroup}>
+            <div className={styles.formInput}>
+              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+            </div>
+            <div className={styles.formInput}></div>
+            <div className={styles.formInput}></div>
+          </div>
         </form>
       </div>
     </div>
