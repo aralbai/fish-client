@@ -21,23 +21,23 @@ export default function Password() {
   const [password, setPassword] = useState({
     id: user?.id,
     username: user?.username,
-    current1: "",
-    current2: "",
-    new: "",
+    current: "",
+    new1: "",
+    new2: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password.current1 !== password.current2) {
+    if (password.new1 !== password.new2) {
       return toast.error("Пароли не совпадают!");
     }
 
     await axios
       .put(`${process.env.NEXT_PUBLIC_API_URL}/users/password/${password.id}`, {
         username: password.username,
-        password: password.current1,
-        newPassword: password.new,
+        password: password.current,
+        newPassword: password.new1,
       })
       .then((res) => {
         toast.success(res.data);
@@ -51,9 +51,9 @@ export default function Password() {
     setPassword({
       id: user?.id,
       username: user?.username,
-      current1: "",
-      current2: "",
-      new: "",
+      current: "",
+      new1: "",
+      new2: "",
     });
   };
 
@@ -93,31 +93,12 @@ export default function Password() {
               <input
                 type={show ? "text" : "password"}
                 placeholder="Текущий пароль"
-                value={password.current1}
+                required
+                value={password.current}
                 onChange={(e) =>
                   setPassword((prev) => ({
                     ...prev,
-                    current1: e.target.value,
-                  }))
-                }
-              />
-              <button
-                className={styles.show}
-                type="button"
-                onClick={() => setShow(!show)}
-              >
-                {show ? <VisibilityOff /> : <RemoveRedEye />}
-              </button>
-            </span>
-            <span>
-              <input
-                type={show ? "text" : "password"}
-                placeholder="Текущий пароль"
-                value={password.current2}
-                onChange={(e) =>
-                  setPassword((prev) => ({
-                    ...prev,
-                    current2: e.target.value,
+                    current: e.target.value,
                   }))
                 }
               />
@@ -133,11 +114,33 @@ export default function Password() {
               <input
                 type={show ? "text" : "password"}
                 placeholder="Новый пароль"
-                value={password.new}
+                required
+                value={password.new1}
                 onChange={(e) =>
                   setPassword((prev) => ({
                     ...prev,
-                    new: e.target.value,
+                    new1: e.target.value,
+                  }))
+                }
+              />
+              <button
+                className={styles.show}
+                type="button"
+                onClick={() => setShow(!show)}
+              >
+                {show ? <VisibilityOff /> : <RemoveRedEye />}
+              </button>
+            </span>
+            <span>
+              <input
+                type={show ? "text" : "password"}
+                placeholder="Новый пароль"
+                required
+                value={password.new2}
+                onChange={(e) =>
+                  setPassword((prev) => ({
+                    ...prev,
+                    new2: e.target.value,
                   }))
                 }
               />
