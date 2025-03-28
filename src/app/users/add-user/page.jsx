@@ -26,7 +26,7 @@ export default function AddUser() {
     e.preventDefault();
 
     await axios
-      .post(`http://localhost:5000/api/users/register`, user)
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, user)
       .then((res) => {
         toast.success(res?.data?.message);
 

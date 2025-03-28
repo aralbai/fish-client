@@ -36,7 +36,7 @@ export default function EditUser() {
     };
 
     await axios
-      .put(`http://localhost:5000/api/users/${userId}`, data)
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, data)
       .then((res) => {
         toast.success(res.data);
 

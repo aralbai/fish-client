@@ -34,7 +34,7 @@ export default function Password() {
     }
 
     await axios
-      .put(`http://localhost:5000/api/users/password/${password.id}`, {
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/users/password/${password.id}`, {
         username: password.username,
         password: password.current1,
         newPassword: password.new,

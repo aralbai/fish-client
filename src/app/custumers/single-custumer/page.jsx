@@ -48,7 +48,7 @@ export default function SingleCustumer() {
     e.preventDefault();
 
     await axios
-      .delete(`http://localhost:5000/api/custumers/${custumerId}`)
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/custumers/${custumerId}`)
       .then((res) => {
         toast.success(res.data);
         router.push("/custumers");

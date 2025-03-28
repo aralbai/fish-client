@@ -71,7 +71,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
               }}
             >
               <Link href="/" className={pathname === "/" ? styles.active : ""}>
-                <Dashboard /> Statistika
+                <Dashboard /> Статистика
               </Link>
             </li>
 
@@ -153,7 +153,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                 onClick={() => setFinanaceDropdown(!financeDropdown)}
               >
                 <div>
-                  <Paid /> Finance
+                  <Paid /> Финансы
                 </div>
                 <div>
                   {financeDropdown ? <KeyboardArrowDown /> : <ChevronRight />}

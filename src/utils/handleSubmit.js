@@ -6,7 +6,7 @@ export const handleSubmit = async (e, reqType, route, data, setData) => {
 
   if (reqType === "create") {
     await axios
-      .post(`http://localhost:5000/api/${route}`, data)
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/${route}`, data)
       .then((res) => {
         // Showing toast success message
         toast.success(res.data);
@@ -16,7 +16,7 @@ export const handleSubmit = async (e, reqType, route, data, setData) => {
       });
   } else {
     await axios
-      .put(`http://localhost:5000/api/${route}/${reqType}`, data)
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/${route}/${reqType}`, data)
       .then((res) => {
         // Showing toast success message
         toast.success(res.data);

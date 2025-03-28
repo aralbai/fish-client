@@ -23,7 +23,7 @@ export default function Change() {
     e.preventDefault();
 
     await axios
-      .put(`http://localhost:5000/api/users/${newUser.id}`, newUser)
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/users/${newUser.id}`, newUser)
       .then((res) => {
         toast.success(res.data);
       })

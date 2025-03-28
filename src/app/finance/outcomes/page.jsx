@@ -66,9 +66,11 @@ export default function Outcomes() {
             <thead>
               <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
                 <td>
-                  {Intl.NumberFormat("ru-RU").format(
-                    outcomesTotalPrice.totalOutcomes
-                  )}
+                  {outcomesTotalPrice.totalOutcomes
+                    ? Intl.NumberFormat("ru-RU").format(
+                        outcomesTotalPrice.totalOutcomes
+                      )
+                    : 0}
                 </td>
                 <td></td>
                 <td></td>

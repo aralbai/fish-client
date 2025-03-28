@@ -18,7 +18,7 @@ export default function Login() {
     e.preventDefault();
 
     await axios
-      .post(`http://localhost:5000/api/users/login`, user)
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, user)
       .then((res) => {
         login(res?.data?.user, res?.data?.token);
         toast.success(res.data.message);
