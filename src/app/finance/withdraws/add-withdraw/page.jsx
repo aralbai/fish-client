@@ -37,6 +37,7 @@ export default function AddWithdraw() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
   };

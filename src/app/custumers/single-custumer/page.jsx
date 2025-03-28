@@ -52,6 +52,11 @@ export default function SingleCustumer() {
       .then((res) => {
         toast.success(res.data);
         router.push("/custumers");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
   };
 

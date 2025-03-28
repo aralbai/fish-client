@@ -44,6 +44,7 @@ export default function EditDeposit() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
   };

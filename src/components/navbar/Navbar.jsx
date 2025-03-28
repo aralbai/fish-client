@@ -57,7 +57,7 @@ export default function Navbar({ isMobile, setIsMobile, tgPopup }) {
             onClick={(e) => e.stopPropagation()}
           >
             <li>
-              <Link href="/profile">
+              <Link href={user?.role === "superadmin" ? "/profile" : "/"}>
                 <Settings />
                 Настройки
               </Link>

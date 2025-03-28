@@ -36,7 +36,6 @@ export default function EditOutcome() {
       ...changedOutcome,
       changedUserId: user?.id,
     };
-    console.log(data);
 
     await axios
       .put(`${process.env.NEXT_PUBLIC_API_URL}/outcomes/${outcomeId}`, data)
@@ -47,6 +46,7 @@ export default function EditOutcome() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
   };

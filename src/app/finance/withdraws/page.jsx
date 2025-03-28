@@ -43,6 +43,7 @@ export default function Withdraws() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
 

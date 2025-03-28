@@ -51,6 +51,8 @@ export default function SingleSupplier() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
 
     setDeleteModal(false);
@@ -60,8 +62,6 @@ export default function SingleSupplier() {
     (sum, purchase) => sum + purchase.debt,
     0
   );
-
-  console.log(purchases);
 
   return (
     <div className={styles.singleSupplier}>

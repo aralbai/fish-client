@@ -98,8 +98,6 @@ const Chart = () => {
     );
   }, []);
 
-  console.log(purchases);
-
   for (let i = 0; i < 6; i++) {
     data[5 - i].month.setMonth(firstDate.getMonth() - i); // Move back 5 months
     data[5 - i].month.setDate(1); // Set to first day of the month

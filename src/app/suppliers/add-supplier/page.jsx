@@ -32,6 +32,8 @@ export default function AddSupplier() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
   };
 

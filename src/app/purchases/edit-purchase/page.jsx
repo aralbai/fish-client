@@ -68,6 +68,8 @@ export default function EditSupplier() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
 
     router.push("/purchases");

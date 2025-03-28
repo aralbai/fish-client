@@ -37,8 +37,6 @@ export default function PurchasesFilter({
 
   if (!isModalOpen) return null;
 
-  console.log(filters);
-
   return (
     <ul className={styles.purchasesFilter}>
       <li>

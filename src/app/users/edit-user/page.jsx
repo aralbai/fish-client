@@ -52,8 +52,6 @@ export default function EditUser() {
     fetchData(`/users/${userId}`, setUser);
   }, [userId]);
 
-  console.log(newPassword);
-
   return (
     <div className={styles.addProduct}>
       <h1>Поставщики</h1>

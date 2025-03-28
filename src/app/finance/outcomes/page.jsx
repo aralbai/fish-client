@@ -41,6 +41,8 @@ export default function Outcomes() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
 
     setDeleteModalOpen(false);

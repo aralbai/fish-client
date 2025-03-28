@@ -30,7 +30,7 @@ export default function Password() {
     e.preventDefault();
 
     if (password.current1 !== password.current2) {
-      return console.log("Password not match");
+      return toast.error("Пароли не совпадают!");
     }
 
     await axios
@@ -43,6 +43,8 @@ export default function Password() {
         toast.success(res.data);
       })
       .catch((err) => {
+        toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
 

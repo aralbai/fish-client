@@ -59,8 +59,6 @@ export default function AddPurchase() {
     }));
   };
 
-  console.log(purchase);
-
   const pageHandleSubmit = async (e) => {
     e.preventDefault();
 
@@ -79,6 +77,8 @@ export default function AddPurchase() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
   };
 

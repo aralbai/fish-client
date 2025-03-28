@@ -34,6 +34,8 @@ export default function AddProduct() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
   };
 

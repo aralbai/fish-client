@@ -51,9 +51,6 @@ export default function AddSell() {
   const maxDiscount = sell?.price * sell?.amount;
   const maxDebt = sell?.price * sell?.amount - sell?.discount;
 
-  console.log(maxDiscount, "disc");
-  console.log(maxDebt, "debt");
-
   useEffect(() => {
     fetchData("/custumers", setCustumers);
 
@@ -92,6 +89,7 @@ export default function AddSell() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
   };

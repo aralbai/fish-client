@@ -43,6 +43,8 @@ export default function EditCustumer() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
 
     router.push(`/custumers/single-custumer?custumerId=${custumerId}`);

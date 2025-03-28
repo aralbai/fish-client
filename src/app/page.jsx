@@ -42,7 +42,6 @@ export default function Home() {
     purchases.totalPurchases -
     withdraws.totalWithdraws;
 
-  console.log(outcomes.totalOutcomes);
   return (
     <ProtectedRoute>
       <div className={styles.home}>

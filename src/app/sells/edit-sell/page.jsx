@@ -71,6 +71,8 @@ export default function EditSell() {
           });
         })
         .catch((err) => {
+          toast.error(err?.response?.data?.message);
+
           console.log(err);
         });
     };

@@ -6,17 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import { format } from "date-fns";
 import TableTop from "@/components/tableTop/TableTop";
-import LimitModal from "@/components/limitModal/LimitModal";
 
 export default function Flow() {
   const [purchases, setPurchases] = useState([]);
-  const [purchaseId, setPurchaseId] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const tableRef = useRef(null);
 
   useEffect(() => {
     fetchData("/purchases/active", setPurchases);
-  }, [isModalOpen]);
+  }, []);
 
   return (
     <div className={styles.products}>
@@ -88,12 +85,6 @@ export default function Flow() {
             </tbody>
           </table>
         </div>
-
-        <LimitModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          purchaseId={purchaseId}
-        />
       </div>
     </div>
   );

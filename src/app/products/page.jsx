@@ -39,6 +39,8 @@ export default function Products() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
 
     setIsModalOpen(false);

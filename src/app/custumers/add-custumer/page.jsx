@@ -33,6 +33,8 @@ export default function AddCustumer() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
   };
 

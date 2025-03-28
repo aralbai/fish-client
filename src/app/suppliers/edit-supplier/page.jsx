@@ -43,7 +43,9 @@ export default function EditSupplier() {
         router.push(`/suppliers/single-supplier?supplierId=${supplierId}`);
       })
       .catch((err) => {
-        toast.success(err?.response?.data?.message);
+        toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
   };
 

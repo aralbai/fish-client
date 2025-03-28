@@ -37,6 +37,7 @@ export default function AddOutcome() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
   };

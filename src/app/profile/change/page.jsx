@@ -28,6 +28,8 @@ export default function Change() {
         toast.success(res.data);
       })
       .catch((err) => {
+        toast.error(err?.response?.data?.message);
+
         console.log(err);
       });
 

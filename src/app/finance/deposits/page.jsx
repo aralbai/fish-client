@@ -43,6 +43,8 @@ export default function Deposits() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+
+        console.log(err);
       });
 
     setDeleteModalOpen(false);
