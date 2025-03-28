@@ -14,7 +14,6 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
-import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import DeleteModal from "@/components/deleteModal/DeleteModal";
 
 export default function SingleSupplier() {
@@ -109,10 +108,6 @@ export default function SingleSupplier() {
               <p>Адрес</p>
               <p>{supplier?.address}</p>
             </li>
-            <li>
-              <p>Наши общие долги</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchasesTotal)}</p>
-            </li>
           </ul>
         </div>
 
@@ -189,7 +184,7 @@ export default function SingleSupplier() {
               <tr>
                 <td>Продукта</td>
                 <td>Amount</td>
-                <td>Debt</td>
+                <td>Сумма</td>
                 <td>Дата</td>
                 <td></td>
               </tr>
@@ -200,7 +195,9 @@ export default function SingleSupplier() {
                   <tr key={purchase._id}>
                     <td>{purchase.product?.title}</td>
                     <td>{purchase.amount}</td>
-                    <td>{Intl.NumberFormat("ru-RU").format(purchase.debt)}</td>
+                    <td>
+                      {Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)}
+                    </td>
                     <td>
                       {format(new Date(purchase.addedDate), "dd.MM.yyyy HH:mm")}
                     </td>
