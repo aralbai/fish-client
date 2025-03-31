@@ -77,50 +77,37 @@ const Chart = () => {
   ];
 
   const firstDate = new Date();
-  let month1 = new Date();
-  month1.setMonth(firstDate.getMonth() - 5); // Move back 5 months
-  month1.setDate(1); // Set to first day of the month
-  month1.setHours(0, 0, 0, 0);
+  const month1 = new Date(
+    firstDate.getFullYear(),
+    firstDate.getMonth() - 5,
+    1,
+    0,
+    0,
+    0,
+    0
+  );
 
   const month6 = new Date();
 
-  useEffect(() => {
-    fetchData(`/sells/query?startDate=${month1}&endDate=${month6}`, setSells);
-
-    fetchData(
-      `/outcomes/query?startDate=${month1}&endDate=${month6}`,
-      setOutcomes
-    );
-
-    fetchData(
-      `/purchases/query?startDate=${month1}&endDate=${month6}`,
-      setPurchases
-    );
-  }, []);
-
   for (let i = 0; i < 6; i++) {
-    data[5 - i].month.setMonth(firstDate.getMonth() - i); // Move back 5 months
-    data[5 - i].month.setDate(1); // Set to first day of the month
-    data[5 - i].month.setHours(0, 0, 0, 0);
+    const monthDate = new Date(firstDate); // Clone firstDate to avoid mutations
+    monthDate.setMonth(firstDate.getMonth() - i, 1); // Ensure the first day of the month
 
-    data[5 - i].name = setMonths(new Date(data[5 - i].month).getMonth());
+    data[5 - i].month = monthDate; // Assign the corrected date
+    data[5 - i].name = setMonths(monthDate.getMonth()); // Format the month name correctly
 
     const monthSells = sells.filter(
-      (sell) =>
-        new Date(data[5 - i].month).getMonth() ===
-        new Date(sell.addedDate).getMonth()
+      (sell) => new Date(sell.addedDate).getMonth() === monthDate.getMonth()
     );
 
     const monthOutcomes = outcomes.filter(
       (outcome) =>
-        new Date(data[5 - i].month).getMonth() ===
-        new Date(outcome.addedDate).getMonth()
+        new Date(outcome.addedDate).getMonth() === monthDate.getMonth()
     );
 
     const monthPurchases = purchases.filter(
       (purchase) =>
-        new Date(data[5 - i].month).getMonth() ===
-        new Date(purchase.addedDate).getMonth()
+        new Date(purchase.addedDate).getMonth() === monthDate.getMonth()
     );
 
     const totalPurchase = monthPurchases.reduce(
@@ -136,9 +123,24 @@ const Chart = () => {
     const totalSells = monthSells.reduce((sum, sell) => sum + sell.given, 0);
 
     data[5 - i].Расход = totalOutcome + totalPurchase;
-
     data[5 - i].Доход = totalSells;
   }
+
+  useEffect(() => {
+    fetchData(`/sells/query?startDate=${month1}&endDate=${month6}`, setSells);
+
+    fetchData(
+      `/outcomes/query?startDate=${month1}&endDate=${month6}`,
+      setOutcomes
+    );
+
+    fetchData(
+      `/purchases/query?startDate=${month1}&endDate=${month6}`,
+      setPurchases
+    );
+  }, []);
+
+  console.log(data);
 
   return (
     <ResponsiveContainer width="100%" height={300}>
