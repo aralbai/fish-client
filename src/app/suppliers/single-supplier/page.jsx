@@ -183,7 +183,7 @@ export default function SingleSupplier() {
             <thead>
               <tr>
                 <td>Продукт</td>
-                Муғдары</td>
+                <td>Муғдары</td>
                 <td>Сумма</td>
                 <td>Сәне</td>
                 <td></td>
