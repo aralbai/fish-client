@@ -46,7 +46,7 @@ export default function SupplierModal({ isModalOpen, setIsModalOpen }) {
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Создать новый поставщик</h2>
+          <h2>Тазасын киритиў Сатыўшы</h2>
 
           <button onClick={() => setIsModalOpen(false)}>
             <Close />
@@ -57,7 +57,7 @@ export default function SupplierModal({ isModalOpen, setIsModalOpen }) {
           <Input
             type="text"
             name="title"
-            placeholder="Название поставщика"
+            placeholder="Название Сатыўшыа"
             value={supplier.title}
             setData={setSupplier}
             required={true}
@@ -79,7 +79,7 @@ export default function SupplierModal({ isModalOpen, setIsModalOpen }) {
             required={false}
           />
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
         </form>
       </div>
     </div>

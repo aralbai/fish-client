@@ -58,7 +58,7 @@ export default function EditDeposit() {
           <h1>Добавить новый депозит</h1>
           <Link href="/finance/deposits">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p></p>
           </Link>
         </div>
 
@@ -101,7 +101,7 @@ export default function EditDeposit() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
             <div className={styles.formInput}></div>
             <div className={styles.formInput}></div>

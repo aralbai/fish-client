@@ -53,11 +53,11 @@ export default function Products() {
 
         <div className={styles.table}>
           <div className={styles.top}>
-            <h1>Все продукты</h1>
+            <h1>Продукты</h1>
 
             <Link href="/products/add-product">
               <Add />
-              <p>Создать новый</p>
+              <p>Тазасын киритиў</p>
             </Link>
           </div>
 
@@ -67,9 +67,9 @@ export default function Products() {
             <table ref={tableRef}>
               <thead>
                 <tr>
-                  <td>Продукта</td>
-                  <td>Добавление</td>
-                  <td>Изменение</td>
+                  <td>Продукт</td>
+                  <td>Киритилди</td>
+                  <td>Өзгертирилди</td>
                   <td></td>
                 </tr>
               </thead>

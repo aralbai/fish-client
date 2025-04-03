@@ -116,7 +116,7 @@ export default function EditSell() {
 
   return (
     <div className={styles.editProduct}>
-      <h1>Продажи</h1>
+      <h1>Сатыў</h1>
 
       <div className={styles.form}>
         {/* Title and back button  */}
@@ -124,7 +124,7 @@ export default function EditSell() {
           <h1>Редактировать продаж</h1>
           <Link href="/sells">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -149,7 +149,7 @@ export default function EditSell() {
 
             {/* Product  */}
             <div className={styles.input}>
-              <label htmlFor="">Продукта</label>
+              <label htmlFor="">Продукт</label>
               <input
                 type="text"
                 name="product"
@@ -185,7 +185,7 @@ export default function EditSell() {
 
             {/* AddedDate  */}
             <div className={styles.input}>
-              <label htmlFor="">Дата добавления</label>
+              <label htmlFor="">Киритилген сәне</label>
               <DatePick
                 defDate={changedSell.addedDate}
                 setDate={setChangedSell}
@@ -196,7 +196,7 @@ export default function EditSell() {
           {/* Amount Price  */}
           <div className={styles.inputGroup}>
             <div className={styles.input}>
-              <label htmlFor="">Количество</label>
+              <label htmlFor="">Муғдары</label>
               <input
                 type="number"
                 name="amount"
@@ -213,7 +213,7 @@ export default function EditSell() {
 
             {/* Price  */}
             <div className={styles.input}>
-              <label htmlFor="">Цена</label>
+              <label htmlFor="">Баҳасы</label>
               <input
                 type="number"
                 name="Price"
@@ -246,7 +246,7 @@ export default function EditSell() {
             </div>
 
             <div className={styles.input}>
-              <label htmlFor="">Долг</label>
+              <label htmlFor="">Қарыз</label>
               <input
                 type="number"
                 value={changedSell.debt}
@@ -278,7 +278,7 @@ export default function EditSell() {
               </div>
 
               <div className={styles.calc}>
-                <p>Оплачено:</p>
+                <p>Төленди:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
                     .format(
@@ -301,7 +301,7 @@ export default function EditSell() {
               </div>
 
               <div className={styles.calc}>
-                <p>Долг:</p>
+                <p>Қарыз:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
                     .format(changedSell.debt)
@@ -313,7 +313,7 @@ export default function EditSell() {
 
           <div className={styles.inputGroup}>
             <div className={styles.input}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
 
             <div className={styles.input}></div>

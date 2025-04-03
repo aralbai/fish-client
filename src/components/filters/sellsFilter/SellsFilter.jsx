@@ -40,7 +40,7 @@ export default function SellsFilter({
   return (
     <ul className={styles.purchasesFilter}>
       <li>
-        <label htmlFor="">Продукта</label>
+        <label htmlFor="">Продукт</label>
         <select
           name="product"
           value={`${filters.product.id}-${filters.product.title}`}
@@ -87,11 +87,11 @@ export default function SellsFilter({
           }
         >
           <option value="">Все</option>
-          <option value="debts">Долги</option>
+          <option value="debts">Қарызлар</option>
         </select>
       </li>
       <li>
-        <label htmlFor="">Начало</label>
+        <label htmlFor="">Басланыўы</label>
 
         <DatePicker
           selected={new Date(filters?.startDate)}
@@ -107,7 +107,7 @@ export default function SellsFilter({
         />
       </li>
       <li>
-        <label htmlFor="">Окончание</label>
+        <label htmlFor="">Тамамланыўы</label>
 
         <DatePicker
           selected={new Date(filters?.endDate)}

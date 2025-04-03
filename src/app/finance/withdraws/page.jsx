@@ -59,7 +59,7 @@ export default function Withdraws() {
           <h1>Все снятия</h1>
           <Link href="/finance/withdraws/add-withdraw">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 
@@ -79,9 +79,9 @@ export default function Withdraws() {
               <tr>
                 <td>Сумма</td>
                 <td>Кому</td>
-                <td>Дата</td>
-                <td>Добавление</td>
-                <td>Последнее изменение</td>
+                <td>Сәне</td>
+                <td>Киритилди</td>
+                <td>Последнее Өзгертирилди</td>
                 <td></td>
               </tr>
             </thead>

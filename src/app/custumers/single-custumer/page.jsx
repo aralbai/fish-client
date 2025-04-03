@@ -67,7 +67,7 @@ export default function SingleCustumer() {
 
         <Link href="/custumers">
           <KeyboardBackspace />
-          <p>Вернуться к списку</p>
+          <p>Артқа қайтыў</p>
         </Link>
       </div>
 
@@ -114,7 +114,7 @@ export default function SingleCustumer() {
               <p>{custumer?.address}</p>
             </li>
             <li>
-              <p>Долги</p>
+              <p>Қарызлар</p>
               <p>{Intl.NumberFormat("ru-RU").format(totalCustumerDebt)}</p>
             </li>
             <li>
@@ -130,19 +130,19 @@ export default function SingleCustumer() {
 
         <div className={styles.right}>
           <div className={styles.top}>
-            <h2>Добавление и изменение</h2>
+            <h2>Киритиў ҳәм өзгертиў</h2>
           </div>
 
           <ul>
             <li>
-              <p>Дата добавления</p>
+              <p>Киритилген сәне</p>
               <p>
                 {custumer?.createdAt &&
                   format(new Date(custumer?.createdAt), "dd.MM.yyyy hh:mm:ss")}
               </p>
             </li>
             <li>
-              <p>Дата изменения</p>
+              <p>Ақырғы өзгерткен сәне</p>
               <p>
                 {custumer?.updatedAt &&
                   format(new Date(custumer?.updatedAt), "dd.MM.yyyy hh:mm:ss")}
@@ -151,7 +151,7 @@ export default function SingleCustumer() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто добавил</p>
+                <p>Кириткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -171,7 +171,7 @@ export default function SingleCustumer() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто изменился последним</p>
+                <p>Ақырғы өзгерткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -193,16 +193,16 @@ export default function SingleCustumer() {
       </div>
 
       <div className={styles.repays}>
-        <h2>Список долгов</h2>
+        <h2>Список Қарызов</h2>
 
         <div className={styles.tableContainer}>
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Продукта</td>
-                <td>Amount</td>
+                <td>Продукт</td>
+                <td>Муғдары</td>
                 <td>Debt</td>
-                <td>Дата</td>
+                <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>

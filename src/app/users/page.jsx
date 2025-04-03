@@ -42,15 +42,15 @@ export default function Users() {
 
   return (
     <div className={styles.users}>
-      <h1>Пользователи</h1>
+      <h1>Аккаунтлар</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все пользователи</h1>
+          <h1>Аккаунтлар</h1>
 
           <Link href="/users/add-user">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 

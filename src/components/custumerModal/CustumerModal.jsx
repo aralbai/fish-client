@@ -47,7 +47,7 @@ export default function CustumerModal({ isModalOpen, setIsModalOpen }) {
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Создать новый клиент</h2>
+          <h2>Тазасын киритиў клиент</h2>
 
           <button onClick={() => setIsModalOpen(false)}>
             <Close />
@@ -77,7 +77,7 @@ export default function CustumerModal({ isModalOpen, setIsModalOpen }) {
             setData={setCustumer}
           />
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
         </form>
       </div>
     </div>

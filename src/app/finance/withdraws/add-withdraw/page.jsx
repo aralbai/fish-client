@@ -51,7 +51,7 @@ export default function AddWithdraw() {
           <h1>Добавить новый снимать</h1>
           <Link href="/finance/withdraws">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p></p>
           </Link>
         </div>
 
@@ -91,7 +91,7 @@ export default function AddWithdraw() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
             <div className={styles.formInput}></div>
             <div className={styles.formInput}></div>

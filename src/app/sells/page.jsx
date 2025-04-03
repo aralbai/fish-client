@@ -41,14 +41,14 @@ export default function Sells() {
 
   return (
     <div className={styles.products}>
-      <h1>Продажи</h1>
+      <h1>Сатыў</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все продажи</h1>
+          <h1>Сатыў</h1>
           <Link href="/sells/add-sell">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 
@@ -73,13 +73,13 @@ export default function Sells() {
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Продукта</td>
+                <td>Продукт</td>
                 <td>Клиент</td>
-                <td>Количество</td>
+                <td>Муғдары</td>
                 <td>Скидка</td>
                 <td>Сумма</td>
-                <td>Долг</td>
-                <td>Дата</td>
+                <td>Қарыз</td>
+                <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>

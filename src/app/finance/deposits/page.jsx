@@ -59,7 +59,7 @@ export default function Deposits() {
           <h1>Все депозиты</h1>
           <Link href="/finance/deposits/add-deposit">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 
@@ -79,9 +79,9 @@ export default function Deposits() {
               <tr>
                 <td>Сумма</td>
                 <td>От кого</td>
-                <td>Дата</td>
-                <td>Добавление</td>
-                <td>Последнее изменение</td>
+                <td>Сәне</td>
+                <td>Киритилди</td>
+                <td>Последнее Өзгертирилди</td>
                 <td></td>
               </tr>
             </thead>

@@ -98,15 +98,15 @@ export default function EditSupplier() {
 
   return (
     <div className={styles.editProduct}>
-      <h1>Поставщики</h1>
+      <h1>Сатыўшыи</h1>
 
       <div className={styles.form}>
         {/* Title and back button  */}
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
+          <h1>Сатып алыў Сатыўшы</h1>
           <Link href="/purchases">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p></p>
           </Link>
         </div>
 
@@ -266,7 +266,7 @@ export default function EditSupplier() {
 
           <div className={styles.inputGroup}>
             <div className={styles.input}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
             <div className={styles.input}></div>
           </div>

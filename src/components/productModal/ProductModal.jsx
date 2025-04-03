@@ -42,7 +42,7 @@ export default function ProductModal({ isModalOpen, setIsModalOpen }) {
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Создать новый продукт</h2>
+          <h2>Таза продукт киритиў</h2>
 
           <button onClick={() => setIsModalOpen(false)}>
             <Close />
@@ -53,12 +53,12 @@ export default function ProductModal({ isModalOpen, setIsModalOpen }) {
           <Input
             type="text"
             name="title"
-            placeholder="Название продукта"
+            placeholder="Название Продукт"
             value={product.title}
             setData={setProduct}
           />
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
         </form>
       </div>
     </div>

@@ -17,16 +17,16 @@ export default function Debts() {
 
   return (
     <div className={styles.products}>
-      <h1>Долги</h1>
+      <h1>Қарызлар</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Долги</h1>
+          <h1>Қарызлар</h1>
 
           <Link href="/">
             <KeyboardBackspace />
 
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -36,11 +36,11 @@ export default function Debts() {
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Продукта</td>
+                <td>Продукт</td>
                 <td>Клиент</td>
                 <td>Сумма</td>
-                <td>Долг</td>
-                <td>Дата</td>
+                <td>Қарыз</td>
+                <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>

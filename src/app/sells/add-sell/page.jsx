@@ -8,7 +8,7 @@ import DatePick from "@/components/datePicker/DatePicker";
 import { fetchData } from "@/utils/fetchData";
 import CheckBox from "@/components/checkBox/CheckBox";
 import CustumerModal from "@/components/custumerModal/CustumerModal";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -23,16 +23,16 @@ export default function AddSell() {
   const [custumerId, setCustumerId] = useState("");
   const [custumerDebts, setCustumedebts] = useState([]);
   const [sell, setSell] = useState({
-    purchaseId: "Выберите поток",
+    purchaseId: "Потокти сайлаң",
     product: {
-      id: "Выберите продукт",
-      title: "Выберите продукт",
+      id: "",
+      title: "Продукт сайлаң",
     },
     custumer: {
       id: "",
-      fullname: "Выберите клиента",
+      fullname: "Клиентти сайлаң",
     },
-    custumerName: "Клиент",
+    custumerName: "Белгисиз",
     amount: "",
     price: "",
     discount: "",
@@ -75,9 +75,12 @@ export default function AddSell() {
 
     const custumer = custumers.find((custumer) => custumerId === custumer._id);
 
-    if (data.debt > custumer?.limit - totalCustumerDebt) {
+    if (
+      custumer.limit !== -1 &&
+      data.debt > custumer?.limit - totalCustumerDebt
+    ) {
       return toast.error(
-        `Custumer limit: ${custumer?.limit - totalCustumerDebt}`
+        `Клиент лимити: ${custumer?.limit - totalCustumerDebt}`
       );
     }
 
@@ -128,14 +131,14 @@ export default function AddSell() {
 
   return (
     <div className={styles.addProduct}>
-      <h1>Продажи</h1>
+      <h1>Сатыў</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
           <h1>Добавить новую продажу</h1>
           <Link href="/sells">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -184,7 +187,7 @@ export default function AddSell() {
                   value={checkClient}
                   setData={setCheckClient}
                 />
-                <label htmlFor="checkClient">Не клиент</label>
+                <label htmlFor="checkClient">Белгисиз</label>
               </div>
 
               {checkClient ? (
@@ -237,7 +240,7 @@ export default function AddSell() {
               <Input
                 type="number"
                 name="amount"
-                placeholder="Количество"
+                placeholder="Муғдары"
                 value={sell.amount}
                 setData={setSell}
                 required={true}
@@ -248,7 +251,7 @@ export default function AddSell() {
               <Input
                 type="number"
                 name="price"
-                placeholder="Цена"
+                placeholder="Баҳасы"
                 value={sell.price}
                 setData={setSell}
                 required={true}
@@ -272,7 +275,7 @@ export default function AddSell() {
             <div className={styles.formInput}>
               <input
                 type="number"
-                placeholder="Долг"
+                placeholder="Қарыз"
                 value={sell.debt}
                 onChange={(e) =>
                   setSell((prev) => ({
@@ -298,7 +301,7 @@ export default function AddSell() {
               </div>
 
               <div className={styles.calc}>
-                <p>Оплачено:</p>
+                <p>Төленди:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
                     .format(
@@ -320,7 +323,7 @@ export default function AddSell() {
               </div>
 
               <div className={styles.calc}>
-                <p>Долг:</p>
+                <p>Қарыз:</p>
                 <b>
                   {Intl.NumberFormat("uz-UZ")
                     .format(sell.debt)
@@ -332,7 +335,7 @@ export default function AddSell() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
             <div className={styles.formInput}></div>
           </div>

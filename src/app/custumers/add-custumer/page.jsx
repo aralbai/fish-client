@@ -44,10 +44,10 @@ export default function AddCustumer() {
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый клиент</h1>
+          <h1>Тазасын киритиў клиент</h1>
           <Link href="/custumers">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -87,7 +87,7 @@ export default function AddCustumer() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
           </div>
         </form>

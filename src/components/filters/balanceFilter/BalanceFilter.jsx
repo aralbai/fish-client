@@ -14,7 +14,7 @@ export default function BalanceFilter({
   return (
     <ul className={styles.balanceFilter}>
       <li>
-        <label htmlFor="">Начало</label>
+        <label htmlFor="">Басланыўы</label>
 
         <DatePicker
           selected={new Date(filters?.startDate)}
@@ -30,7 +30,7 @@ export default function BalanceFilter({
         />
       </li>
       <li>
-        <label htmlFor="">Окончание</label>
+        <label htmlFor="">Тамамланыўы</label>
 
         <DatePicker
           selected={new Date(filters?.endDate)}

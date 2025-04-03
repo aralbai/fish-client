@@ -39,14 +39,14 @@ export default function Purchases() {
 
   return (
     <div className={styles.products}>
-      <h1>Покупки</h1>
+      <h1>Сатып алыў</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все покупки</h1>
+          <h1>Сатып алыў</h1>
           <Link href="/purchases/add-purchase">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 
@@ -71,14 +71,14 @@ export default function Purchases() {
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Продукта</td>
-                <td>Поставщик</td>
-                <td>Количество</td>
+                <td>Продукт</td>
+                <td>Сатыўшы</td>
+                <td>Муғдары</td>
                 <td>Скидка</td>
                 <td>Сумма</td>
-                <td>Недостаток</td>
-                <td>Остальные</td>
-                <td>Дата</td>
+                <td>Кемшилик</td>
+                <td>Қалдық</td>
+                <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>

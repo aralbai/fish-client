@@ -43,7 +43,7 @@ export default function ShortageModal({
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Недостаток</h2>
+          <h2>Кемшилик</h2>
 
           <button onClick={() => setIsModalOpen(false)}>
             <Close />
@@ -54,12 +54,12 @@ export default function ShortageModal({
           <Input
             type="text"
             name="shortage"
-            placeholder="Количество"
+            placeholder="Муғдары"
             value={purchase.shortage}
             setData={setPurchase}
           />
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
         </form>
       </div>
     </div>

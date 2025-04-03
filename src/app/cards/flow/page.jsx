@@ -21,11 +21,11 @@ export default function Flow() {
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Покупки</h1>
+          <h1>Склад</h1>
 
           <Link href="/">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -35,13 +35,13 @@ export default function Flow() {
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Название</td>
-                <td>Поставщик</td>
-                <td>Количество</td>
-                <td>Цена</td>
-                <td>Недостаток</td>
-                <td>Остальные</td>
-                <td>Дата</td>
+                <td>Продукт</td>
+                <td>Сатыўшы</td>
+                <td>Муғдары</td>
+                <td>Баҳасы</td>
+                <td>Кемшилик</td>
+                <td>Қалдық</td>
+                <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>
@@ -74,9 +74,13 @@ export default function Flow() {
                 ))
               ) : (
                 <tr>
+                  <td style={{ padding: "30px 20px", width: "maxContent" }}>
+                    Этот раздел пуст.
+                  </td>
                   <td></td>
                   <td></td>
-                  <td style={{ padding: "30px" }}>Этот раздел пуст.</td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>

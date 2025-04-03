@@ -16,14 +16,14 @@ export default function Suppliers() {
 
   return (
     <div className={styles.products}>
-      <h1>Поставщики</h1>
+      <h1>Сатыўшыи</h1>
 
       <div className={styles.table}>
         <div className={styles.top}>
-          <h1>Все поставщики</h1>
+          <h1>Сатыўшыи</h1>
           <Link href="/suppliers/add-supplier">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 
@@ -33,7 +33,7 @@ export default function Suppliers() {
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Поставщик</td>
+                <td>Сатыўшы</td>
                 <td>Номер телефона</td>
                 <td>Адрес</td>
                 <td></td>

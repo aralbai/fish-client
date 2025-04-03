@@ -45,10 +45,10 @@ export default function AddProduct() {
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый продукт</h1>
+          <h1>Таза продукт киритиў</h1>
           <Link href="/products">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -58,7 +58,7 @@ export default function AddProduct() {
               <Input
                 type="text"
                 name="title"
-                placeholder="Название продукта"
+                placeholder="Продукт"
                 value={product.title}
                 setData={setProduct}
                 required={true}
@@ -66,7 +66,7 @@ export default function AddProduct() {
             </div>
 
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
           </div>
         </form>

@@ -52,7 +52,7 @@ export default function RepayModal({
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Оплатить долг</h2>
+          <h2>Оплатить Қарыз</h2>
 
           <button onClick={() => setIsModalOpen(false)}>
             <Close />
@@ -78,7 +78,7 @@ export default function RepayModal({
               0}
           </p>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
         </form>
       </div>
     </div>

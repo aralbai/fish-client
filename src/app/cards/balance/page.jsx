@@ -58,7 +58,7 @@ export default function Balance() {
 
           <Link href="/">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -80,14 +80,14 @@ export default function Balance() {
           <table>
             <thead>
               <tr>
-                <td>Название</td>
+                <td>Қай жерге</td>
                 <td>Сумма</td>
                 <td></td>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Покупки</td>
+                <td>Тазасын киритиў</td>
                 <td>
                   {purchases.totalPurchases
                     ? Intl.NumberFormat("ru-RU").format(
@@ -104,7 +104,7 @@ export default function Balance() {
                 </td>
               </tr>
               <tr>
-                <td>Продажи</td>
+                <td>Сатыў</td>
                 <td>
                   {sells.totalSales
                     ? Intl.NumberFormat("ru-RU").format(sells.totalSales)
@@ -119,7 +119,7 @@ export default function Balance() {
                 </td>
               </tr>
               <tr>
-                <td>Расходы</td>
+                <td>Расход</td>
                 <td>
                   {outcomes.totalOutcomes
                     ? Intl.NumberFormat("ru-RU").format(outcomes.totalOutcomes)
@@ -134,7 +134,7 @@ export default function Balance() {
                 </td>
               </tr>
               <tr>
-                <td>Пополнение</td>
+                <td>Баланс толтырыў</td>
                 <td>
                   {deposits.totalDeposits
                     ? Intl.NumberFormat("ru-RU").format(deposits.totalDeposits)
@@ -149,7 +149,7 @@ export default function Balance() {
                 </td>
               </tr>
               <tr>
-                <td>Снимать</td>
+                <td>Баланстан шығарыў</td>
                 <td>
                   {withdraws.totalWithdraws
                     ? Intl.NumberFormat("ru-RU").format(

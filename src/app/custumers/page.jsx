@@ -30,7 +30,7 @@ export default function Custumers() {
           <h1>Все клиенты</h1>
           <Link href="/custumers/add-custumer">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 
@@ -44,7 +44,7 @@ export default function Custumers() {
                 <td>Номер тел.</td>
                 <td>Адрес</td>
                 <td>Лимит</td>
-                <td>Долги</td>
+                <td>Қарызлар</td>
                 <td></td>
               </tr>
             </thead>

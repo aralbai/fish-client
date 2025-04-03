@@ -63,18 +63,18 @@ export default function SinglePurchase() {
   return (
     <div className={styles.singlePurchase}>
       <div className={styles.title}>
-        <h1>Разовая покупка</h1>
+        <h1>Сатып алыў</h1>
 
         <Link href="/purchases">
           <KeyboardBackspace />
-          <p>Вернуться к списку</p>
+          <p></p>
         </Link>
       </div>
 
       <div className={styles.purchaseInfo}>
         <div className={styles.left}>
           <div className={styles.top}>
-            <h2>Информация о покупке</h2>
+            <h2>Информация</h2>
 
             <div>
               <Link
@@ -104,27 +104,27 @@ export default function SinglePurchase() {
 
           <ul>
             <li>
-              <p>Продукта</p>
+              <p>Продукт</p>
               <p>{purchase?.product?.title}</p>
             </li>
             <li>
-              <p>Поставщик</p>
+              <p>Сатыўшы</p>
               <p>{purchase?.supplier?.title}</p>
             </li>
             <li>
-              <p>Номер автомобиля</p>
+              <p>Машина номери</p>
               <p>{purchase?.carNumber}</p>
             </li>
             <li>
-              <p>Количество</p>
+              <p>Муғдары</p>
               <p>
                 {purchase?.amount
-                  ? Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)
+                  ? Intl.NumberFormat("ru-RU").format(purchase?.amount)
                   : 0}
               </p>
             </li>
             <li>
-              <p>Цена</p>
+              <p>Баҳасы</p>
               <p>
                 {purchase?.price
                   ? Intl.NumberFormat("ru-RU").format(purchase?.price)
@@ -148,7 +148,7 @@ export default function SinglePurchase() {
               </p>
             </li>
             <li>
-              <p>Остальные</p>
+              <p>Қалдық</p>
               <p>
                 {purchase?.remainingAmount
                   ? Intl.NumberFormat("ru-RU").format(purchase?.remainingAmount)
@@ -156,7 +156,7 @@ export default function SinglePurchase() {
               </p>
             </li>
             <li>
-              <p>Продано</p>
+              <p>Сатылды</p>
               <p>
                 {Intl.NumberFormat("ru-RU").format(
                   purchase?.amount -
@@ -166,7 +166,7 @@ export default function SinglePurchase() {
               </p>
             </li>
             <li>
-              <p>Недостаток</p>
+              <p>Кемшилик</p>
               <p>{Intl.NumberFormat("ru-RU").format(purchase?.shortage)}</p>
             </li>
           </ul>
@@ -174,19 +174,19 @@ export default function SinglePurchase() {
 
         <div className={styles.right}>
           <div className={styles.top}>
-            <h2>Добавление и изменение</h2>
+            <h2>Киритиў ҳәм өзгертиў</h2>
           </div>
 
           <ul>
             <li>
-              <p>Дата добавления</p>
+              <p>Киритилген сәне</p>
               <p>
                 {purchase?.createdAt &&
                   format(new Date(purchase?.createdAt), "dd.MM.yyyy HH:mm")}
               </p>
             </li>
             <li>
-              <p>Дата изменения</p>
+              <p>Ақырғы өзгерткен сәне</p>
               <p>
                 {purchase?.updatedAt &&
                   format(new Date(purchase?.updatedAt), "dd.MM.yyyy HH:mm")}
@@ -195,7 +195,7 @@ export default function SinglePurchase() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто добавил</p>
+                <p>Кириткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -215,7 +215,7 @@ export default function SinglePurchase() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто изменился последним</p>
+                <p>Ақырғы өзгерткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -237,17 +237,17 @@ export default function SinglePurchase() {
       </div>
 
       <div className={styles.repays}>
-        <h2>Список продаж</h2>
+        <h2>Сатыўлар</h2>
 
         <div className={styles.tableContainer}>
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Продукта</td>
+                <td>Продукт</td>
                 <td>Клиент</td>
-                <td>Amount</td>
+                <td>Муғдары</td>
                 <td>Сумма</td>
-                <td>Дата</td>
+                <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>

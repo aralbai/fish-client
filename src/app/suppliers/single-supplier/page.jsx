@@ -69,7 +69,7 @@ export default function SingleSupplier() {
 
         <Link href="/suppliers">
           <KeyboardBackspace />
-          <p>Вернуться к списку</p>
+          <p>Артқа қайтыў</p>
         </Link>
       </div>
 
@@ -97,7 +97,7 @@ export default function SingleSupplier() {
 
           <ul>
             <li>
-              <p>Поставщик</p>
+              <p>Сатыўшы</p>
               <p>{supplier?.title}</p>
             </li>
             <li>
@@ -113,19 +113,19 @@ export default function SingleSupplier() {
 
         <div className={styles.right}>
           <div className={styles.top}>
-            <h2>Добавление и изменение</h2>
+            <h2>Киритиў ҳәм өзгертиў</h2>
           </div>
 
           <ul>
             <li>
-              <p>Дата добавления</p>
+              <p>Киритилген сәне</p>
               <p>
                 {supplier?.createdAt &&
                   format(new Date(supplier?.createdAt), "dd.MM.yyyy hh:mm:ss")}
               </p>
             </li>
             <li>
-              <p>Дата изменения</p>
+              <p>Ақырғы өзгерткен сәне</p>
               <p>
                 {supplier?.updatedAt &&
                   format(new Date(supplier?.updatedAt), "dd.MM.yyyy hh:mm:ss")}
@@ -134,7 +134,7 @@ export default function SingleSupplier() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто добавил</p>
+                <p>Кириткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -154,7 +154,7 @@ export default function SingleSupplier() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто изменился последним</p>
+                <p>Ақырғы өзгерткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -176,16 +176,16 @@ export default function SingleSupplier() {
       </div>
 
       <div className={styles.repays}>
-        <h2>Покупки</h2>
+        <h2>Сатып алыў</h2>
 
         <div className={styles.tableContainer}>
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Продукта</td>
-                <td>Amount</td>
+                <td>Продукт</td>
+                Муғдары</td>
                 <td>Сумма</td>
-                <td>Дата</td>
+                <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>

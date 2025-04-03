@@ -54,14 +54,14 @@ export default function EditUser() {
 
   return (
     <div className={styles.addProduct}>
-      <h1>Поставщики</h1>
+      <h1>Сатыўшыи</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
+          <h1>Тазасын киритиў Сатыўшы</h1>
           <Link href="/users">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -140,7 +140,7 @@ export default function EditUser() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
             <div className={styles.formInput}></div>
             <div className={styles.formInput}></div>

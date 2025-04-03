@@ -59,7 +59,7 @@ export default function EditCustumer() {
           <h1>Изменить клиент</h1>
           <Link href="/custumers">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -69,7 +69,7 @@ export default function EditCustumer() {
               <Input
                 type="text"
                 name="fullname"
-                placeholder="Название поставщика"
+                placeholder="Название Сатыўшыа"
                 value={changedCustumer.fullname}
                 setData={setChangedCustumer}
                 required={true}
@@ -99,7 +99,7 @@ export default function EditCustumer() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
           </div>
         </form>

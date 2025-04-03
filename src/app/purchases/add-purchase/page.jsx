@@ -22,12 +22,12 @@ export default function AddPurchase() {
   const [suppliers, setSuppliers] = useState([]);
   const [purchase, setPurchase] = useState({
     product: {
-      id: "",
-      title: "Выберите продукт",
+      id: null,
+      title: "Продукт сайлаң",
     },
     supplier: {
-      id: "",
-      title: "Выберите поставщика",
+      id: null,
+      title: "Сатыўшыны сайлаң",
     },
     carNumber: "",
     amount: "",
@@ -82,16 +82,18 @@ export default function AddPurchase() {
       });
   };
 
+  console.log(purchase);
+
   return (
     <div className={styles.addProduct}>
-      <h1>Поставщики</h1>
+      <h1>Сатып алыў</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
+          <h1>Сатып алыў</h1>
           <Link href="/purchases">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -102,11 +104,12 @@ export default function AddPurchase() {
             <div className={styles.formInput}>
               <select
                 name="product"
-                value={`${purchase?.product?._id}-${purchase?.product.title}`}
+                value={`${purchase?.product?.id}-${purchase?.product?.title}`}
                 onChange={handleChange}
+                required
               >
                 <option value="" hidden>
-                  {purchase?.product?.title}
+                  {purchase?.product?.title || "Продукт сайлаң"}
                 </option>
                 {products?.map((product) => (
                   <option
@@ -128,11 +131,12 @@ export default function AddPurchase() {
             <div className={styles.formInput}>
               <select
                 name="supplier"
-                value={`${purchase?.supplier?._id}-${purchase?.supplier.title}`}
+                value={`${purchase?.supplier?.id}-${purchase?.supplier.title}`}
                 onChange={handleChange}
+                required
               >
                 <option value="" hidden>
-                  {purchase?.supplier?.title}
+                  {purchase?.supplier?.title || "Сатыўшыны сайлаң"}
                 </option>
                 {suppliers?.map((supplier) => (
                   <option
@@ -157,7 +161,7 @@ export default function AddPurchase() {
               <Input
                 type="number"
                 name="amount"
-                placeholder="Количество"
+                placeholder="Муғдары"
                 value={purchase.amount}
                 setData={setPurchase}
                 required={true}
@@ -167,7 +171,7 @@ export default function AddPurchase() {
               <Input
                 type="number"
                 name="price"
-                placeholder="Цена"
+                placeholder="Баҳасы"
                 value={purchase.price}
                 setData={setPurchase}
                 required={true}
@@ -181,7 +185,7 @@ export default function AddPurchase() {
               <Input
                 type="text"
                 name="carNumber"
-                placeholder="Номер автомобиля"
+                placeholder="Машина номери"
                 value={purchase.carNumber}
                 setData={setPurchase}
                 required={true}
@@ -232,7 +236,7 @@ export default function AddPurchase() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
             <div className={styles.formInput}></div>
           </div>

@@ -56,7 +56,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
     >
       <div className={styles.container}>
         <div className={styles.top}>
-          <h1>FISH</h1>
+          <h1>САЛАМАТ</h1>
           <span onClick={() => setIsMobile(!isMobile)}>
             <Close />
           </span>
@@ -85,7 +85,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                 href="/purchases"
                 className={pathname.includes("/purchases") ? styles.active : ""}
               >
-                <GetApp /> Покупка продукта
+                <GetApp /> Сатып алыў
               </Link>
             </li>
 
@@ -99,7 +99,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                 href="/sells"
                 className={pathname.includes("/sells") ? styles.active : ""}
               >
-                <FileUpload /> Продажа продукта
+                <FileUpload /> Сатыў
               </Link>
             </li>
 
@@ -128,7 +128,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                 className={pathname.includes("/custumers") ? styles.active : ""}
               >
                 <AccountBox />
-                Клиенты
+                Клиентлер
               </Link>
             </li>
 
@@ -143,7 +143,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                 className={pathname.includes("/suppliers") ? styles.active : ""}
               >
                 <AccountBox />
-                Поставщики
+                Сатыўшылар
               </Link>
             </li>
 
@@ -153,7 +153,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                 onClick={() => setFinanaceDropdown(!financeDropdown)}
               >
                 <div>
-                  <Paid /> Финансы
+                  <Paid /> Финанс
                 </div>
                 <div>
                   {financeDropdown ? <KeyboardArrowDown /> : <ChevronRight />}
@@ -191,7 +191,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                     }
                   >
                     <Archive />
-                    Пополнение
+                    Баланс толтырыў
                   </Link>
                 </li>
 
@@ -205,7 +205,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                     }
                   >
                     <Unarchive />
-                    Снимать
+                    Баланстан шығарыў
                   </Link>
                 </li>
               </ul>
@@ -223,7 +223,7 @@ export default function Sidebar({ isMobile, setIsMobile, popupRef }) {
                   className={pathname === "/users" ? styles.active : ""}
                 >
                   <PermContactCalendar />
-                  Пользователи
+                  Аккаунтлар
                 </Link>
               </li>
             )}

@@ -55,7 +55,7 @@ export default function EditProduct() {
           <h1>Изменить продукт</h1>
           <Link href="/products">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -65,14 +65,14 @@ export default function EditProduct() {
               <Input
                 type="text"
                 name="title"
-                placeholder="Количество"
+                placeholder="Муғдары"
                 value={changedProduct.title}
                 setData={setChangedProduct}
               />
             </div>
 
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
           </div>
         </form>

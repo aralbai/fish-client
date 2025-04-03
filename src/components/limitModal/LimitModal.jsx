@@ -73,7 +73,7 @@ export default function LimitModal({
           <Input
             type="text"
             name="limit"
-            placeholder="Количество"
+            placeholder="Муғдары"
             value={custumer.limit}
             setData={setCustumer}
           />
@@ -92,7 +92,7 @@ export default function LimitModal({
 
           <p className={styles.error}>{error}</p>
 
-          <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+          <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
         </form>
       </div>
     </div>

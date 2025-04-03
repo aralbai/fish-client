@@ -57,7 +57,7 @@ export default function Outcomes() {
           <h1>Все расходы</h1>
           <Link href="/finance/outcomes/add-outcome">
             <Add />
-            <p>Создать новый</p>
+            <p>Тазасын киритиў</p>
           </Link>
         </div>
 
@@ -83,9 +83,9 @@ export default function Outcomes() {
               <tr>
                 <td>Сумма</td>
                 <td>Куда</td>
-                <td>Дата</td>
-                <td>Добавление</td>
-                <td>Последнее изменение</td>
+                <td>Сәне</td>
+                <td>Киритилди</td>
+                <td>Последнее Өзгертирилди</td>
                 <td></td>
               </tr>
             </thead>

@@ -55,14 +55,14 @@ export default function EditSupplier() {
 
   return (
     <div className={styles.editProduct}>
-      <h1>Поставщики</h1>
+      <h1>Сатыўшыи</h1>
 
       <div className={styles.form}>
         <div className={styles.top}>
-          <h1>Создать новый поставщик</h1>
+          <h1>Тазасын киритиў Сатыўшы</h1>
           <Link href="/suppliers">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -72,7 +72,7 @@ export default function EditSupplier() {
               <Input
                 type="text"
                 name="title"
-                placeholder="Название поставщика"
+                placeholder="Название Сатыўшыа"
                 value={changedSupplier.title}
                 setData={setChangedSupplier}
               />
@@ -99,7 +99,7 @@ export default function EditSupplier() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
           </div>
         </form>

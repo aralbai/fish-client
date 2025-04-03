@@ -84,7 +84,7 @@ export default function SingleSell() {
 
         <Link href="/sells">
           <KeyboardBackspace />
-          <p>Вернуться к списку</p>
+          <p>Артқа қайтыў</p>
         </Link>
       </div>
 
@@ -119,7 +119,7 @@ export default function SingleSell() {
           </div>
           <ul>
             <li>
-              <p>Продукта</p>
+              <p>Продукт</p>
               <p>{sell?.product?.title}</p>
             </li>
             <li>
@@ -127,7 +127,7 @@ export default function SingleSell() {
               <p>{sell?.custumer?.fullname}</p>
             </li>
             <li>
-              <p>Количество</p>
+              <p>Муғдары</p>
               <p>
                 {sell?.amount
                   ? Intl.NumberFormat("ru-RU").format(sell.amount)
@@ -136,7 +136,7 @@ export default function SingleSell() {
             </li>
 
             <li>
-              <p>Цена</p>
+              <p>Баҳасы</p>
               <p>
                 {sell?.price
                   ? Intl.NumberFormat("ru-RU").format(sell.price)
@@ -160,13 +160,13 @@ export default function SingleSell() {
               </p>
             </li>
             <li>
-              <p>Долг</p>
+              <p>Қарыз</p>
               <p>
                 {sell?.debt ? Intl.NumberFormat("ru-RU").format(sell.debt) : 0}
               </p>
             </li>
             <li>
-              <p>Оплачено</p>
+              <p>Төленди</p>
               <p>
                 {sell?.given
                   ? Intl.NumberFormat("ru-RU").format(sell.given)
@@ -178,19 +178,19 @@ export default function SingleSell() {
 
         <div className={styles.right}>
           <div className={styles.top}>
-            <h2>Добавление и изменение</h2>
+            <h2>Киритиў ҳәм өзгертиў</h2>
           </div>
 
           <ul>
             <li>
-              <p>Дата добавления</p>
+              <p>Киритилген сәне</p>
               <p>
                 {sell?.createdAt &&
                   format(new Date(sell?.createdAt), "dd.MM.yyyy HH:mm")}
               </p>
             </li>
             <li>
-              <p>Дата изменения</p>
+              <p>Ақырғы өзгерткен сәне</p>
               <p>
                 {sell?.updatedAt &&
                   format(new Date(sell?.updatedAt), "dd.MM.yyyy HH:mm")}
@@ -199,7 +199,7 @@ export default function SingleSell() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто добавил</p>
+                <p>Кириткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -219,7 +219,7 @@ export default function SingleSell() {
 
             {user?.role === "superadmin" && (
               <li>
-                <p>Кто изменился последним</p>
+                <p>Ақырғы өзгерткен аккаунт</p>
                 <p>
                   {users?.map(
                     (user) =>
@@ -241,14 +241,14 @@ export default function SingleSell() {
       </div>
 
       <div className={styles.repays}>
-        <h2>Погашение долга</h2>
+        <h2>Погашение Қарыза</h2>
 
         <div className={styles.tableContainer}>
           <table ref={tableRef}>
             <thead>
               <tr>
                 <td>Сумма</td>
-                <td>Дата</td>
+                <td>Сәне</td>
                 <td>Кто принял</td>
                 <td>Кто изменился</td>
                 <td></td>

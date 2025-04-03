@@ -51,7 +51,7 @@ export default function AddOutcome() {
           <h1>Добавить новый расход</h1>
           <Link href="/finance/outcomes">
             <KeyboardBackspace />
-            <p>Вернуться к списку</p>
+            <p>Артқа қайтыў</p>
           </Link>
         </div>
 
@@ -91,7 +91,7 @@ export default function AddOutcome() {
 
           <div className={styles.inputGroup}>
             <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сохранять</PrimaryBtn>
+              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
             </div>
             <div className={styles.formInput}></div>
             <div className={styles.formInput}></div>

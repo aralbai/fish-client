@@ -61,7 +61,7 @@ export default function Home() {
                       )
                     : 0}
                 </h2>
-                <p>Sklad</p>
+                <p>Склад</p>
               </div>
             </Link>
 
@@ -92,7 +92,7 @@ export default function Home() {
                     ? Intl.NumberFormat("ru-RU").format(totalDebts.totalDebts)
                     : 0}
                 </h2>
-                <p>Долги</p>
+                <p>Қарызлар</p>
               </div>
             </Link>
 
@@ -109,7 +109,7 @@ export default function Home() {
                     ? users.length
                     : 0}
                 </h2>
-                <p>Пользователи</p>
+                <p>Аккаунтлар</p>
               </div>
             </Link>
           </div>
@@ -118,7 +118,7 @@ export default function Home() {
         {user?.role && user?.role === "superadmin" && (
           <div className={styles.incomeOutcomChart}>
             <div className={styles.top}>
-              <h2>Финансы</h2>
+              <h2>Финанс статистика</h2>
             </div>
 
             <div className={styles.bottom}>
