@@ -1,0 +1,26 @@
+@import '../../app/styles/variables.module.scss';
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+    margin: 20px 0;
+
+    p {
+        margin-right: 20px;
+    }
+
+    button {
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+    }
+}

@@ -61,7 +61,7 @@ export default function SellsFilter({
         <label htmlFor="">Клиент</label>
         <select
           name="custumer"
-          value={`${filters.custumer.id}-${filters.custumer.fullname}`}
+          value={`${filters.custumer.id}-${filters.custumer.title}`}
           onChange={handleChange}
         >
           <option value="all">Все</option>
@@ -122,7 +122,7 @@ export default function SellsFilter({
           wrapperClassName={styles.wrappedDateInput}
         />
       </li>
-      <li>
+      <li className={styles.close}>
         <button onClick={() => setIsModalOpen((prev) => !prev)}>
           <Close />
         </button>

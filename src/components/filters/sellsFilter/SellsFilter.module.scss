@@ -56,3 +56,16 @@
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  .purchasesFilter {
+    flex-direction: column;
+
+    .close {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+}

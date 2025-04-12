@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styles from "./page.module.scss";
 import { Add, ArrowRightAlt, FilterList } from "@mui/icons-material";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import { format } from "date-fns";
 import TableTop from "@/components/tableTop/TableTop";
@@ -27,6 +27,25 @@ export default function Purchases() {
   });
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const tableRef = useRef(null);
+
+  // page number and total pages for pagination
+  const [totalDocuments, setTotalDocuments] = useState(1);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // 1. Guruhlash xaridor va sana bo‘yicha
+  const grouped = {};
+
+  purchases?.forEach((p) => {
+    const supplierName = p.supplier?.title || "No Name";
+    const date = new Date(p.addedDate).toISOString().split("T")[0]; // YYYY-MM-DD
+
+    const key = `${supplierName}-${date}`;
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(p);
+  });
+
+  const rows = Object.entries(grouped); // [ [key, purchases], ... ]
 
   useEffect(() => {
     fetchData(
@@ -71,57 +90,94 @@ export default function Purchases() {
           <table ref={tableRef}>
             <thead>
               <tr>
-                <td>Продукт</td>
+                <td>Н</td>
                 <td>Сатыўшы</td>
+                <td>Продукт</td>
                 <td>Муғдары</td>
-                <td>Скидка</td>
+                <td>Баҳасы</td>
                 <td>Сумма</td>
+                <td>Скидка</td>
                 <td>Кемшилик</td>
                 <td>Қалдық</td>
+                <td>Итого</td>
                 <td>Сәне</td>
                 <td></td>
               </tr>
             </thead>
             <tbody>
-              {purchases?.map((purchase) => (
-                <tr key={purchase._id}>
-                  <td>{purchase.product?.title}</td>
-                  <td>{purchase.supplier?.title}</td>
-                  <td>
-                    {Intl.NumberFormat("uz-UZ")
-                      .format(purchase?.amount)
-                      .replace(/,/g, " ")}
-                  </td>
+              {rows.map(([key, group], i) => {
+                const total = group.reduce((sum, p) => sum + p.totalPrice, 0);
 
-                  <td>
-                    {Intl.NumberFormat("uz-UZ")
-                      .format(purchase?.discount)
-                      .replace(/,/g, " ")}
-                  </td>
-                  <td>
-                    {Intl.NumberFormat("uz-UZ")
-                      .format(purchase?.totalPrice)
-                      .replace(/,/g, " ")}
-                  </td>
-                  <td>{purchase.shortage}</td>
-                  <td>
-                    {Intl.NumberFormat("uz-UZ")
-                      .format(purchase.remainingAmount)
-                      .replace(/,/g, " ")}
-                  </td>
-                  <td>{format(purchase.addedDate, "dd.MM.yyyy")}</td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/purchases/single-purchase",
-                        query: { purchaseId: purchase._id },
-                      }}
-                    >
-                      <ArrowRightAlt />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+                return (
+                  <React.Fragment key={key}>
+                    {group.map((p, index) => (
+                      <tr key={p._id}>
+                        {index === 0 && (
+                          <>
+                            <td rowSpan={group.length}>{i + 1}</td>
+                            <td rowSpan={group.length}>{p.supplier.title}</td>
+                          </>
+                        )}
+                        <td>{p.product.title}</td>
+                        <td>
+                          {p.amount
+                            ? Intl.NumberFormat("uz-UZ").format(p.amount / 1000)
+                            : 0}
+                        </td>
+                        <td>
+                          {p.price
+                            ? Intl.NumberFormat("ru-RU").format(p.price)
+                            : 0}
+                        </td>
+                        <td>
+                          {p.totalPrice
+                            ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
+                            : 0}
+                        </td>
+                        <td>
+                          {p.discount
+                            ? Intl.NumberFormat("ru-RU").format(p.discount)
+                            : 0}
+                        </td>
+                        <td>
+                          {p.shortage
+                            ? Intl.NumberFormat("ru-RU").format(p.shortage)
+                            : 0}
+                        </td>
+                        <td>
+                          {p.remainingAmount
+                            ? Intl.NumberFormat("uz-UZ").format(
+                                p.remainingAmount / 1000
+                              )
+                            : 0}
+                        </td>
+                        {index === 0 && (
+                          <>
+                            <td rowSpan={group.length}>
+                              {total
+                                ? Intl.NumberFormat("ru-RU").format(total)
+                                : 0}
+                            </td>
+                            <td rowSpan={group.length}>
+                              {format(new Date(p.addedDate), "dd.MM.yyyy")}
+                            </td>
+                          </>
+                        )}
+                        <td className={styles.action}>
+                          <Link
+                            href={{
+                              pathname: "/sells/single-sell",
+                              query: { sellId: p._id },
+                            }}
+                          >
+                            <ArrowRightAlt />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>

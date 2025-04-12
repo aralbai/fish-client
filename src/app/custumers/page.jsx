@@ -16,7 +16,7 @@ export default function Custumers() {
     fetchData("/sells", setSells);
   }, []);
 
-  const debtMap = sells.reduce((acc, sell) => {
+  const debtMap = sells?.sells?.reduce((acc, sell) => {
     acc[sell?.custumer?.id] = (acc[sell?.custumer?.id] || 0) + sell?.debt;
     return acc;
   }, {});

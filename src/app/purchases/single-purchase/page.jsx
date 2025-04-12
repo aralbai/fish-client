@@ -15,7 +15,6 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
-import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import ShortageModal from "@/components/shortageModal/ShortageModal";
 import DeleteModal from "@/components/deleteModal/DeleteModal";
 
@@ -119,7 +118,7 @@ export default function SinglePurchase() {
               <p>Муғдары</p>
               <p>
                 {purchase?.amount
-                  ? Intl.NumberFormat("ru-RU").format(purchase?.amount)
+                  ? Intl.NumberFormat("uz-UZ").format(purchase?.amount / 1000)
                   : 0}
               </p>
             </li>
@@ -151,7 +150,9 @@ export default function SinglePurchase() {
               <p>Қалдық</p>
               <p>
                 {purchase?.remainingAmount
-                  ? Intl.NumberFormat("ru-RU").format(purchase?.remainingAmount)
+                  ? Intl.NumberFormat("uz-UZ").format(
+                      purchase?.remainingAmount / 1000
+                    )
                   : 0}
               </p>
             </li>
