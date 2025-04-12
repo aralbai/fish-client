@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import ShortageModal from "@/components/shortageModal/ShortageModal";
 import DeleteModal from "@/components/deleteModal/DeleteModal";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function SinglePurchase() {
   const { user } = useContext(AuthContext);
@@ -60,245 +61,247 @@ export default function SinglePurchase() {
   };
 
   return (
-    <div className={styles.singlePurchase}>
-      <div className={styles.title}>
-        <h1>Сатып алыў</h1>
+    <ProtectedRoute>
+      <div className={styles.singlePurchase}>
+        <div className={styles.title}>
+          <h1>Сатып алыў</h1>
 
-        <Link href="/purchases">
-          <KeyboardBackspace />
-          <p></p>
-        </Link>
-      </div>
+          <Link href="/purchases">
+            <KeyboardBackspace />
+            <p></p>
+          </Link>
+        </div>
 
-      <div className={styles.purchaseInfo}>
-        <div className={styles.left}>
-          <div className={styles.top}>
-            <h2>Информация</h2>
+        <div className={styles.purchaseInfo}>
+          <div className={styles.left}>
+            <div className={styles.top}>
+              <h2>Информация</h2>
 
-            <div>
-              <Link
-                href={{
-                  pathname: "/purchases/edit-purchase",
-                  query: {
-                    purchaseId: purchaseId,
-                  },
-                }}
-              >
-                <Edit />
-              </Link>
-              {purchaseSells?.length <= 0 && (
-                <button onClick={handleDeleteClick}>
-                  <Delete />
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  setShortageModalOpen(true);
-                }}
-              >
-                <BedtimeOff />
-              </button>
-            </div>
-          </div>
-
-          <ul>
-            <li>
-              <p>Продукт</p>
-              <p>{purchase?.product?.title}</p>
-            </li>
-            <li>
-              <p>Сатыўшы</p>
-              <p>{purchase?.supplier?.title}</p>
-            </li>
-            <li>
-              <p>Машина номери</p>
-              <p>{purchase?.carNumber}</p>
-            </li>
-            <li>
-              <p>Муғдары</p>
-              <p>
-                {purchase?.amount
-                  ? Intl.NumberFormat("uz-UZ").format(purchase?.amount / 1000)
-                  : 0}
-              </p>
-            </li>
-            <li>
-              <p>Баҳасы</p>
-              <p>
-                {purchase?.price
-                  ? Intl.NumberFormat("ru-RU").format(purchase?.price)
-                  : 0}
-              </p>
-            </li>
-            <li>
-              <p>Сумма</p>
-              <p>
-                {purchase?.totalPrice
-                  ? Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)
-                  : 0}
-              </p>
-            </li>
-            <li>
-              <p>Скидка</p>
-              <p>
-                {purchase?.discount
-                  ? Intl.NumberFormat("ru-RU").format(purchase?.discount)
-                  : 0}
-              </p>
-            </li>
-            <li>
-              <p>Қалдық</p>
-              <p>
-                {purchase?.remainingAmount
-                  ? Intl.NumberFormat("uz-UZ").format(
-                      purchase?.remainingAmount / 1000
-                    )
-                  : 0}
-              </p>
-            </li>
-            <li>
-              <p>Сатылды</p>
-              <p>
-                {Intl.NumberFormat("ru-RU").format(
-                  purchase?.amount -
-                    purchase?.remainingAmount -
-                    purchase?.shortage
+              <div>
+                <Link
+                  href={{
+                    pathname: "/purchases/edit-purchase",
+                    query: {
+                      purchaseId: purchaseId,
+                    },
+                  }}
+                >
+                  <Edit />
+                </Link>
+                {purchaseSells?.length <= 0 && (
+                  <button onClick={handleDeleteClick}>
+                    <Delete />
+                  </button>
                 )}
-              </p>
-            </li>
-            <li>
-              <p>Кемшилик</p>
-              <p>{Intl.NumberFormat("ru-RU").format(purchase?.shortage)}</p>
-            </li>
-          </ul>
-        </div>
+                <button
+                  onClick={() => {
+                    setShortageModalOpen(true);
+                  }}
+                >
+                  <BedtimeOff />
+                </button>
+              </div>
+            </div>
 
-        <div className={styles.right}>
-          <div className={styles.top}>
-            <h2>Киритиў ҳәм өзгертиў</h2>
+            <ul>
+              <li>
+                <p>Продукт</p>
+                <p>{purchase?.product?.title}</p>
+              </li>
+              <li>
+                <p>Сатыўшы</p>
+                <p>{purchase?.supplier?.title}</p>
+              </li>
+              <li>
+                <p>Машина номери</p>
+                <p>{purchase?.carNumber}</p>
+              </li>
+              <li>
+                <p>Муғдары</p>
+                <p>
+                  {purchase?.amount
+                    ? Intl.NumberFormat("uz-UZ").format(purchase?.amount / 1000)
+                    : 0}
+                </p>
+              </li>
+              <li>
+                <p>Баҳасы</p>
+                <p>
+                  {purchase?.price
+                    ? Intl.NumberFormat("ru-RU").format(purchase?.price)
+                    : 0}
+                </p>
+              </li>
+              <li>
+                <p>Сумма</p>
+                <p>
+                  {purchase?.totalPrice
+                    ? Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)
+                    : 0}
+                </p>
+              </li>
+              <li>
+                <p>Скидка</p>
+                <p>
+                  {purchase?.discount
+                    ? Intl.NumberFormat("ru-RU").format(purchase?.discount)
+                    : 0}
+                </p>
+              </li>
+              <li>
+                <p>Қалдық</p>
+                <p>
+                  {purchase?.remainingAmount
+                    ? Intl.NumberFormat("uz-UZ").format(
+                        purchase?.remainingAmount / 1000
+                      )
+                    : 0}
+                </p>
+              </li>
+              <li>
+                <p>Сатылды</p>
+                <p>
+                  {Intl.NumberFormat("ru-RU").format(
+                    purchase?.amount -
+                      purchase?.remainingAmount -
+                      purchase?.shortage
+                  )}
+                </p>
+              </li>
+              <li>
+                <p>Кемшилик</p>
+                <p>{Intl.NumberFormat("ru-RU").format(purchase?.shortage)}</p>
+              </li>
+            </ul>
           </div>
 
-          <ul>
-            <li>
-              <p>Киритилген сәне</p>
-              <p>
-                {purchase?.createdAt &&
-                  format(new Date(purchase?.createdAt), "dd.MM.yyyy HH:mm")}
-              </p>
-            </li>
-            <li>
-              <p>Ақырғы өзгерткен сәне</p>
-              <p>
-                {purchase?.updatedAt &&
-                  format(new Date(purchase?.updatedAt), "dd.MM.yyyy HH:mm")}
-              </p>
-            </li>
+          <div className={styles.right}>
+            <div className={styles.top}>
+              <h2>Киритиў ҳәм өзгертиў</h2>
+            </div>
 
-            {user?.role === "superadmin" && (
+            <ul>
               <li>
-                <p>Кириткен аккаунт</p>
+                <p>Киритилген сәне</p>
                 <p>
-                  {users?.map(
-                    (user) =>
-                      user._id === purchase?.addedUserId && (
-                        <Link
-                          href="/users"
-                          key={user._id}
-                          style={{ color: "#1976D2" }}
-                        >
-                          {user?.username}
-                        </Link>
-                      )
-                  )}
+                  {purchase?.createdAt &&
+                    format(new Date(purchase?.createdAt), "dd.MM.yyyy HH:mm")}
                 </p>
               </li>
-            )}
-
-            {user?.role === "superadmin" && (
               <li>
-                <p>Ақырғы өзгерткен аккаунт</p>
+                <p>Ақырғы өзгерткен сәне</p>
                 <p>
-                  {users?.map(
-                    (user) =>
-                      user?._id === purchase?.changedUserId && (
-                        <Link
-                          href="/users"
-                          key={user?._id}
-                          style={{ color: "#1976D2" }}
-                        >
-                          {user?.username}
-                        </Link>
-                      )
-                  )}
+                  {purchase?.updatedAt &&
+                    format(new Date(purchase?.updatedAt), "dd.MM.yyyy HH:mm")}
                 </p>
               </li>
-            )}
-          </ul>
-        </div>
-      </div>
 
-      <div className={styles.repays}>
-        <h2>Сатыўлар</h2>
+              {user?.role === "superadmin" && (
+                <li>
+                  <p>Кириткен аккаунт</p>
+                  <p>
+                    {users?.map(
+                      (user) =>
+                        user._id === purchase?.addedUserId && (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user?.username}
+                          </Link>
+                        )
+                    )}
+                  </p>
+                </li>
+              )}
 
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Продукт</td>
-                <td>Клиент</td>
-                <td>Муғдары</td>
-                <td>Сумма</td>
-                <td>Сәне</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {purchaseSells.length > 0 &&
-                purchaseSells.map((sell) => (
-                  <tr key={sell?._id}>
-                    <td>{sell?.product?.title}</td>
-                    <td>{sell?.custumer?.fullname}</td>
-                    <td>{sell?.amount}</td>
-                    <td>
-                      {Intl.NumberFormat("ru-RU").format(sell?.totalPrice)}
-                    </td>
-                    <td>
-                      {format(new Date(sell?.addedDate), "dd.MM.yyyy HH:mm")}
-                    </td>
-                    <td className={styles.action}>
-                      <Link
-                        href={{
-                          pathname: "/sells/single-sell",
-                          query: {
-                            sellId: sell?._id,
-                          },
-                        }}
-                      >
-                        <ArrowRightAlt />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+              {user?.role === "superadmin" && (
+                <li>
+                  <p>Ақырғы өзгерткен аккаунт</p>
+                  <p>
+                    {users?.map(
+                      (user) =>
+                        user?._id === purchase?.changedUserId && (
+                          <Link
+                            href="/users"
+                            key={user?._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user?.username}
+                          </Link>
+                        )
+                    )}
+                  </p>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
 
-        {purchaseSells.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
+        <div className={styles.repays}>
+          <h2>Сатыўлар</h2>
+
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Продукт</td>
+                  <td>Клиент</td>
+                  <td>Муғдары</td>
+                  <td>Сумма</td>
+                  <td>Сәне</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {purchaseSells.length > 0 &&
+                  purchaseSells.map((sell) => (
+                    <tr key={sell?._id}>
+                      <td>{sell?.product?.title}</td>
+                      <td>{sell?.custumer?.fullname}</td>
+                      <td>{sell?.amount}</td>
+                      <td>
+                        {Intl.NumberFormat("ru-RU").format(sell?.totalPrice)}
+                      </td>
+                      <td>
+                        {format(new Date(sell?.addedDate), "dd.MM.yyyy HH:mm")}
+                      </td>
+                      <td className={styles.action}>
+                        <Link
+                          href={{
+                            pathname: "/sells/single-sell",
+                            query: {
+                              sellId: sell?._id,
+                            },
+                          }}
+                        >
+                          <ArrowRightAlt />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
+          {purchaseSells.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
+        </div>
+
+        <ShortageModal
+          isModalOpen={shortageModalOpen}
+          setIsModalOpen={setShortageModalOpen}
+          purchaseId={purchaseId}
+        />
+
+        <DeleteModal
+          isModalOpen={deleteModalOpen}
+          setIsModalOpen={setDeleteModalOpen}
+          handleDelete={handleDelete}
+        />
       </div>
-
-      <ShortageModal
-        isModalOpen={shortageModalOpen}
-        setIsModalOpen={setShortageModalOpen}
-        purchaseId={purchaseId}
-      />
-
-      <DeleteModal
-        isModalOpen={deleteModalOpen}
-        setIsModalOpen={setDeleteModalOpen}
-        handleDelete={handleDelete}
-      />
-    </div>
+    </ProtectedRoute>
   );
 }

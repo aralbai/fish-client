@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function AddOutcome() {
   const { user } = useContext(AuthContext);
@@ -43,61 +44,63 @@ export default function AddOutcome() {
   };
 
   return (
-    <div className={styles.addProduct}>
-      <h1>Расходы</h1>
+    <ProtectedRoute>
+      <div className={styles.addProduct}>
+        <h1>Расходы</h1>
 
-      <div className={styles.form}>
-        <div className={styles.top}>
-          <h1>Добавить новый расход</h1>
-          <Link href="/finance/outcomes">
-            <KeyboardBackspace />
-            <p>Артқа қайтыў</p>
-          </Link>
+        <div className={styles.form}>
+          <div className={styles.top}>
+            <h1>Добавить новый расход</h1>
+            <Link href="/finance/outcomes">
+              <KeyboardBackspace />
+              <p>Артқа қайтыў</p>
+            </Link>
+          </div>
+
+          <form onSubmit={pageHandleSubmit}>
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <Input
+                  type="number"
+                  name="amount"
+                  placeholder="Сумма"
+                  value={outcome.amount}
+                  setData={setOutcome}
+                  required={true}
+                />
+
+                <p>
+                  Сумма:{" "}
+                  {outcome?.amount
+                    ? Intl.NumberFormat("ru-RU").format(outcome?.amount)
+                    : 0}
+                </p>
+              </div>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="purpose"
+                  placeholder="Куда"
+                  value={outcome.purpose}
+                  setData={setOutcome}
+                  required={false}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <DatePick defDate={outcome.addedDate} setDate={setOutcome} />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+              <div className={styles.formInput}></div>
+              <div className={styles.formInput}></div>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={pageHandleSubmit}>
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <Input
-                type="number"
-                name="amount"
-                placeholder="Сумма"
-                value={outcome.amount}
-                setData={setOutcome}
-                required={true}
-              />
-
-              <p>
-                Сумма:{" "}
-                {outcome?.amount
-                  ? Intl.NumberFormat("ru-RU").format(outcome?.amount)
-                  : 0}
-              </p>
-            </div>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="purpose"
-                placeholder="Куда"
-                value={outcome.purpose}
-                setData={setOutcome}
-                required={false}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <DatePick defDate={outcome.addedDate} setDate={setOutcome} />
-            </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
-            <div className={styles.formInput}></div>
-            <div className={styles.formInput}></div>
-          </div>
-        </form>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

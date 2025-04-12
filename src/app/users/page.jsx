@@ -8,6 +8,7 @@ import TableTop from "@/components/tableTop/TableTop";
 import axios from "axios";
 import { toast } from "react-toastify";
 import DeleteModal from "@/components/deleteModal/DeleteModal";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -41,67 +42,69 @@ export default function Users() {
   };
 
   return (
-    <div className={styles.users}>
-      <h1>Аккаунтлар</h1>
+    <ProtectedRoute>
+      <div className={styles.users}>
+        <h1>Аккаунтлар</h1>
 
-      <div className={styles.table}>
-        <div className={styles.top}>
-          <h1>Аккаунтлар</h1>
+        <div className={styles.table}>
+          <div className={styles.top}>
+            <h1>Аккаунтлар</h1>
 
-          <Link href="/users/add-user">
-            <Add />
-            <p>Тазасын киритиў</p>
-          </Link>
-        </div>
+            <Link href="/users/add-user">
+              <Add />
+              <p>Тазасын киритиў</p>
+            </Link>
+          </div>
 
-        <TableTop tableRef={tableRef} />
+          <TableTop tableRef={tableRef} />
 
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Полное имя</td>
-                <td>Имя пользователя</td>
-                <td>Роль</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {users?.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.fullname}</td>
-                  <td>{user.username}</td>
-                  <td>{user.role}</td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/users/edit-user",
-                        query: { userId: user._id },
-                      }}
-                    >
-                      <Edit />
-                    </Link>
-
-                    <button onClick={() => handleDeleteClick(user._id)}>
-                      <Delete />
-                    </button>
-                  </td>
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Полное имя</td>
+                  <td>Имя пользователя</td>
+                  <td>Роль</td>
+                  <td></td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users?.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.fullname}</td>
+                    <td>{user.username}</td>
+                    <td>{user.role}</td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/users/edit-user",
+                          query: { userId: user._id },
+                        }}
+                      >
+                        <Edit />
+                      </Link>
+
+                      <button onClick={() => handleDeleteClick(user._id)}>
+                        <Delete />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {users.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
         </div>
 
-        {users.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
+        <DeleteModal
+          isModalOpen={deleteModalOpen}
+          setIsModalOpen={setDeleteModalOpen}
+          handleDelete={handleDelete}
+        />
       </div>
-
-      <DeleteModal
-        isModalOpen={deleteModalOpen}
-        setIsModalOpen={setDeleteModalOpen}
-        handleDelete={handleDelete}
-      />
-    </div>
+    </ProtectedRoute>
   );
 }

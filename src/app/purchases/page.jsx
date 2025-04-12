@@ -7,6 +7,7 @@ import { fetchData } from "@/utils/fetchData";
 import { format } from "date-fns";
 import TableTop from "@/components/tableTop/TableTop";
 import PurchasesFilter from "../../components/filters/purchasesFilter/PurchasesFilter";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);
@@ -57,135 +58,139 @@ export default function Purchases() {
   }, [filters]);
 
   return (
-    <div className={styles.products}>
-      <h1>Сатып алыў</h1>
+    <ProtectedRoute>
+      <div className={styles.products}>
+        <h1>Сатып алыў</h1>
 
-      <div className={styles.table}>
-        <div className={styles.top}>
-          <h1>Сатып алыў</h1>
-          <Link href="/purchases/add-purchase">
-            <Add />
-            <p>Тазасын киритиў</p>
-          </Link>
-        </div>
-
-        <div className={styles.tableTop}>
-          <div className={styles.filter}>
-            <button onClick={() => setFilterModalOpen((prev) => !prev)}>
-              <FilterList /> Фильтр
-            </button>
-            <PurchasesFilter
-              isModalOpen={filterModalOpen}
-              setIsModalOpen={setFilterModalOpen}
-              products={products}
-              suppliers={suppliers}
-              filters={filters}
-              setFilters={setFilters}
-            />
+        <div className={styles.table}>
+          <div className={styles.top}>
+            <h1>Сатып алыў</h1>
+            <Link href="/purchases/add-purchase">
+              <Add />
+              <p>Тазасын киритиў</p>
+            </Link>
           </div>
-          <TableTop tableRef={tableRef} />
+
+          <div className={styles.tableTop}>
+            <div className={styles.filter}>
+              <button onClick={() => setFilterModalOpen((prev) => !prev)}>
+                <FilterList /> Фильтр
+              </button>
+              <PurchasesFilter
+                isModalOpen={filterModalOpen}
+                setIsModalOpen={setFilterModalOpen}
+                products={products}
+                suppliers={suppliers}
+                filters={filters}
+                setFilters={setFilters}
+              />
+            </div>
+            <TableTop tableRef={tableRef} />
+          </div>
+
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Н</td>
+                  <td>Сатыўшы</td>
+                  <td>Продукт</td>
+                  <td>Муғдары</td>
+                  <td>Баҳасы</td>
+                  <td>Сумма</td>
+                  <td>Скидка</td>
+                  <td>Кемшилик</td>
+                  <td>Қалдық</td>
+                  <td>Итого</td>
+                  <td>Сәне</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map(([key, group], i) => {
+                  const total = group.reduce((sum, p) => sum + p.totalPrice, 0);
+
+                  return (
+                    <React.Fragment key={key}>
+                      {group.map((p, index) => (
+                        <tr key={p._id}>
+                          {index === 0 && (
+                            <>
+                              <td rowSpan={group.length}>{i + 1}</td>
+                              <td rowSpan={group.length}>{p.supplier.title}</td>
+                            </>
+                          )}
+                          <td>{p.product.title}</td>
+                          <td>
+                            {p.amount
+                              ? Intl.NumberFormat("uz-UZ").format(
+                                  p.amount / 1000
+                                )
+                              : 0}
+                          </td>
+                          <td>
+                            {p.price
+                              ? Intl.NumberFormat("ru-RU").format(p.price)
+                              : 0}
+                          </td>
+                          <td>
+                            {p.totalPrice
+                              ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
+                              : 0}
+                          </td>
+                          <td>
+                            {p.discount
+                              ? Intl.NumberFormat("ru-RU").format(p.discount)
+                              : 0}
+                          </td>
+                          <td>
+                            {p.shortage
+                              ? Intl.NumberFormat("ru-RU").format(p.shortage)
+                              : 0}
+                          </td>
+                          <td>
+                            {p.remainingAmount
+                              ? Intl.NumberFormat("uz-UZ").format(
+                                  p.remainingAmount / 1000
+                                )
+                              : 0}
+                          </td>
+                          {index === 0 && (
+                            <>
+                              <td rowSpan={group.length}>
+                                {total
+                                  ? Intl.NumberFormat("ru-RU").format(total)
+                                  : 0}
+                              </td>
+                              <td rowSpan={group.length}>
+                                {format(new Date(p.addedDate), "dd.MM.yyyy")}
+                              </td>
+                            </>
+                          )}
+                          <td className={styles.action}>
+                            <Link
+                              href={{
+                                pathname: "/sells/single-sell",
+                                query: { sellId: p._id },
+                              }}
+                            >
+                              <ArrowRightAlt />
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {purchases.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
         </div>
-
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Н</td>
-                <td>Сатыўшы</td>
-                <td>Продукт</td>
-                <td>Муғдары</td>
-                <td>Баҳасы</td>
-                <td>Сумма</td>
-                <td>Скидка</td>
-                <td>Кемшилик</td>
-                <td>Қалдық</td>
-                <td>Итого</td>
-                <td>Сәне</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(([key, group], i) => {
-                const total = group.reduce((sum, p) => sum + p.totalPrice, 0);
-
-                return (
-                  <React.Fragment key={key}>
-                    {group.map((p, index) => (
-                      <tr key={p._id}>
-                        {index === 0 && (
-                          <>
-                            <td rowSpan={group.length}>{i + 1}</td>
-                            <td rowSpan={group.length}>{p.supplier.title}</td>
-                          </>
-                        )}
-                        <td>{p.product.title}</td>
-                        <td>
-                          {p.amount
-                            ? Intl.NumberFormat("uz-UZ").format(p.amount / 1000)
-                            : 0}
-                        </td>
-                        <td>
-                          {p.price
-                            ? Intl.NumberFormat("ru-RU").format(p.price)
-                            : 0}
-                        </td>
-                        <td>
-                          {p.totalPrice
-                            ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
-                            : 0}
-                        </td>
-                        <td>
-                          {p.discount
-                            ? Intl.NumberFormat("ru-RU").format(p.discount)
-                            : 0}
-                        </td>
-                        <td>
-                          {p.shortage
-                            ? Intl.NumberFormat("ru-RU").format(p.shortage)
-                            : 0}
-                        </td>
-                        <td>
-                          {p.remainingAmount
-                            ? Intl.NumberFormat("uz-UZ").format(
-                                p.remainingAmount / 1000
-                              )
-                            : 0}
-                        </td>
-                        {index === 0 && (
-                          <>
-                            <td rowSpan={group.length}>
-                              {total
-                                ? Intl.NumberFormat("ru-RU").format(total)
-                                : 0}
-                            </td>
-                            <td rowSpan={group.length}>
-                              {format(new Date(p.addedDate), "dd.MM.yyyy")}
-                            </td>
-                          </>
-                        )}
-                        <td className={styles.action}>
-                          <Link
-                            href={{
-                              pathname: "/sells/single-sell",
-                              query: { sellId: p._id },
-                            }}
-                          >
-                            <ArrowRightAlt />
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {purchases.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

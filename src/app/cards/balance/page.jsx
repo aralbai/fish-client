@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import BalanceFilter from "@/components/filters/balanceFilter/BalanceFilter";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function Balance() {
   const [deposits, setDeposits] = useState([]);
@@ -49,139 +50,145 @@ export default function Balance() {
   const profit = sells.totalSales - purchases.totalPurchases;
 
   return (
-    <div className={styles.products}>
-      <h1>Баланс</h1>
+    <ProtectedRoute>
+      <div className={styles.products}>
+        <h1>Баланс</h1>
 
-      <div className={styles.table}>
-        <div className={styles.top}>
-          <h1>Баланс</h1>
+        <div className={styles.table}>
+          <div className={styles.top}>
+            <h1>Баланс</h1>
 
-          <Link href="/">
-            <KeyboardBackspace />
-            <p>Артқа қайтыў</p>
-          </Link>
-        </div>
+            <Link href="/">
+              <KeyboardBackspace />
+              <p>Артқа қайтыў</p>
+            </Link>
+          </div>
 
-        <div className={styles.tableTop}>
-          <div className={styles.filter}>
-            <button onClick={() => setBalanceModalOpen((prev) => !prev)}>
-              <FilterList /> Фильтр
-            </button>
-            <BalanceFilter
-              isModalOpen={balanceModalOpen}
-              setIsModalOpen={setBalanceModalOpen}
-              filters={filters}
-              setFilters={setFilters}
-            />
+          <div className={styles.tableTop}>
+            <div className={styles.filter}>
+              <button onClick={() => setBalanceModalOpen((prev) => !prev)}>
+                <FilterList /> Фильтр
+              </button>
+              <BalanceFilter
+                isModalOpen={balanceModalOpen}
+                setIsModalOpen={setBalanceModalOpen}
+                filters={filters}
+                setFilters={setFilters}
+              />
+            </div>
+          </div>
+
+          <div className={styles.tableContainer}>
+            <table>
+              <thead>
+                <tr>
+                  <td>Қай жерге</td>
+                  <td>Сумма</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Тазасын киритиў</td>
+                  <td>
+                    {purchases.totalPurchases
+                      ? Intl.NumberFormat("ru-RU").format(
+                          purchases.totalPurchases
+                        )
+                      : 0}
+                  </td>
+                  <td>
+                    <Link href="/purchases">
+                      <div>
+                        <ArrowRightAlt />
+                      </div>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Сатыў</td>
+                  <td>
+                    {sells.totalSales
+                      ? Intl.NumberFormat("ru-RU").format(sells.totalSales)
+                      : 0}
+                  </td>
+                  <td>
+                    <Link href="/sells">
+                      <div>
+                        <ArrowRightAlt />
+                      </div>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Расход</td>
+                  <td>
+                    {outcomes.totalOutcomes
+                      ? Intl.NumberFormat("ru-RU").format(
+                          outcomes.totalOutcomes
+                        )
+                      : 0}
+                  </td>
+                  <td>
+                    <Link href="/finance/outcomes">
+                      <div>
+                        <ArrowRightAlt />
+                      </div>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Баланс толтырыў</td>
+                  <td>
+                    {deposits.totalDeposits
+                      ? Intl.NumberFormat("ru-RU").format(
+                          deposits.totalDeposits
+                        )
+                      : 0}
+                  </td>
+                  <td>
+                    <Link href="/finance/deposits">
+                      <div>
+                        <ArrowRightAlt />
+                      </div>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Баланстан шығарыў</td>
+                  <td>
+                    {withdraws.totalWithdraws
+                      ? Intl.NumberFormat("ru-RU").format(
+                          withdraws.totalWithdraws
+                        )
+                      : 0}
+                  </td>
+                  <td>
+                    <Link href="/finance/withdraws">
+                      <div>
+                        <ArrowRightAlt />
+                      </div>
+                    </Link>
+                  </td>
+                </tr>
+                <tr
+                  style={
+                    profit < 0
+                      ? { backgroundColor: "#FF6378", color: "#fff" }
+                      : { backgroundColor: "#28A745", color: "#fff" }
+                  }
+                >
+                  <td>Прибыль</td>
+                  <td>
+                    {profit ? Intl.NumberFormat("ru-RU").format(profit) : 0}
+                  </td>
+                  <td style={{ padding: "30px" }}></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-
-        <div className={styles.tableContainer}>
-          <table>
-            <thead>
-              <tr>
-                <td>Қай жерге</td>
-                <td>Сумма</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Тазасын киритиў</td>
-                <td>
-                  {purchases.totalPurchases
-                    ? Intl.NumberFormat("ru-RU").format(
-                        purchases.totalPurchases
-                      )
-                    : 0}
-                </td>
-                <td>
-                  <Link href="/purchases">
-                    <div>
-                      <ArrowRightAlt />
-                    </div>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>Сатыў</td>
-                <td>
-                  {sells.totalSales
-                    ? Intl.NumberFormat("ru-RU").format(sells.totalSales)
-                    : 0}
-                </td>
-                <td>
-                  <Link href="/sells">
-                    <div>
-                      <ArrowRightAlt />
-                    </div>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>Расход</td>
-                <td>
-                  {outcomes.totalOutcomes
-                    ? Intl.NumberFormat("ru-RU").format(outcomes.totalOutcomes)
-                    : 0}
-                </td>
-                <td>
-                  <Link href="/finance/outcomes">
-                    <div>
-                      <ArrowRightAlt />
-                    </div>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>Баланс толтырыў</td>
-                <td>
-                  {deposits.totalDeposits
-                    ? Intl.NumberFormat("ru-RU").format(deposits.totalDeposits)
-                    : 0}
-                </td>
-                <td>
-                  <Link href="/finance/deposits">
-                    <div>
-                      <ArrowRightAlt />
-                    </div>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>Баланстан шығарыў</td>
-                <td>
-                  {withdraws.totalWithdraws
-                    ? Intl.NumberFormat("ru-RU").format(
-                        withdraws.totalWithdraws
-                      )
-                    : 0}
-                </td>
-                <td>
-                  <Link href="/finance/withdraws">
-                    <div>
-                      <ArrowRightAlt />
-                    </div>
-                  </Link>
-                </td>
-              </tr>
-              <tr
-                style={
-                  profit < 0
-                    ? { backgroundColor: "#FF6378", color: "#fff" }
-                    : { backgroundColor: "#28A745", color: "#fff" }
-                }
-              >
-                <td>Прибыль</td>
-                <td>
-                  {profit ? Intl.NumberFormat("ru-RU").format(profit) : 0}
-                </td>
-                <td style={{ padding: "30px" }}></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

@@ -11,6 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import Link from "next/link";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function EditSupplier() {
   const { user } = useContext(AuthContext);
@@ -97,181 +98,183 @@ export default function EditSupplier() {
   }, []);
 
   return (
-    <div className={styles.editProduct}>
-      <h1>Сатыўшыи</h1>
+    <ProtectedRoute>
+      <div className={styles.editProduct}>
+        <h1>Сатыўшыи</h1>
 
-      <div className={styles.form}>
-        {/* Title and back button  */}
-        <div className={styles.top}>
-          <h1>Сатып алыў Сатыўшы</h1>
-          <Link href="/purchases">
-            <KeyboardBackspace />
-            <p></p>
-          </Link>
+        <div className={styles.form}>
+          {/* Title and back button  */}
+          <div className={styles.top}>
+            <h1>Сатып алыў Сатыўшы</h1>
+            <Link href="/purchases">
+              <KeyboardBackspace />
+              <p></p>
+            </Link>
+          </div>
+
+          <form onSubmit={pageHandleSubmit}>
+            {/* Product Supplier */}
+            <div className={styles.inputGroup}>
+              <div className={styles.input}>
+                <label htmlFor="">Product</label>
+                <select
+                  name="product"
+                  required
+                  value={changedPurchase?.product?.id}
+                  onChange={(e) => handleChange(e)}
+                >
+                  <option value={changedPurchase?.product?.id} hidden>
+                    {changedPurchase?.product?.title}
+                  </option>
+                  {products?.map((product) => (
+                    <option
+                      value={`${product?._id}-${product?.title}`}
+                      key={product?._id}
+                    >
+                      {product?.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.input}>
+                <label htmlFor="">Supplier</label>
+                <select
+                  name="supplier"
+                  value={changedPurchase?.supplier?.id}
+                  onChange={(e) => handleChange(e)}
+                  required
+                >
+                  <option value={changedPurchase?.supplier?.id} hidden>
+                    {changedPurchase?.supplier?.title}
+                  </option>
+                  {suppliers?.map((supplier) => (
+                    <option
+                      value={`${supplier?._id}-${supplier?.title}`}
+                      key={supplier?._id}
+                    >
+                      {supplier?.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Amount PerKilo  */}
+            <div className={styles.inputGroup}>
+              <div className={styles.input}>
+                <label htmlFor="">Amount</label>
+                <input
+                  type="number"
+                  name="Amount"
+                  required
+                  min={changedPurchase.minAmount}
+                  value={changedPurchase.amount}
+                  onChange={(e) =>
+                    setChangedPurchase((prev) => ({
+                      ...prev,
+                      amount: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className={styles.input}>
+                <label htmlFor="">Price</label>
+                <input
+                  type="number"
+                  name="Amount"
+                  required
+                  value={changedPurchase.price}
+                  onChange={(e) =>
+                    setChangedPurchase((prev) => ({
+                      ...prev,
+                      price: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+
+            {/* CarNumber AddedDate  */}
+            <div className={styles.inputGroup}>
+              <div className={styles.input}>
+                <label htmlFor="">Car Number</label>
+                <input
+                  type="text"
+                  required
+                  value={changedPurchase.carNumber}
+                  onChange={(e) =>
+                    setChangedPurchase((prev) => ({
+                      ...prev,
+                      carNumber: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className={styles.input}>
+                <label htmlFor="">Added date</label>
+                <DatePick
+                  defDate={changedPurchase.addedDate}
+                  setDate={setChangedPurchase}
+                />
+              </div>
+            </div>
+
+            {/* Discount Debt  */}
+            <div className={styles.inputGroup}>
+              <div className={styles.input}>
+                <label htmlFor="">Discount</label>
+                <input
+                  type="number"
+                  required
+                  value={changedPurchase.discount}
+                  onChange={(e) =>
+                    setChangedPurchase((prev) => ({
+                      ...prev,
+                      discount: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className={styles.input}></div>
+            </div>
+
+            {/* Calculate total */}
+            <div className={styles.bottom}>
+              <div className={styles.row}>
+                <div className={styles.calc}>
+                  <p>Итого:</p>
+                  <b>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(
+                        parseFloat(changedPurchase.amount) *
+                          parseFloat(changedPurchase.price)
+                      )
+                      .replace(/,/g, " ")}
+                  </b>
+                </div>
+
+                <div className={styles.calc}>
+                  <p>Скидка:</p>
+                  <b>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(changedPurchase.discount)
+                      .replace(/,/g, " ")}
+                  </b>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.input}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+              <div className={styles.input}></div>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={pageHandleSubmit}>
-          {/* Product Supplier */}
-          <div className={styles.inputGroup}>
-            <div className={styles.input}>
-              <label htmlFor="">Product</label>
-              <select
-                name="product"
-                required
-                value={changedPurchase?.product?.id}
-                onChange={(e) => handleChange(e)}
-              >
-                <option value={changedPurchase?.product?.id} hidden>
-                  {changedPurchase?.product?.title}
-                </option>
-                {products?.map((product) => (
-                  <option
-                    value={`${product?._id}-${product?.title}`}
-                    key={product?._id}
-                  >
-                    {product?.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.input}>
-              <label htmlFor="">Supplier</label>
-              <select
-                name="supplier"
-                value={changedPurchase?.supplier?.id}
-                onChange={(e) => handleChange(e)}
-                required
-              >
-                <option value={changedPurchase?.supplier?.id} hidden>
-                  {changedPurchase?.supplier?.title}
-                </option>
-                {suppliers?.map((supplier) => (
-                  <option
-                    value={`${supplier?._id}-${supplier?.title}`}
-                    key={supplier?._id}
-                  >
-                    {supplier?.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Amount PerKilo  */}
-          <div className={styles.inputGroup}>
-            <div className={styles.input}>
-              <label htmlFor="">Amount</label>
-              <input
-                type="number"
-                name="Amount"
-                required
-                min={changedPurchase.minAmount}
-                value={changedPurchase.amount}
-                onChange={(e) =>
-                  setChangedPurchase((prev) => ({
-                    ...prev,
-                    amount: e.target.value,
-                  }))
-                }
-              />
-            </div>
-
-            <div className={styles.input}>
-              <label htmlFor="">Price</label>
-              <input
-                type="number"
-                name="Amount"
-                required
-                value={changedPurchase.price}
-                onChange={(e) =>
-                  setChangedPurchase((prev) => ({
-                    ...prev,
-                    price: e.target.value,
-                  }))
-                }
-              />
-            </div>
-          </div>
-
-          {/* CarNumber AddedDate  */}
-          <div className={styles.inputGroup}>
-            <div className={styles.input}>
-              <label htmlFor="">Car Number</label>
-              <input
-                type="text"
-                required
-                value={changedPurchase.carNumber}
-                onChange={(e) =>
-                  setChangedPurchase((prev) => ({
-                    ...prev,
-                    carNumber: e.target.value,
-                  }))
-                }
-              />
-            </div>
-
-            <div className={styles.input}>
-              <label htmlFor="">Added date</label>
-              <DatePick
-                defDate={changedPurchase.addedDate}
-                setDate={setChangedPurchase}
-              />
-            </div>
-          </div>
-
-          {/* Discount Debt  */}
-          <div className={styles.inputGroup}>
-            <div className={styles.input}>
-              <label htmlFor="">Discount</label>
-              <input
-                type="number"
-                required
-                value={changedPurchase.discount}
-                onChange={(e) =>
-                  setChangedPurchase((prev) => ({
-                    ...prev,
-                    discount: e.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className={styles.input}></div>
-          </div>
-
-          {/* Calculate total */}
-          <div className={styles.bottom}>
-            <div className={styles.row}>
-              <div className={styles.calc}>
-                <p>Итого:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(
-                      parseFloat(changedPurchase.amount) *
-                        parseFloat(changedPurchase.price)
-                    )
-                    .replace(/,/g, " ")}
-                </b>
-              </div>
-
-              <div className={styles.calc}>
-                <p>Скидка:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(changedPurchase.discount)
-                    .replace(/,/g, " ")}
-                </b>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.input}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
-            <div className={styles.input}></div>
-          </div>
-        </form>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import DeleteModal from "@/components/deleteModal/DeleteModal";
 import { AuthContext } from "@/context/AuthContext";
 import TableTop from "@/components/tableTop/TableTop";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function Outcomes() {
   const { user } = useContext(AuthContext);
@@ -49,114 +50,116 @@ export default function Outcomes() {
   };
 
   return (
-    <div className={styles.outcomes}>
-      <h1>Расходы</h1>
+    <ProtectedRoute>
+      <div className={styles.outcomes}>
+        <h1>Расходы</h1>
 
-      <div className={styles.table}>
-        <div className={styles.top}>
-          <h1>Все расходы</h1>
-          <Link href="/finance/outcomes/add-outcome">
-            <Add />
-            <p>Тазасын киритиў</p>
-          </Link>
-        </div>
+        <div className={styles.table}>
+          <div className={styles.top}>
+            <h1>Все расходы</h1>
+            <Link href="/finance/outcomes/add-outcome">
+              <Add />
+              <p>Тазасын киритиў</p>
+            </Link>
+          </div>
 
-        <TableTop tableRef={tableRef} />
+          <TableTop tableRef={tableRef} />
 
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-                <td>
-                  {outcomesTotalPrice.totalOutcomes
-                    ? Intl.NumberFormat("ru-RU").format(
-                        outcomesTotalPrice.totalOutcomes
-                      )
-                    : 0}
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style={{ padding: "30px" }}></td>
-              </tr>
-              <tr>
-                <td>Сумма</td>
-                <td>Куда</td>
-                <td>Сәне</td>
-                <td>Киритилди</td>
-                <td>Последнее Өзгертирилди</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {outcomes?.map((outcome) => (
-                <tr key={outcome._id}>
-                  <td>{Intl.NumberFormat("ru-RU").format(outcome.amount)}</td>
-                  <td>{outcome.purpose}</td>
-                  <td>{format(outcome.addedDate, "dd.MM.yyyy HH:mm")}</td>
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
                   <td>
-                    {user?.role === "superadmin"
-                      ? users?.map((user) =>
-                          user._id === outcome?.addedUserId ? (
-                            <Link
-                              href="/users"
-                              key={user._id}
-                              style={{ color: "#1976D2" }}
-                            >
-                              {user.username} {" - "}
-                            </Link>
-                          ) : null
+                    {outcomesTotalPrice.totalOutcomes
+                      ? Intl.NumberFormat("ru-RU").format(
+                          outcomesTotalPrice.totalOutcomes
                         )
-                      : ""}
-                    {format(new Date(outcome?.createdAt), "dd.MM.yyyy HH:mm")}
+                      : 0}
                   </td>
-                  <td>
-                    {user?.role === "superadmin"
-                      ? users?.map((user) =>
-                          user._id === outcome?.changedUserId ? (
-                            <Link
-                              href="/users"
-                              key={user._id}
-                              style={{ color: "#1976D2" }}
-                            >
-                              {user.username} {" - "}
-                            </Link>
-                          ) : null
-                        )
-                      : ""}
-                    {format(new Date(outcome?.updatedAt), "dd.MM.yyyy HH:mm")}
-                  </td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/finance/outcomes/edit-outcome",
-                        query: { outcomeId: outcome._id },
-                      }}
-                    >
-                      <Edit />
-                    </Link>
-
-                    <button onClick={() => handleDeleteClick(outcome._id)}>
-                      <Delete />
-                    </button>
-                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style={{ padding: "30px" }}></td>
                 </tr>
-              ))}
-            </tbody>
-          </table>{" "}
+                <tr>
+                  <td>Сумма</td>
+                  <td>Куда</td>
+                  <td>Сәне</td>
+                  <td>Киритилди</td>
+                  <td>Последнее Өзгертирилди</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {outcomes?.map((outcome) => (
+                  <tr key={outcome._id}>
+                    <td>{Intl.NumberFormat("ru-RU").format(outcome.amount)}</td>
+                    <td>{outcome.purpose}</td>
+                    <td>{format(outcome.addedDate, "dd.MM.yyyy HH:mm")}</td>
+                    <td>
+                      {user?.role === "superadmin"
+                        ? users?.map((user) =>
+                            user._id === outcome?.addedUserId ? (
+                              <Link
+                                href="/users"
+                                key={user._id}
+                                style={{ color: "#1976D2" }}
+                              >
+                                {user.username} {" - "}
+                              </Link>
+                            ) : null
+                          )
+                        : ""}
+                      {format(new Date(outcome?.createdAt), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td>
+                      {user?.role === "superadmin"
+                        ? users?.map((user) =>
+                            user._id === outcome?.changedUserId ? (
+                              <Link
+                                href="/users"
+                                key={user._id}
+                                style={{ color: "#1976D2" }}
+                              >
+                                {user.username} {" - "}
+                              </Link>
+                            ) : null
+                          )
+                        : ""}
+                      {format(new Date(outcome?.updatedAt), "dd.MM.yyyy HH:mm")}
+                    </td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/finance/outcomes/edit-outcome",
+                          query: { outcomeId: outcome._id },
+                        }}
+                      >
+                        <Edit />
+                      </Link>
+
+                      <button onClick={() => handleDeleteClick(outcome._id)}>
+                        <Delete />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>{" "}
+          </div>
+
+          {outcomes.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
         </div>
 
-        {outcomes.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
+        <DeleteModal
+          isModalOpen={deleteModalOpen}
+          setIsModalOpen={setDeleteModalOpen}
+          handleDelete={handleDelete}
+        />
       </div>
-
-      <DeleteModal
-        isModalOpen={deleteModalOpen}
-        setIsModalOpen={setDeleteModalOpen}
-        handleDelete={handleDelete}
-      />
-    </div>
+    </ProtectedRoute>
   );
 }

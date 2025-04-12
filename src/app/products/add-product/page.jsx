@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function AddProduct() {
   const { user } = useContext(AuthContext);
@@ -40,37 +41,39 @@ export default function AddProduct() {
   };
 
   return (
-    <div className={styles.addProduct}>
-      <h1>Продукты</h1>
+    <ProtectedRoute>
+      <div className={styles.addProduct}>
+        <h1>Продукты</h1>
 
-      <div className={styles.form}>
-        <div className={styles.top}>
-          <h1>Таза продукт киритиў</h1>
-          <Link href="/products">
-            <KeyboardBackspace />
-            <p>Артқа қайтыў</p>
-          </Link>
-        </div>
-
-        <form onSubmit={pageHandleSubmit}>
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="title"
-                placeholder="Продукт"
-                value={product.title}
-                setData={setProduct}
-                required={true}
-              />
-            </div>
-
-            <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
+        <div className={styles.form}>
+          <div className={styles.top}>
+            <h1>Таза продукт киритиў</h1>
+            <Link href="/products">
+              <KeyboardBackspace />
+              <p>Артқа қайтыў</p>
+            </Link>
           </div>
-        </form>
+
+          <form onSubmit={pageHandleSubmit}>
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="title"
+                  placeholder="Продукт"
+                  value={product.title}
+                  setData={setProduct}
+                  required={true}
+                />
+              </div>
+
+              <div className={styles.formInput}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

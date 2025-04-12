@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function AddUser() {
   const router = useRouter();
@@ -39,105 +40,107 @@ export default function AddUser() {
   };
 
   return (
-    <div className={styles.addProduct}>
-      <h1>Сатыўшыи</h1>
+    <ProtectedRoute>
+      <div className={styles.addProduct}>
+        <h1>Сатыўшыи</h1>
 
-      <div className={styles.form}>
-        <div className={styles.top}>
-          <h1>Тазасын киритиў Сатыўшы</h1>
-          <Link href="/users">
-            <KeyboardBackspace />
-            <p>Артқа қайтыў</p>
-          </Link>
-        </div>
-
-        <form onSubmit={pageHandleSubmit}>
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <input
-                type="text"
-                placeholder="Полное имя"
-                value={user.fullname}
-                onChange={(e) =>
-                  setUser((prev) => ({
-                    ...prev,
-                    fullname: e.target.value,
-                  }))
-                }
-                required
-              />
-            </div>
-
-            <div className={styles.formInput}>
-              <input
-                type="text"
-                placeholder="Имя пользователя"
-                value={user.username}
-                onChange={(e) =>
-                  setUser((prev) => ({
-                    ...prev,
-                    username: e.target.value,
-                  }))
-                }
-                required
-              />
-            </div>
+        <div className={styles.form}>
+          <div className={styles.top}>
+            <h1>Тазасын киритиў Сатыўшы</h1>
+            <Link href="/users">
+              <KeyboardBackspace />
+              <p>Артқа қайтыў</p>
+            </Link>
           </div>
 
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <span>
+          <form onSubmit={pageHandleSubmit}>
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
                 <input
-                  type={type ? "password" : "text"}
-                  placeholder="Пароль"
-                  value={user.password}
+                  type="text"
+                  placeholder="Полное имя"
+                  value={user.fullname}
                   onChange={(e) =>
                     setUser((prev) => ({
                       ...prev,
-                      password: e.target.value,
+                      fullname: e.target.value,
                     }))
                   }
                   required
                 />
-                <button
-                  className={styles.show}
-                  type="button"
-                  onClick={() => setType(!type)}
+              </div>
+
+              <div className={styles.formInput}>
+                <input
+                  type="text"
+                  placeholder="Имя пользователя"
+                  value={user.username}
+                  onChange={(e) =>
+                    setUser((prev) => ({
+                      ...prev,
+                      username: e.target.value,
+                    }))
+                  }
+                  required
+                />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <span>
+                  <input
+                    type={type ? "password" : "text"}
+                    placeholder="Пароль"
+                    value={user.password}
+                    onChange={(e) =>
+                      setUser((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
+                    required
+                  />
+                  <button
+                    className={styles.show}
+                    type="button"
+                    onClick={() => setType(!type)}
+                  >
+                    {type ? <VisibilityOff /> : <RemoveRedEye />}
+                  </button>
+                </span>
+              </div>
+
+              <div className={styles.formInput}>
+                <select
+                  name=""
+                  id=""
+                  value={user.role}
+                  onChange={(e) =>
+                    setUser((prev) => ({
+                      ...prev,
+                      role: e.target.value,
+                    }))
+                  }
+                  required
                 >
-                  {type ? <VisibilityOff /> : <RemoveRedEye />}
-                </button>
-              </span>
+                  <option value="" hidden>
+                    Роль
+                  </option>
+                  <option value="admin">admin</option>
+                </select>
+              </div>
             </div>
 
-            <div className={styles.formInput}>
-              <select
-                name=""
-                id=""
-                value={user.role}
-                onChange={(e) =>
-                  setUser((prev) => ({
-                    ...prev,
-                    role: e.target.value,
-                  }))
-                }
-                required
-              >
-                <option value="" hidden>
-                  Роль
-                </option>
-                <option value="admin">admin</option>
-              </select>
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+              <div className={styles.formInput}></div>
             </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
-            <div className={styles.formInput}></div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

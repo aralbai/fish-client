@@ -5,6 +5,7 @@ import { Add, ArrowRightAlt } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { fetchData } from "@/utils/fetchData";
 import TableTop from "@/components/tableTop/TableTop";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function Custumers() {
   const [custumers, setCustumers] = useState([]);
@@ -22,69 +23,71 @@ export default function Custumers() {
   }, {});
 
   return (
-    <div className={styles.custumers}>
-      <h1>Клиенты</h1>
+    <ProtectedRoute>
+      <div className={styles.custumers}>
+        <h1>Клиенты</h1>
 
-      <div className={styles.table}>
-        <div className={styles.top}>
-          <h1>Все клиенты</h1>
-          <Link href="/custumers/add-custumer">
-            <Add />
-            <p>Тазасын киритиў</p>
-          </Link>
-        </div>
+        <div className={styles.table}>
+          <div className={styles.top}>
+            <h1>Все клиенты</h1>
+            <Link href="/custumers/add-custumer">
+              <Add />
+              <p>Тазасын киритиў</p>
+            </Link>
+          </div>
 
-        <TableTop tableRef={tableRef} />
+          <TableTop tableRef={tableRef} />
 
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Клиент</td>
-                <td>Номер тел.</td>
-                <td>Адрес</td>
-                <td>Лимит</td>
-                <td>Қарызлар</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {custumers?.map((custumer) => (
-                <tr key={custumer._id}>
-                  <td>{custumer.fullname}</td>
-                  <td>{custumer.phone}</td>
-                  <td>{custumer.address}</td>
-                  <td>
-                    {custumer.limit === -1
-                      ? "Безлимитный"
-                      : Intl.NumberFormat("ru-RU").format(custumer.limit)}
-                  </td>
-                  <td>
-                    {(debtMap[custumer?._id] &&
-                      Intl.NumberFormat("ru-RU").format(
-                        debtMap[custumer?._id]
-                      )) ||
-                      0}
-                  </td>
-                  <td className={styles.action}>
-                    <Link
-                      href={{
-                        pathname: "/custumers/single-custumer",
-                        query: { custumerId: custumer._id },
-                      }}
-                    >
-                      <ArrowRightAlt />
-                    </Link>
-                  </td>
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Клиент</td>
+                  <td>Номер тел.</td>
+                  <td>Адрес</td>
+                  <td>Лимит</td>
+                  <td>Қарызлар</td>
+                  <td></td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {custumers?.map((custumer) => (
+                  <tr key={custumer._id}>
+                    <td>{custumer.fullname}</td>
+                    <td>{custumer.phone}</td>
+                    <td>{custumer.address}</td>
+                    <td>
+                      {custumer.limit === -1
+                        ? "Безлимитный"
+                        : Intl.NumberFormat("ru-RU").format(custumer.limit)}
+                    </td>
+                    <td>
+                      {(debtMap[custumer?._id] &&
+                        Intl.NumberFormat("ru-RU").format(
+                          debtMap[custumer?._id]
+                        )) ||
+                        0}
+                    </td>
+                    <td className={styles.action}>
+                      <Link
+                        href={{
+                          pathname: "/custumers/single-custumer",
+                          query: { custumerId: custumer._id },
+                        }}
+                      >
+                        <ArrowRightAlt />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {custumers.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
         </div>
-        {custumers.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

@@ -9,6 +9,7 @@ import TableTop from "@/components/tableTop/TableTop";
 import SellsFilter from "@/components/filters/sellsFilter/SellsFilter";
 import axios from "axios";
 import Pagination from "@/components/pagination/Pagination";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function Sells() {
   const [sells, setSells] = useState([]);
@@ -73,130 +74,132 @@ export default function Sells() {
   }, [filters, totalPages, page]);
 
   return (
-    <div className={styles.products}>
-      <h1>Сатыў</h1>
+    <ProtectedRoute>
+      <div className={styles.products}>
+        <h1>Сатыў</h1>
 
-      <div className={styles.table}>
-        <div className={styles.top}>
-          <h1>Сатыў</h1>
-          <Link href="/sells/add-sell">
-            <Add />
-            <p>Тазасын киритиў</p>
-          </Link>
-        </div>
+        <div className={styles.table}>
+          <div className={styles.top}>
+            <h1>Сатыў</h1>
+            <Link href="/sells/add-sell">
+              <Add />
+              <p>Тазасын киритиў</p>
+            </Link>
+          </div>
 
-        <div className={styles.tableTop}>
-          <div className={styles.filter}>
-            <button onClick={() => setFilterModalOpen((prev) => !prev)}>
-              <FilterList /> Фильтр
-            </button>
-            <SellsFilter
-              isModalOpen={filterModalOpen}
-              setIsModalOpen={setFilterModalOpen}
-              products={products}
-              custumers={custumers}
-              filters={filters}
-              setFilters={setFilters}
+          <div className={styles.tableTop}>
+            <div className={styles.filter}>
+              <button onClick={() => setFilterModalOpen((prev) => !prev)}>
+                <FilterList /> Фильтр
+              </button>
+              <SellsFilter
+                isModalOpen={filterModalOpen}
+                setIsModalOpen={setFilterModalOpen}
+                products={products}
+                custumers={custumers}
+                filters={filters}
+                setFilters={setFilters}
+              />
+            </div>
+            <TableTop tableRef={tableRef} />
+          </div>
+
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Н</td>
+                  <td>Клиент</td>
+                  <td>Продукт</td>
+                  <td>Муғдары</td>
+                  <td>Баҳасы</td>
+                  <td>Сумма</td>
+                  <td>Скидка</td>
+                  <td>Итого</td>
+                  <td>Қарыз</td>
+                  <td>Сәне</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map(([key, group], i) => {
+                  const total = group.reduce((sum, p) => sum + p.totalPrice, 0);
+                  const totalDebt = group.reduce((sum, p) => sum + p.debt, 0);
+
+                  return (
+                    <React.Fragment key={key}>
+                      {group.map((p, index) => (
+                        <tr key={p._id}>
+                          {index === 0 && (
+                            <>
+                              <td rowSpan={group.length}>{i + 1}</td>
+                              <td rowSpan={group.length}>
+                                {p.custumer.fullname}
+                              </td>
+                            </>
+                          )}
+                          <td>{p.product.title}</td>
+                          <td>{p.amount}</td>
+                          <td>
+                            {p.price
+                              ? Intl.NumberFormat("ru-RU").format(p.price)
+                              : 0}
+                          </td>
+                          <td>
+                            {p.totalPrice
+                              ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
+                              : 0}
+                          </td>
+                          <td>{p.discount}</td>
+                          {index === 0 && (
+                            <>
+                              <td rowSpan={group.length}>
+                                {total
+                                  ? Intl.NumberFormat("ru-RU").format(total)
+                                  : 0}
+                              </td>
+                              <td rowSpan={group.length}>
+                                {totalDebt
+                                  ? Intl.NumberFormat("ru-RU").format(totalDebt)
+                                  : 0}
+                              </td>
+                              <td rowSpan={group.length}>
+                                {format(new Date(p.addedDate), "dd.MM.yyyy")}
+                              </td>
+                            </>
+                          )}
+                          <td className={styles.action}>
+                            <Link
+                              href={{
+                                pathname: "/sells/single-sell",
+                                query: { sellId: p._id },
+                              }}
+                            >
+                              <ArrowRightAlt />
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalDocuments={totalDocuments}
+              setPage={setPage}
+              title={"Всего продаж:"}
             />
           </div>
-          <TableTop tableRef={tableRef} />
+
+          {sells?.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
         </div>
-
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Н</td>
-                <td>Клиент</td>
-                <td>Продукт</td>
-                <td>Муғдары</td>
-                <td>Баҳасы</td>
-                <td>Сумма</td>
-                <td>Скидка</td>
-                <td>Итого</td>
-                <td>Қарыз</td>
-                <td>Сәне</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(([key, group], i) => {
-                const total = group.reduce((sum, p) => sum + p.totalPrice, 0);
-                const totalDebt = group.reduce((sum, p) => sum + p.debt, 0);
-
-                return (
-                  <React.Fragment key={key}>
-                    {group.map((p, index) => (
-                      <tr key={p._id}>
-                        {index === 0 && (
-                          <>
-                            <td rowSpan={group.length}>{i + 1}</td>
-                            <td rowSpan={group.length}>
-                              {p.custumer.fullname}
-                            </td>
-                          </>
-                        )}
-                        <td>{p.product.title}</td>
-                        <td>{p.amount}</td>
-                        <td>
-                          {p.price
-                            ? Intl.NumberFormat("ru-RU").format(p.price)
-                            : 0}
-                        </td>
-                        <td>
-                          {p.totalPrice
-                            ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
-                            : 0}
-                        </td>
-                        <td>{p.discount}</td>
-                        {index === 0 && (
-                          <>
-                            <td rowSpan={group.length}>
-                              {total
-                                ? Intl.NumberFormat("ru-RU").format(total)
-                                : 0}
-                            </td>
-                            <td rowSpan={group.length}>
-                              {totalDebt
-                                ? Intl.NumberFormat("ru-RU").format(totalDebt)
-                                : 0}
-                            </td>
-                            <td rowSpan={group.length}>
-                              {format(new Date(p.addedDate), "dd.MM.yyyy")}
-                            </td>
-                          </>
-                        )}
-                        <td className={styles.action}>
-                          <Link
-                            href={{
-                              pathname: "/sells/single-sell",
-                              query: { sellId: p._id },
-                            }}
-                          >
-                            <ArrowRightAlt />
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            totalDocuments={totalDocuments}
-            setPage={setPage}
-            title={"Всего продаж:"}
-          />
-        </div>
-
-        {sells?.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

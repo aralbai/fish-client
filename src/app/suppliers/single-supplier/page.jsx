@@ -15,6 +15,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import DeleteModal from "@/components/deleteModal/DeleteModal";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function SingleSupplier() {
   const { user } = useContext(AuthContext);
@@ -63,172 +64,185 @@ export default function SingleSupplier() {
   );
 
   return (
-    <div className={styles.singleSupplier}>
-      <div className={styles.title}>
-        <h1>Единый клиент</h1>
+    <ProtectedRoute>
+      <div className={styles.singleSupplier}>
+        <div className={styles.title}>
+          <h1>Единый клиент</h1>
 
-        <Link href="/suppliers">
-          <KeyboardBackspace />
-          <p>Артқа қайтыў</p>
-        </Link>
-      </div>
+          <Link href="/suppliers">
+            <KeyboardBackspace />
+            <p>Артқа қайтыў</p>
+          </Link>
+        </div>
 
-      <div className={styles.supplierInfo}>
-        <div className={styles.left}>
-          <div className={styles.top}>
-            <h2>Информация о клиенте</h2>
+        <div className={styles.supplierInfo}>
+          <div className={styles.left}>
+            <div className={styles.top}>
+              <h2>Информация о клиенте</h2>
 
-            <div>
-              <Link
-                href={{
-                  pathname: "/suppliers/edit-supplier",
-                  query: {
-                    supplierId: supplierId,
-                  },
-                }}
-              >
-                <Edit />
-              </Link>
-              <button onClick={handleDeleteClick}>
-                <Delete />
-              </button>
+              <div>
+                <Link
+                  href={{
+                    pathname: "/suppliers/edit-supplier",
+                    query: {
+                      supplierId: supplierId,
+                    },
+                  }}
+                >
+                  <Edit />
+                </Link>
+                <button onClick={handleDeleteClick}>
+                  <Delete />
+                </button>
+              </div>
             </div>
+
+            <ul>
+              <li>
+                <p>Сатыўшы</p>
+                <p>{supplier?.title}</p>
+              </li>
+              <li>
+                <p>Номер телефона</p>
+                <p>{supplier?.phone}</p>
+              </li>
+              <li>
+                <p>Адрес</p>
+                <p>{supplier?.address}</p>
+              </li>
+            </ul>
           </div>
 
-          <ul>
-            <li>
-              <p>Сатыўшы</p>
-              <p>{supplier?.title}</p>
-            </li>
-            <li>
-              <p>Номер телефона</p>
-              <p>{supplier?.phone}</p>
-            </li>
-            <li>
-              <p>Адрес</p>
-              <p>{supplier?.address}</p>
-            </li>
-          </ul>
+          <div className={styles.right}>
+            <div className={styles.top}>
+              <h2>Киритиў ҳәм өзгертиў</h2>
+            </div>
+
+            <ul>
+              <li>
+                <p>Киритилген сәне</p>
+                <p>
+                  {supplier?.createdAt &&
+                    format(
+                      new Date(supplier?.createdAt),
+                      "dd.MM.yyyy hh:mm:ss"
+                    )}
+                </p>
+              </li>
+              <li>
+                <p>Ақырғы өзгерткен сәне</p>
+                <p>
+                  {supplier?.updatedAt &&
+                    format(
+                      new Date(supplier?.updatedAt),
+                      "dd.MM.yyyy hh:mm:ss"
+                    )}
+                </p>
+              </li>
+
+              {user?.role === "superadmin" && (
+                <li>
+                  <p>Кириткен аккаунт</p>
+                  <p>
+                    {users?.map(
+                      (user) =>
+                        user?._id === supplier?.addedUserId && (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user.username}
+                          </Link>
+                        )
+                    )}
+                  </p>
+                </li>
+              )}
+
+              {user?.role === "superadmin" && (
+                <li>
+                  <p>Ақырғы өзгерткен аккаунт</p>
+                  <p>
+                    {users?.map(
+                      (user) =>
+                        user?._id === supplier?.changedUserId && (
+                          <Link
+                            href="/users"
+                            key={user?._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user?.username}
+                          </Link>
+                        )
+                    )}
+                  </p>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
 
-        <div className={styles.right}>
-          <div className={styles.top}>
-            <h2>Киритиў ҳәм өзгертиў</h2>
+        <div className={styles.repays}>
+          <h2>Сатып алыў</h2>
+
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Продукт</td>
+                  <td>Муғдары</td>
+                  <td>Сумма</td>
+                  <td>Сәне</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {purchases.length > 0 &&
+                  purchases.map((purchase) => (
+                    <tr key={purchase._id}>
+                      <td>{purchase.product?.title}</td>
+                      <td>{purchase.amount}</td>
+                      <td>
+                        {Intl.NumberFormat("ru-RU").format(
+                          purchase?.totalPrice
+                        )}
+                      </td>
+                      <td>
+                        {format(
+                          new Date(purchase.addedDate),
+                          "dd.MM.yyyy HH:mm"
+                        )}
+                      </td>
+                      <td className={styles.action}>
+                        <Link
+                          href={{
+                            pathname: "/purchases/single-purchase",
+                            query: {
+                              purchaseId: purchase._id,
+                            },
+                          }}
+                        >
+                          <ArrowRightAlt />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
 
-          <ul>
-            <li>
-              <p>Киритилген сәне</p>
-              <p>
-                {supplier?.createdAt &&
-                  format(new Date(supplier?.createdAt), "dd.MM.yyyy hh:mm:ss")}
-              </p>
-            </li>
-            <li>
-              <p>Ақырғы өзгерткен сәне</p>
-              <p>
-                {supplier?.updatedAt &&
-                  format(new Date(supplier?.updatedAt), "dd.MM.yyyy hh:mm:ss")}
-              </p>
-            </li>
-
-            {user?.role === "superadmin" && (
-              <li>
-                <p>Кириткен аккаунт</p>
-                <p>
-                  {users?.map(
-                    (user) =>
-                      user?._id === supplier?.addedUserId && (
-                        <Link
-                          href="/users"
-                          key={user._id}
-                          style={{ color: "#1976D2" }}
-                        >
-                          {user.username}
-                        </Link>
-                      )
-                  )}
-                </p>
-              </li>
-            )}
-
-            {user?.role === "superadmin" && (
-              <li>
-                <p>Ақырғы өзгерткен аккаунт</p>
-                <p>
-                  {users?.map(
-                    (user) =>
-                      user?._id === supplier?.changedUserId && (
-                        <Link
-                          href="/users"
-                          key={user?._id}
-                          style={{ color: "#1976D2" }}
-                        >
-                          {user?.username}
-                        </Link>
-                      )
-                  )}
-                </p>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
-
-      <div className={styles.repays}>
-        <h2>Сатып алыў</h2>
-
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Продукт</td>
-                <td>Муғдары</td>
-                <td>Сумма</td>
-                <td>Сәне</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {purchases.length > 0 &&
-                purchases.map((purchase) => (
-                  <tr key={purchase._id}>
-                    <td>{purchase.product?.title}</td>
-                    <td>{purchase.amount}</td>
-                    <td>
-                      {Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)}
-                    </td>
-                    <td>
-                      {format(new Date(purchase.addedDate), "dd.MM.yyyy HH:mm")}
-                    </td>
-                    <td className={styles.action}>
-                      <Link
-                        href={{
-                          pathname: "/purchases/single-purchase",
-                          query: {
-                            purchaseId: purchase._id,
-                          },
-                        }}
-                      >
-                        <ArrowRightAlt />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          {purchases.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
         </div>
 
-        {purchases.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
+        <DeleteModal
+          isModalOpen={deleteModal}
+          setIsModalOpen={setDeleteModal}
+          handleDelete={handleDelete}
+        />
       </div>
-
-      <DeleteModal
-        isModalOpen={deleteModal}
-        setIsModalOpen={setDeleteModal}
-        handleDelete={handleDelete}
-      />
-    </div>
+    </ProtectedRoute>
   );
 }

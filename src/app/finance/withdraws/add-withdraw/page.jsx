@@ -10,6 +10,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function AddWithdraw() {
   const { user } = useContext(AuthContext);
@@ -43,61 +44,63 @@ export default function AddWithdraw() {
   };
 
   return (
-    <div className={styles.addProduct}>
-      <h1>Снятия</h1>
+    <ProtectedRoute>
+      <div className={styles.addProduct}>
+        <h1>Снятия</h1>
 
-      <div className={styles.form}>
-        <div className={styles.top}>
-          <h1>Добавить новый снимать</h1>
-          <Link href="/finance/withdraws">
-            <KeyboardBackspace />
-            <p></p>
-          </Link>
+        <div className={styles.form}>
+          <div className={styles.top}>
+            <h1>Добавить новый снимать</h1>
+            <Link href="/finance/withdraws">
+              <KeyboardBackspace />
+              <p></p>
+            </Link>
+          </div>
+
+          <form onSubmit={pageHandleSubmit}>
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <Input
+                  type="number"
+                  name="amount"
+                  placeholder="Сумма"
+                  value={withdraw.amount}
+                  setData={setWithdraw}
+                  required={true}
+                />
+
+                <p>
+                  Сумма:{" "}
+                  {withdraw?.amount
+                    ? Intl.NumberFormat("ru-RU").format(withdraw?.amount)
+                    : 0}
+                </p>
+              </div>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="toWhom"
+                  placeholder="Куда"
+                  value={withdraw.toWhom}
+                  setData={setWithdraw}
+                  required={false}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <DatePick defDate={withdraw.addedDate} setDate={setWithdraw} />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+              <div className={styles.formInput}></div>
+              <div className={styles.formInput}></div>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={pageHandleSubmit}>
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <Input
-                type="number"
-                name="amount"
-                placeholder="Сумма"
-                value={withdraw.amount}
-                setData={setWithdraw}
-                required={true}
-              />
-
-              <p>
-                Сумма:{" "}
-                {withdraw?.amount
-                  ? Intl.NumberFormat("ru-RU").format(withdraw?.amount)
-                  : 0}
-              </p>
-            </div>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="toWhom"
-                placeholder="Куда"
-                value={withdraw.toWhom}
-                setData={setWithdraw}
-                required={false}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <DatePick defDate={withdraw.addedDate} setDate={setWithdraw} />
-            </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
-            <div className={styles.formInput}></div>
-            <div className={styles.formInput}></div>
-          </div>
-        </form>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

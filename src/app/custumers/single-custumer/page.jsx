@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import LimitModal from "@/components/limitModal/LimitModal";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function SingleCustumer() {
   const { user } = useContext(AuthContext);
@@ -61,195 +62,204 @@ export default function SingleCustumer() {
   };
 
   return (
-    <div className={styles.singleCustumer}>
-      <div className={styles.title}>
-        <h1>Единый клиент</h1>
+    <ProtectedRoute>
+      {" "}
+      <div className={styles.singleCustumer}>
+        <div className={styles.title}>
+          <h1>Единый клиент</h1>
 
-        <Link href="/custumers">
-          <KeyboardBackspace />
-          <p>Артқа қайтыў</p>
-        </Link>
-      </div>
+          <Link href="/custumers">
+            <KeyboardBackspace />
+            <p>Артқа қайтыў</p>
+          </Link>
+        </div>
 
-      <div className={styles.custumerInfo}>
-        <div className={styles.left}>
-          <div className={styles.top}>
-            <h2>Информация о клиенте</h2>
+        <div className={styles.custumerInfo}>
+          <div className={styles.left}>
+            <div className={styles.top}>
+              <h2>Информация о клиенте</h2>
 
-            <div>
-              <Link
-                href={{
-                  pathname: "/custumers/edit-custumer",
-                  query: {
-                    custumerId: custumer._id,
-                  },
-                }}
-              >
-                <Edit />
-              </Link>
-              <button onClick={handleDelete}>
-                <Delete />
-              </button>
-              <button
-                onClick={() => {
-                  setLimitModal(true);
-                }}
-              >
-                <FormatColorReset />
-              </button>
+              <div>
+                <Link
+                  href={{
+                    pathname: "/custumers/edit-custumer",
+                    query: {
+                      custumerId: custumer._id,
+                    },
+                  }}
+                >
+                  <Edit />
+                </Link>
+                <button onClick={handleDelete}>
+                  <Delete />
+                </button>
+                <button
+                  onClick={() => {
+                    setLimitModal(true);
+                  }}
+                >
+                  <FormatColorReset />
+                </button>
+              </div>
             </div>
-          </div>
 
-          <ul>
-            <li>
-              <p>Имя клиента</p>
-              <p>{custumer?.fullname}</p>
-            </li>
-            <li>
-              <p>Номер телефона</p>
-              <p>{custumer?.phone}</p>
-            </li>
-            <li>
-              <p>Адрес</p>
-              <p>{custumer?.address}</p>
-            </li>
-            <li>
-              <p>Қарызлар</p>
-              <p>{Intl.NumberFormat("ru-RU").format(totalCustumerDebt)}</p>
-            </li>
-            <li>
-              <p>Лимит</p>
-              <p>
-                {custumer.limit === -1
-                  ? "Безлимитный"
-                  : Intl.NumberFormat("ru-RU").format(custumer.limit)}
-              </p>
-            </li>
-          </ul>
-        </div>
-
-        <div className={styles.right}>
-          <div className={styles.top}>
-            <h2>Киритиў ҳәм өзгертиў</h2>
-          </div>
-
-          <ul>
-            <li>
-              <p>Киритилген сәне</p>
-              <p>
-                {custumer?.createdAt &&
-                  format(new Date(custumer?.createdAt), "dd.MM.yyyy hh:mm:ss")}
-              </p>
-            </li>
-            <li>
-              <p>Ақырғы өзгерткен сәне</p>
-              <p>
-                {custumer?.updatedAt &&
-                  format(new Date(custumer?.updatedAt), "dd.MM.yyyy hh:mm:ss")}
-              </p>
-            </li>
-
-            {user?.role === "superadmin" && (
+            <ul>
               <li>
-                <p>Кириткен аккаунт</p>
+                <p>Имя клиента</p>
+                <p>{custumer?.fullname}</p>
+              </li>
+              <li>
+                <p>Номер телефона</p>
+                <p>{custumer?.phone}</p>
+              </li>
+              <li>
+                <p>Адрес</p>
+                <p>{custumer?.address}</p>
+              </li>
+              <li>
+                <p>Қарызлар</p>
+                <p>{Intl.NumberFormat("ru-RU").format(totalCustumerDebt)}</p>
+              </li>
+              <li>
+                <p>Лимит</p>
                 <p>
-                  {users?.map(
-                    (user) =>
-                      user._id === custumer.addedUserId && (
-                        <Link
-                          href="/users"
-                          key={user._id}
-                          style={{ color: "#1976D2" }}
-                        >
-                          {user.username}
-                        </Link>
-                      )
-                  )}
+                  {custumer.limit === -1
+                    ? "Безлимитный"
+                    : Intl.NumberFormat("ru-RU").format(custumer.limit)}
                 </p>
               </li>
-            )}
+            </ul>
+          </div>
 
-            {user?.role === "superadmin" && (
+          <div className={styles.right}>
+            <div className={styles.top}>
+              <h2>Киритиў ҳәм өзгертиў</h2>
+            </div>
+
+            <ul>
               <li>
-                <p>Ақырғы өзгерткен аккаунт</p>
+                <p>Киритилген сәне</p>
                 <p>
-                  {users?.map(
-                    (user) =>
-                      user?._id === custumer?.changedUserId && (
-                        <Link
-                          href="/users"
-                          key={user._id}
-                          style={{ color: "#1976D2" }}
-                        >
-                          {user.username}
-                        </Link>
-                      )
-                  )}
+                  {custumer?.createdAt &&
+                    format(
+                      new Date(custumer?.createdAt),
+                      "dd.MM.yyyy hh:mm:ss"
+                    )}
                 </p>
               </li>
-            )}
-          </ul>
+              <li>
+                <p>Ақырғы өзгерткен сәне</p>
+                <p>
+                  {custumer?.updatedAt &&
+                    format(
+                      new Date(custumer?.updatedAt),
+                      "dd.MM.yyyy hh:mm:ss"
+                    )}
+                </p>
+              </li>
+
+              {user?.role === "superadmin" && (
+                <li>
+                  <p>Кириткен аккаунт</p>
+                  <p>
+                    {users?.map(
+                      (user) =>
+                        user._id === custumer.addedUserId && (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user.username}
+                          </Link>
+                        )
+                    )}
+                  </p>
+                </li>
+              )}
+
+              {user?.role === "superadmin" && (
+                <li>
+                  <p>Ақырғы өзгерткен аккаунт</p>
+                  <p>
+                    {users?.map(
+                      (user) =>
+                        user?._id === custumer?.changedUserId && (
+                          <Link
+                            href="/users"
+                            key={user._id}
+                            style={{ color: "#1976D2" }}
+                          >
+                            {user.username}
+                          </Link>
+                        )
+                    )}
+                  </p>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
-      </div>
 
-      <div className={styles.repays}>
-        <h2>Список Қарызов</h2>
+        <div className={styles.repays}>
+          <h2>Список Қарызов</h2>
 
-        <div className={styles.tableContainer}>
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <td>Продукт</td>
-                <td>Муғдары</td>
-                <td>Debt</td>
-                <td>Сәне</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {custumerDebts.length > 0 &&
-                custumerDebts.map((sell) => (
-                  <tr key={sell._id}>
-                    <td>{sell.product?.title}</td>
-                    <td>{sell.amount}</td>
-                    <td>{Intl.NumberFormat("ru-RU").format(sell.debt)}</td>
-                    <td>
-                      {format(new Date(sell.addedDate), "dd.MM.yyyy HH:mm")}
-                    </td>
-                    <td className={styles.action}>
-                      <Link
-                        href={{
-                          pathname: "/sells/single-sell",
-                          query: {
-                            sellId: sell._id,
-                          },
-                        }}
-                      >
-                        <ArrowRightAlt />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Продукт</td>
+                  <td>Муғдары</td>
+                  <td>Debt</td>
+                  <td>Сәне</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {custumerDebts.length > 0 &&
+                  custumerDebts.map((sell) => (
+                    <tr key={sell._id}>
+                      <td>{sell.product?.title}</td>
+                      <td>{sell.amount}</td>
+                      <td>{Intl.NumberFormat("ru-RU").format(sell.debt)}</td>
+                      <td>
+                        {format(new Date(sell.addedDate), "dd.MM.yyyy HH:mm")}
+                      </td>
+                      <td className={styles.action}>
+                        <Link
+                          href={{
+                            pathname: "/sells/single-sell",
+                            query: {
+                              sellId: sell._id,
+                            },
+                          }}
+                        >
+                          <ArrowRightAlt />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
+          {custumerDebts.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
         </div>
 
-        {custumerDebts.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
+        <RepayModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          custumerId={custumerId}
+        />
+
+        <LimitModal
+          isModalOpen={limitModal}
+          setIsModalOpen={setLimitModal}
+          custumerId={custumerId}
+        />
       </div>
-
-      <RepayModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        custumerId={custumerId}
-      />
-
-      <LimitModal
-        isModalOpen={limitModal}
-        setIsModalOpen={setLimitModal}
-        custumerId={custumerId}
-      />
-    </div>
+    </ProtectedRoute>
   );
 }

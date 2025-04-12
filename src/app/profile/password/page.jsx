@@ -13,6 +13,7 @@ import Link from "next/link";
 import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function Password() {
   const { user } = useContext(AuthContext);
@@ -58,105 +59,107 @@ export default function Password() {
   };
 
   return (
-    <div className={styles.password}>
-      <ul className={styles.bar}>
-        <li className={pathname === "/profile" ? styles.active : ""}>
-          <Link href="/profile">
-            <Info />
-            <p>Информация</p>
-          </Link>
-        </li>
-        <li className={pathname === "/profile/change" ? styles.active : ""}>
-          <Link href="/profile/change">
-            <Settings />
-            <p>Изменить аккаунт</p>
-          </Link>
-        </li>
-        <li className={pathname === "/profile/password" ? styles.active : ""}>
-          <Link href="/profile/password">
-            <Lock />
-            <p>Изменить пароль</p>
-          </Link>
-        </li>
-      </ul>
+    <ProtectedRoute>
+      <div className={styles.password}>
+        <ul className={styles.bar}>
+          <li className={pathname === "/profile" ? styles.active : ""}>
+            <Link href="/profile">
+              <Info />
+              <p>Информация</p>
+            </Link>
+          </li>
+          <li className={pathname === "/profile/change" ? styles.active : ""}>
+            <Link href="/profile/change">
+              <Settings />
+              <p>Изменить аккаунт</p>
+            </Link>
+          </li>
+          <li className={pathname === "/profile/password" ? styles.active : ""}>
+            <Link href="/profile/password">
+              <Lock />
+              <p>Изменить пароль</p>
+            </Link>
+          </li>
+        </ul>
 
-      <div className={styles.change}>
-        <div className={styles.top}></div>
+        <div className={styles.change}>
+          <div className={styles.top}></div>
 
-        <div className={styles.title}>
-          <h2>Изменить информацию</h2>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div>
-            <span>
-              <input
-                type={show ? "text" : "password"}
-                placeholder="Текущий пароль"
-                required
-                value={password.current}
-                onChange={(e) =>
-                  setPassword((prev) => ({
-                    ...prev,
-                    current: e.target.value,
-                  }))
-                }
-              />
-              <button
-                className={styles.show}
-                type="button"
-                onClick={() => setShow(!show)}
-              >
-                {show ? <VisibilityOff /> : <RemoveRedEye />}
-              </button>
-            </span>
-            <span>
-              <input
-                type={show ? "text" : "password"}
-                placeholder="Новый пароль"
-                required
-                value={password.new1}
-                onChange={(e) =>
-                  setPassword((prev) => ({
-                    ...prev,
-                    new1: e.target.value,
-                  }))
-                }
-              />
-              <button
-                className={styles.show}
-                type="button"
-                onClick={() => setShow(!show)}
-              >
-                {show ? <VisibilityOff /> : <RemoveRedEye />}
-              </button>
-            </span>
-            <span>
-              <input
-                type={show ? "text" : "password"}
-                placeholder="Новый пароль"
-                required
-                value={password.new2}
-                onChange={(e) =>
-                  setPassword((prev) => ({
-                    ...prev,
-                    new2: e.target.value,
-                  }))
-                }
-              />
-              <button
-                className={styles.show}
-                type="button"
-                onClick={() => setShow(!show)}
-              >
-                {show ? <VisibilityOff /> : <RemoveRedEye />}
-              </button>
-            </span>
+          <div className={styles.title}>
+            <h2>Изменить информацию</h2>
           </div>
 
-          <button className={styles.submit}>Save</button>
-        </form>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <span>
+                <input
+                  type={show ? "text" : "password"}
+                  placeholder="Текущий пароль"
+                  required
+                  value={password.current}
+                  onChange={(e) =>
+                    setPassword((prev) => ({
+                      ...prev,
+                      current: e.target.value,
+                    }))
+                  }
+                />
+                <button
+                  className={styles.show}
+                  type="button"
+                  onClick={() => setShow(!show)}
+                >
+                  {show ? <VisibilityOff /> : <RemoveRedEye />}
+                </button>
+              </span>
+              <span>
+                <input
+                  type={show ? "text" : "password"}
+                  placeholder="Новый пароль"
+                  required
+                  value={password.new1}
+                  onChange={(e) =>
+                    setPassword((prev) => ({
+                      ...prev,
+                      new1: e.target.value,
+                    }))
+                  }
+                />
+                <button
+                  className={styles.show}
+                  type="button"
+                  onClick={() => setShow(!show)}
+                >
+                  {show ? <VisibilityOff /> : <RemoveRedEye />}
+                </button>
+              </span>
+              <span>
+                <input
+                  type={show ? "text" : "password"}
+                  placeholder="Новый пароль"
+                  required
+                  value={password.new2}
+                  onChange={(e) =>
+                    setPassword((prev) => ({
+                      ...prev,
+                      new2: e.target.value,
+                    }))
+                  }
+                />
+                <button
+                  className={styles.show}
+                  type="button"
+                  onClick={() => setShow(!show)}
+                >
+                  {show ? <VisibilityOff /> : <RemoveRedEye />}
+                </button>
+              </span>
+            </div>
+
+            <button className={styles.submit}>Save</button>
+          </form>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

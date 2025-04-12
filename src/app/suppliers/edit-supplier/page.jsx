@@ -12,6 +12,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Link from "next/link";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function EditSupplier() {
   const { user } = useContext(AuthContext);
@@ -54,56 +55,58 @@ export default function EditSupplier() {
   }, []);
 
   return (
-    <div className={styles.editProduct}>
-      <h1>Сатыўшыи</h1>
+    <ProtectedRoute>
+      <div className={styles.editProduct}>
+        <h1>Сатыўшыи</h1>
 
-      <div className={styles.form}>
-        <div className={styles.top}>
-          <h1>Тазасын киритиў Сатыўшы</h1>
-          <Link href="/suppliers">
-            <KeyboardBackspace />
-            <p>Артқа қайтыў</p>
-          </Link>
+        <div className={styles.form}>
+          <div className={styles.top}>
+            <h1>Тазасын киритиў Сатыўшы</h1>
+            <Link href="/suppliers">
+              <KeyboardBackspace />
+              <p>Артқа қайтыў</p>
+            </Link>
+          </div>
+
+          <form onSubmit={pageHandleSubmit}>
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="title"
+                  placeholder="Название Сатыўшыа"
+                  value={changedSupplier.title}
+                  setData={setChangedSupplier}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="phone"
+                  placeholder="Номер телефона"
+                  value={changedSupplier.phone}
+                  setData={setChangedSupplier}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="address"
+                  placeholder="Адрес"
+                  value={changedSupplier.address}
+                  setData={setChangedSupplier}
+                />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={pageHandleSubmit}>
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="title"
-                placeholder="Название Сатыўшыа"
-                value={changedSupplier.title}
-                setData={setChangedSupplier}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="phone"
-                placeholder="Номер телефона"
-                value={changedSupplier.phone}
-                setData={setChangedSupplier}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="address"
-                placeholder="Адрес"
-                value={changedSupplier.address}
-                setData={setChangedSupplier}
-              />
-            </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
-          </div>
-        </form>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

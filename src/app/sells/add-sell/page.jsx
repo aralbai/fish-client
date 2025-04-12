@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function AddSell() {
   const { user } = useContext(AuthContext);
@@ -130,222 +131,224 @@ export default function AddSell() {
   };
 
   return (
-    <div className={styles.addProduct}>
-      <h1>Сатыў</h1>
+    <ProtectedRoute>
+      <div className={styles.addProduct}>
+        <h1>Сатыў</h1>
 
-      <div className={styles.form}>
-        <div className={styles.top}>
-          <h1>Добавить новую продажу</h1>
-          <Link href="/sells">
-            <KeyboardBackspace />
-            <p>Артқа қайтыў</p>
-          </Link>
+        <div className={styles.form}>
+          <div className={styles.top}>
+            <h1>Добавить новую продажу</h1>
+            <Link href="/sells">
+              <KeyboardBackspace />
+              <p>Артқа қайтыў</p>
+            </Link>
+          </div>
+
+          <form onSubmit={pageHandleSubmit}>
+            {/* Purchase Product  */}
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <select
+                  name="purchase"
+                  value={sell.purchaseId}
+                  onChange={(e) => handleChange(e)}
+                  required
+                >
+                  <option value="" hidden>
+                    {sell.purchaseId}
+                  </option>
+                  {purchases.map((purchase) => (
+                    <option key={purchase._id} value={purchase?._id}>
+                      {purchase.product.title +
+                        " " +
+                        purchase.supplier.title +
+                        " " +
+                        format(purchase.addedDate, "dd.MM.yyyy") +
+                        " " +
+                        purchase.remainingAmount +
+                        "kg" +
+                        " "}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.formInput}>
+                <select name="" id="" disabled>
+                  <option value={sell.product.id}>{sell.product.title}</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Custumer AddedDate  */}
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <div className={styles.formInputCheck}>
+                  <CheckBox
+                    id="checkClient"
+                    value={checkClient}
+                    setData={setCheckClient}
+                  />
+                  <label htmlFor="checkClient">Белгисиз</label>
+                </div>
+
+                {checkClient ? (
+                  <div className={styles.client}>
+                    <Input
+                      type="text"
+                      name="custumerName"
+                      placeholder="Имя клиента"
+                      value={sell.custumerName}
+                      setData={setSell}
+                      required={true}
+                    />
+                  </div>
+                ) : (
+                  <div className={styles.client}>
+                    <select
+                      name="custumer"
+                      value={sell.custumer.id}
+                      onChange={(e) => handleChange(e)}
+                      required={true}
+                    >
+                      <option value={sell.custumer.id} hidden>
+                        {sell?.custumer?.fullname}
+                      </option>
+                      {custumers.map((custumer) => (
+                        <option
+                          key={custumer._id}
+                          value={`${custumer?._id}-${custumer.fullname}`}
+                        >
+                          {custumer?.fullname}
+                        </option>
+                      ))}
+                    </select>
+
+                    <div onClick={() => setIsModalOpen(true)}>
+                      <PrimaryBtn type="button">+</PrimaryBtn>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.formInput}>
+                <DatePick defDate={sell.addedDate} setDate={setSell} />
+              </div>
+            </div>
+
+            {/* Amount Price  */}
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <Input
+                  type="number"
+                  name="amount"
+                  placeholder="Муғдары"
+                  value={sell.amount}
+                  setData={setSell}
+                  required={true}
+                  max={checkAmount}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <Input
+                  type="number"
+                  name="price"
+                  placeholder="Баҳасы"
+                  value={sell.price}
+                  setData={setSell}
+                  required={true}
+                />
+              </div>
+            </div>
+
+            {/* Discount Debt  */}
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <Input
+                  type="number"
+                  name="discount"
+                  placeholder="Скидка"
+                  value={sell.discount}
+                  setData={setSell}
+                  required={false}
+                  max={maxDiscount}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <input
+                  type="number"
+                  placeholder="Қарыз"
+                  value={sell.debt}
+                  onChange={(e) =>
+                    setSell((prev) => ({
+                      ...prev,
+                      debt: e.target.value,
+                    }))
+                  }
+                  max={maxDebt && maxDebt}
+                />
+              </div>
+            </div>
+
+            {/* Calculate total */}
+            <div className={styles.bottom}>
+              <div className={styles.row}>
+                <div className={styles.calc}>
+                  <p>Итого:</p>
+                  <b>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(sell.amount * sell.price)
+                      .replace(/,/g, " ")}
+                  </b>
+                </div>
+
+                <div className={styles.calc}>
+                  <p>Төленди:</p>
+                  <b>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(
+                        sell.amount * sell.price - sell.discount - sell.debt
+                      )
+                      .replace(/,/g, " ")}
+                  </b>
+                </div>
+              </div>
+
+              <div className={styles.row}>
+                <div className={styles.calc}>
+                  <p>Скидка:</p>
+                  <b>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(sell.discount)
+                      .replace(/,/g, " ")}
+                  </b>
+                </div>
+
+                <div className={styles.calc}>
+                  <p>Қарыз:</p>
+                  <b>
+                    {Intl.NumberFormat("uz-UZ")
+                      .format(sell.debt)
+                      .replace(/,/g, " ")}
+                  </b>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+              <div className={styles.formInput}></div>
+            </div>
+          </form>
         </div>
 
-        <form onSubmit={pageHandleSubmit}>
-          {/* Purchase Product  */}
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <select
-                name="purchase"
-                value={sell.purchaseId}
-                onChange={(e) => handleChange(e)}
-                required
-              >
-                <option value="" hidden>
-                  {sell.purchaseId}
-                </option>
-                {purchases.map((purchase) => (
-                  <option key={purchase._id} value={purchase?._id}>
-                    {purchase.product.title +
-                      " " +
-                      purchase.supplier.title +
-                      " " +
-                      format(purchase.addedDate, "dd.MM.yyyy") +
-                      " " +
-                      purchase.remainingAmount +
-                      "kg" +
-                      " "}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles.formInput}>
-              <select name="" id="" disabled>
-                <option value={sell.product.id}>{sell.product.title}</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Custumer AddedDate  */}
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <div className={styles.formInputCheck}>
-                <CheckBox
-                  id="checkClient"
-                  value={checkClient}
-                  setData={setCheckClient}
-                />
-                <label htmlFor="checkClient">Белгисиз</label>
-              </div>
-
-              {checkClient ? (
-                <div className={styles.client}>
-                  <Input
-                    type="text"
-                    name="custumerName"
-                    placeholder="Имя клиента"
-                    value={sell.custumerName}
-                    setData={setSell}
-                    required={true}
-                  />
-                </div>
-              ) : (
-                <div className={styles.client}>
-                  <select
-                    name="custumer"
-                    value={sell.custumer.id}
-                    onChange={(e) => handleChange(e)}
-                    required={true}
-                  >
-                    <option value={sell.custumer.id} hidden>
-                      {sell?.custumer?.fullname}
-                    </option>
-                    {custumers.map((custumer) => (
-                      <option
-                        key={custumer._id}
-                        value={`${custumer?._id}-${custumer.fullname}`}
-                      >
-                        {custumer?.fullname}
-                      </option>
-                    ))}
-                  </select>
-
-                  <div onClick={() => setIsModalOpen(true)}>
-                    <PrimaryBtn type="button">+</PrimaryBtn>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className={styles.formInput}>
-              <DatePick defDate={sell.addedDate} setDate={setSell} />
-            </div>
-          </div>
-
-          {/* Amount Price  */}
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <Input
-                type="number"
-                name="amount"
-                placeholder="Муғдары"
-                value={sell.amount}
-                setData={setSell}
-                required={true}
-                max={checkAmount}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <Input
-                type="number"
-                name="price"
-                placeholder="Баҳасы"
-                value={sell.price}
-                setData={setSell}
-                required={true}
-              />
-            </div>
-          </div>
-
-          {/* Discount Debt  */}
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <Input
-                type="number"
-                name="discount"
-                placeholder="Скидка"
-                value={sell.discount}
-                setData={setSell}
-                required={false}
-                max={maxDiscount}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <input
-                type="number"
-                placeholder="Қарыз"
-                value={sell.debt}
-                onChange={(e) =>
-                  setSell((prev) => ({
-                    ...prev,
-                    debt: e.target.value,
-                  }))
-                }
-                max={maxDebt && maxDebt}
-              />
-            </div>
-          </div>
-
-          {/* Calculate total */}
-          <div className={styles.bottom}>
-            <div className={styles.row}>
-              <div className={styles.calc}>
-                <p>Итого:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(sell.amount * sell.price)
-                    .replace(/,/g, " ")}
-                </b>
-              </div>
-
-              <div className={styles.calc}>
-                <p>Төленди:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(
-                      sell.amount * sell.price - sell.discount - sell.debt
-                    )
-                    .replace(/,/g, " ")}
-                </b>
-              </div>
-            </div>
-
-            <div className={styles.row}>
-              <div className={styles.calc}>
-                <p>Скидка:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(sell.discount)
-                    .replace(/,/g, " ")}
-                </b>
-              </div>
-
-              <div className={styles.calc}>
-                <p>Қарыз:</p>
-                <b>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(sell.debt)
-                    .replace(/,/g, " ")}
-                </b>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
-            <div className={styles.formInput}></div>
-          </div>
-        </form>
+        <CustumerModal
+          isModalOpen={isModalOPen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
-
-      <CustumerModal
-        isModalOpen={isModalOPen}
-        setIsModalOpen={setIsModalOpen}
-      />
-    </div>
+    </ProtectedRoute>
   );
 }

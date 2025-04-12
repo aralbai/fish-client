@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function AddCustumer() {
   const { user } = useContext(AuthContext);
@@ -39,59 +40,61 @@ export default function AddCustumer() {
   };
 
   return (
-    <div className={styles.addProduct}>
-      <h1>Клиенты</h1>
+    <ProtectedRoute>
+      <div className={styles.addProduct}>
+        <h1>Клиенты</h1>
 
-      <div className={styles.form}>
-        <div className={styles.top}>
-          <h1>Тазасын киритиў клиент</h1>
-          <Link href="/custumers">
-            <KeyboardBackspace />
-            <p>Артқа қайтыў</p>
-          </Link>
+        <div className={styles.form}>
+          <div className={styles.top}>
+            <h1>Тазасын киритиў клиент</h1>
+            <Link href="/custumers">
+              <KeyboardBackspace />
+              <p>Артқа қайтыў</p>
+            </Link>
+          </div>
+
+          <form onSubmit={pageHandleSubmit}>
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="fullname"
+                  placeholder="Имя клиента"
+                  value={custumer.fullname}
+                  setData={setCustumer}
+                  required={false}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="phone"
+                  placeholder="Номер телефона"
+                  value={custumer.phone}
+                  setData={setCustumer}
+                  required={false}
+                />
+              </div>
+              <div className={styles.formInput}>
+                <Input
+                  type="text"
+                  name="address"
+                  placeholder="Адрес"
+                  value={custumer.address}
+                  setData={setCustumer}
+                  required={false}
+                />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.formInput}>
+                <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
+              </div>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={pageHandleSubmit}>
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="fullname"
-                placeholder="Имя клиента"
-                value={custumer.fullname}
-                setData={setCustumer}
-                required={false}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="phone"
-                placeholder="Номер телефона"
-                value={custumer.phone}
-                setData={setCustumer}
-                required={false}
-              />
-            </div>
-            <div className={styles.formInput}>
-              <Input
-                type="text"
-                name="address"
-                placeholder="Адрес"
-                value={custumer.address}
-                setData={setCustumer}
-                required={false}
-              />
-            </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.formInput}>
-              <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>
-            </div>
-          </div>
-        </form>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }
