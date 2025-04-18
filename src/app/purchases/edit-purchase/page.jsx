@@ -66,14 +66,14 @@ export default function EditSupplier() {
       .put(`${process.env.NEXT_PUBLIC_API_URL}/purchases/${purchaseId}`, data)
       .then((res) => {
         toast.success(res.data);
+
+        router.push("/purchases");
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
 
         console.log(err);
       });
-
-    router.push("/purchases");
   };
 
   useEffect(() => {
@@ -86,7 +86,8 @@ export default function EditSupplier() {
         .then((res) => {
           setChangedPurchase({
             ...res.data,
-            minAmount: res?.data?.amount - res?.data?.remainingAmount,
+            amount: res?.data?.amount / 1000,
+            minAmount: (res?.data?.amount - res?.data?.remainingAmount) / 1000,
           });
         })
         .catch((err) => {
@@ -96,6 +97,8 @@ export default function EditSupplier() {
 
     fetchPurchase();
   }, []);
+
+  console.log(changedPurchase.minAmount);
 
   return (
     <ProtectedRoute>
@@ -167,7 +170,6 @@ export default function EditSupplier() {
                   type="number"
                   name="Amount"
                   required
-                  min={changedPurchase.minAmount}
                   value={changedPurchase.amount}
                   onChange={(e) =>
                     setChangedPurchase((prev) => ({

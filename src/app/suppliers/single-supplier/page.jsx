@@ -202,17 +202,22 @@ export default function SingleSupplier() {
                   purchases.map((purchase) => (
                     <tr key={purchase._id}>
                       <td>{purchase.product?.title}</td>
-                      <td>{purchase.amount}</td>
                       <td>
-                        {Intl.NumberFormat("ru-RU").format(
-                          purchase?.totalPrice
-                        )}
+                        {purchase.amount
+                          ? Intl.NumberFormat("uz-UZ")
+                              .format(purchase.amount / 1000)
+                              .replace(/,/g, " ")
+                          : 0}
                       </td>
                       <td>
-                        {format(
-                          new Date(purchase.addedDate),
-                          "dd.MM.yyyy HH:mm"
-                        )}
+                        {purchase?.totalPrice
+                          ? Intl.NumberFormat("uz-UZ")
+                              .format(purchase?.totalPrice)
+                              .replace(/,/g, " ")
+                          : 0}
+                      </td>
+                      <td>
+                        {format(new Date(purchase.addedDate), "dd.MM.yyyy")}
                       </td>
                       <td className={styles.action}>
                         <Link

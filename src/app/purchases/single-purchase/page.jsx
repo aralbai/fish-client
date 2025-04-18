@@ -88,7 +88,7 @@ export default function SinglePurchase() {
                 >
                   <Edit />
                 </Link>
-                {purchaseSells?.length <= 0 && (
+                {purchaseSells && purchaseSells.length === 0 && (
                   <button onClick={handleDeleteClick}>
                     <Delete />
                   </button>
@@ -119,8 +119,10 @@ export default function SinglePurchase() {
               <li>
                 <p>Муғдары</p>
                 <p>
-                  {purchase?.amount
-                    ? Intl.NumberFormat("uz-UZ").format(purchase?.amount / 1000)
+                  {purchase.amount
+                    ? Intl.NumberFormat("uz-UZ")
+                        .format(purchase.amount / 1000)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -151,26 +153,35 @@ export default function SinglePurchase() {
               <li>
                 <p>Қалдық</p>
                 <p>
-                  {purchase?.remainingAmount
-                    ? Intl.NumberFormat("uz-UZ").format(
-                        purchase?.remainingAmount / 1000
-                      )
+                  {purchase.remainingAmount
+                    ? Intl.NumberFormat("uz-UZ")
+                        .format(purchase.remainingAmount / 1000)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
               <li>
                 <p>Сатылды</p>
                 <p>
-                  {Intl.NumberFormat("ru-RU").format(
-                    purchase?.amount -
-                      purchase?.remainingAmount -
-                      purchase?.shortage
-                  )}
+                  {Intl.NumberFormat("uz-UZ")
+                    .format(
+                      (purchase?.amount -
+                        purchase?.remainingAmount -
+                        purchase?.shortage) /
+                        1000
+                    )
+                    .replace(/,/g, " ")}
                 </p>
               </li>
               <li>
                 <p>Кемшилик</p>
-                <p>{Intl.NumberFormat("ru-RU").format(purchase?.shortage)}</p>
+                <p>
+                  {purchase.shortage
+                    ? Intl.NumberFormat("uz-UZ")
+                        .format(purchase.shortage / 1000)
+                        .replace(/,/g, " ")
+                    : 0}
+                </p>
               </li>
             </ul>
           </div>
@@ -260,7 +271,13 @@ export default function SinglePurchase() {
                     <tr key={sell?._id}>
                       <td>{sell?.product?.title}</td>
                       <td>{sell?.custumer?.fullname}</td>
-                      <td>{sell?.amount}</td>
+                      <td>
+                        {sell.amount
+                          ? Intl.NumberFormat("uz-UZ")
+                              .format(sell.amount / 1000)
+                              .replace(/,/g, " ")
+                          : 0}
+                      </td>
                       <td>
                         {Intl.NumberFormat("ru-RU").format(sell?.totalPrice)}
                       </td>

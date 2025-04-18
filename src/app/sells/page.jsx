@@ -139,7 +139,13 @@ export default function Sells() {
                             </>
                           )}
                           <td>{p.product.title}</td>
-                          <td>{p.amount}</td>
+                          <td>
+                            {p.amount
+                              ? Intl.NumberFormat("uz-UZ")
+                                  .format(p.amount / 1000)
+                                  .replace(/,/g, " ")
+                              : 0}
+                          </td>
                           <td>
                             {p.price
                               ? Intl.NumberFormat("ru-RU").format(p.price)
@@ -150,7 +156,14 @@ export default function Sells() {
                               ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
                               : 0}
                           </td>
-                          <td>{p.discount}</td>
+                          <td>
+                            {" "}
+                            {p.discount
+                              ? Intl.NumberFormat("uz-UZ")
+                                  .format(p.discount)
+                                  .replace(/,/g, " ")
+                              : 0}
+                          </td>
                           {index === 0 && (
                             <>
                               <td rowSpan={group.length}>
@@ -191,7 +204,7 @@ export default function Sells() {
               totalPages={totalPages}
               totalDocuments={totalDocuments}
               setPage={setPage}
-              title={"Всего продаж:"}
+              title={"Все:"}
             />
           </div>
 

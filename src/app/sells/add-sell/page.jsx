@@ -49,8 +49,8 @@ export default function AddSell() {
   custumerDebts?.forEach((sell) => {
     totalCustumerDebt += sell?.debt;
   });
-  const maxDiscount = sell?.price * sell?.amount;
-  const maxDebt = sell?.price * sell?.amount - sell?.discount;
+  const maxDiscount = sell?.price * (sell?.amount / 1000);
+  const maxDebt = sell?.price * (sell?.amount / 1000) - sell?.discount;
 
   useEffect(() => {
     fetchData("/custumers", setCustumers);
@@ -73,17 +73,6 @@ export default function AddSell() {
       debt: sell.debt === "" ? 0 : parseFloat(sell.debt),
       addedUserId: user?.id,
     };
-
-    const custumer = custumers.find((custumer) => custumerId === custumer._id);
-
-    if (
-      custumer.limit !== -1 &&
-      data.debt > custumer?.limit - totalCustumerDebt
-    ) {
-      return toast.error(
-        `Клиент лимити: ${custumer?.limit - totalCustumerDebt}`
-      );
-    }
 
     await axios
       .post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, data)
@@ -165,7 +154,7 @@ export default function AddSell() {
                         " " +
                         format(purchase.addedDate, "dd.MM.yyyy") +
                         " " +
-                        purchase.remainingAmount +
+                        purchase.remainingAmount / 1000 +
                         "kg" +
                         " "}
                     </option>
@@ -245,8 +234,7 @@ export default function AddSell() {
                   placeholder="Муғдары"
                   value={sell.amount}
                   setData={setSell}
-                  required={true}
-                  max={checkAmount}
+                  required
                 />
               </div>
               <div className={styles.formInput}>
@@ -270,8 +258,6 @@ export default function AddSell() {
                   placeholder="Скидка"
                   value={sell.discount}
                   setData={setSell}
-                  required={false}
-                  max={maxDiscount}
                 />
               </div>
               <div className={styles.formInput}>
@@ -285,7 +271,6 @@ export default function AddSell() {
                       debt: e.target.value,
                     }))
                   }
-                  max={maxDebt && maxDebt}
                 />
               </div>
             </div>

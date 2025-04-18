@@ -23,10 +23,7 @@ export default function EditSell() {
   const purchaseId = searchParams.get("purchaseId");
 
   const [custumers, setCustumers] = useState([]);
-  const [repays, setRepays] = useState([]);
-  const [purchase, setPurchase] = useState({
-    remainingAmount: 0,
-  });
+  const [purchase, setPurchase] = useState({});
 
   const [changedSell, setChangedSell] = useState({
     custumer: {
@@ -34,12 +31,10 @@ export default function EditSell() {
       fullname: "",
     },
     addedDate: new Date(),
-    prevAmount: 0,
     amount: 0,
     price: 0,
     discount: 0,
     debt: 0,
-    maxAmount: 0,
   });
 
   const handleChange = (e) => {
@@ -58,8 +53,6 @@ export default function EditSell() {
 
   useEffect(() => {
     fetchData("/custumers", setCustumers);
-    fetchData(`/purchases/${purchaseId}`, setPurchase);
-    fetchData(`/repays/${sellId}`, setRepays);
 
     const fetchSell = async () => {
       await axios
@@ -67,8 +60,23 @@ export default function EditSell() {
         .then((res) => {
           setChangedSell({
             ...res.data,
-            maxAmount: changedSell?.maxAmount + res?.data?.amount,
-            prevAmount: res.data.amount,
+            amount: res.data.amount / 1000,
+          });
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.message);
+
+          console.log(err);
+        });
+    };
+
+    const fetchPurchase = async () => {
+      await axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/purchases/${purchaseId}`)
+        .then((res) => {
+          setPurchase({
+            ...res.data,
+            remainingAmount: res.data.remainingAmount / 1000,
           });
         })
         .catch((err) => {
@@ -79,19 +87,8 @@ export default function EditSell() {
     };
 
     fetchSell();
+    fetchPurchase();
   }, []);
-
-  let totalMaxAmount = 0;
-
-  totalMaxAmount =
-    parseFloat(changedSell?.maxAmount) + parseFloat(purchase?.remainingAmount);
-
-  const maxDebt = changedSell.amount * changedSell.price - changedSell.discount;
-  const maxDiscount = changedSell?.amount * changedSell?.price;
-  const totalRepay =
-    repays.length > 0
-      ? repays.reduce((sum, repay) => sum + repay.amount, 0)
-      : 0;
 
   const pageHandleSubmit = async (e) => {
     e.preventDefault();
@@ -99,7 +96,6 @@ export default function EditSell() {
     const data = {
       ...changedSell,
       purchaseId,
-      totalRepay,
       changedUserId: user?.id,
     };
 
@@ -112,6 +108,7 @@ export default function EditSell() {
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
+        console.log(err);
       });
   };
 
@@ -202,7 +199,8 @@ export default function EditSell() {
                 <input
                   type="number"
                   name="amount"
-                  max={totalMaxAmount}
+                  step="any"
+                  min={0}
                   value={changedSell.amount}
                   onChange={(e) =>
                     setChangedSell((prev) => ({
@@ -220,6 +218,8 @@ export default function EditSell() {
                   type="number"
                   name="Price"
                   value={changedSell.price}
+                  step="any"
+                  min={0}
                   onChange={(e) =>
                     setChangedSell((prev) => ({
                       ...prev,
@@ -237,7 +237,8 @@ export default function EditSell() {
                 <input
                   type="number"
                   value={changedSell.discount}
-                  max={maxDiscount}
+                  step="any"
+                  min={0}
                   onChange={(e) =>
                     setChangedSell((prev) => ({
                       ...prev,
@@ -252,8 +253,8 @@ export default function EditSell() {
                 <input
                   type="number"
                   value={changedSell.debt}
-                  max={maxDebt}
-                  min={totalRepay}
+                  step="any"
+                  min={0}
                   onChange={(e) =>
                     setChangedSell((prev) => ({
                       ...prev,

@@ -63,7 +63,6 @@ export default function SingleCustumer() {
 
   return (
     <ProtectedRoute>
-      {" "}
       <div className={styles.singleCustumer}>
         <div className={styles.title}>
           <h1>Единый клиент</h1>

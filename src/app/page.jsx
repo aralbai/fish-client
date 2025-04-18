@@ -56,9 +56,9 @@ export default function Home() {
               <div className={styles.right}>
                 <h2>
                   {purchaseAmount.totalAmount
-                    ? Intl.NumberFormat("ru-RU").format(
-                        purchaseAmount.totalAmount
-                      )
+                    ? Intl.NumberFormat("uz-UZ")
+                        .format(purchaseAmount.totalAmount / 1000)
+                        .replace(/,/g, " ")
                     : 0}
                 </h2>
                 <p>Склад</p>
@@ -74,7 +74,11 @@ export default function Home() {
               </div>
               <div className={styles.right}>
                 <h2>
-                  {balance ? Intl.NumberFormat("ru-RU").format(balance) : 0}
+                  {balance
+                    ? Intl.NumberFormat("uz-UZ")
+                        .format(balance)
+                        .replace(/,/g, " ")
+                    : 0}
                 </h2>
                 <p>Баланс</p>
               </div>

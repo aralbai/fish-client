@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import TableTop from "@/components/tableTop/TableTop";
 import PurchasesFilter from "../../components/filters/purchasesFilter/PurchasesFilter";
 import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
+import Pagination from "@/components/pagination/Pagination";
 
 export default function Purchases() {
   const [purchases, setPurchases] = useState([]);
@@ -123,9 +124,9 @@ export default function Purchases() {
                           <td>{p.product.title}</td>
                           <td>
                             {p.amount
-                              ? Intl.NumberFormat("uz-UZ").format(
-                                  p.amount / 1000
-                                )
+                              ? Intl.NumberFormat("uz-UZ")
+                                  .format(p.amount / 1000)
+                                  .replace(/,/g, " ")
                               : 0}
                           </td>
                           <td>
@@ -145,14 +146,16 @@ export default function Purchases() {
                           </td>
                           <td>
                             {p.shortage
-                              ? Intl.NumberFormat("ru-RU").format(p.shortage)
+                              ? Intl.NumberFormat("uz-UZ")
+                                  .format(p.shortage / 1000)
+                                  .replace(/,/g, " ")
                               : 0}
                           </td>
                           <td>
                             {p.remainingAmount
-                              ? Intl.NumberFormat("uz-UZ").format(
-                                  p.remainingAmount / 1000
-                                )
+                              ? Intl.NumberFormat("uz-UZ")
+                                  .format(p.remainingAmount / 1000)
+                                  .replace(/,/g, " ")
                               : 0}
                           </td>
                           {index === 0 && (
@@ -170,8 +173,8 @@ export default function Purchases() {
                           <td className={styles.action}>
                             <Link
                               href={{
-                                pathname: "/sells/single-sell",
-                                query: { sellId: p._id },
+                                pathname: "/purchases/single-purchase",
+                                query: { purchaseId: p._id },
                               }}
                             >
                               <ArrowRightAlt />
@@ -184,6 +187,14 @@ export default function Purchases() {
                 })}
               </tbody>
             </table>
+
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalDocuments={totalDocuments}
+              setPage={setPage}
+              title={"Всего продаж:"}
+            />
           </div>
 
           {purchases.length < 1 && (

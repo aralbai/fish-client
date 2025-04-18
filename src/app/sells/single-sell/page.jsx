@@ -131,8 +131,10 @@ export default function SingleSell() {
               <li>
                 <p>Муғдары</p>
                 <p>
-                  {sell?.amount
-                    ? Intl.NumberFormat("ru-RU").format(sell.amount)
+                  {sell.amount
+                    ? Intl.NumberFormat("uz-UZ")
+                        .format(sell.amount / 1000)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>

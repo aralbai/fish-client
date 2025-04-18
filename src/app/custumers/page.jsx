@@ -22,6 +22,8 @@ export default function Custumers() {
     return acc;
   }, {});
 
+  console.log(debtMap);
+
   return (
     <ProtectedRoute>
       <div className={styles.custumers}>
@@ -62,11 +64,13 @@ export default function Custumers() {
                         : Intl.NumberFormat("ru-RU").format(custumer.limit)}
                     </td>
                     <td>
-                      {(debtMap[custumer?._id] &&
-                        Intl.NumberFormat("ru-RU").format(
-                          debtMap[custumer?._id]
-                        )) ||
-                        0}
+                      {debtMap
+                        ? (debtMap[custumer?._id] &&
+                            Intl.NumberFormat("ru-RU").format(
+                              debtMap[custumer?._id]
+                            )) ||
+                          0
+                        : 0}
                     </td>
                     <td className={styles.action}>
                       <Link
