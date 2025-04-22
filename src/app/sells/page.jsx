@@ -115,8 +115,8 @@ export default function Sells() {
                   <td>Баҳасы</td>
                   <td>Сумма</td>
                   <td>Скидка</td>
-                  <td>Итого</td>
                   <td>Қарыз</td>
+                  <td>Итого</td>
                   <td>Сәне</td>
                   <td></td>
                 </tr>
@@ -148,19 +148,29 @@ export default function Sells() {
                           </td>
                           <td>
                             {p.price
-                              ? Intl.NumberFormat("ru-RU").format(p.price)
+                              ? Intl.NumberFormat("ru-RU")
+                                  .format(p.price)
+                                  .replace(/,/g, " ")
                               : 0}
                           </td>
                           <td>
                             {p.totalPrice
-                              ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
+                              ? Intl.NumberFormat("ru-RU")
+                                  .format(p.totalPrice)
+                                  .replace(/,/g, " ")
                               : 0}
                           </td>
                           <td>
-                            {" "}
                             {p.discount
                               ? Intl.NumberFormat("uz-UZ")
                                   .format(p.discount)
+                                  .replace(/,/g, " ")
+                              : 0}
+                          </td>
+                          <td>
+                            {p.debt
+                              ? Intl.NumberFormat("uz-UZ")
+                                  .format(p.debt)
                                   .replace(/,/g, " ")
                               : 0}
                           </td>
@@ -168,14 +178,12 @@ export default function Sells() {
                             <>
                               <td rowSpan={group.length}>
                                 {total
-                                  ? Intl.NumberFormat("ru-RU").format(total)
+                                  ? Intl.NumberFormat("ru-RU")
+                                      .format(total)
+                                      .replace(/,/g, " ")
                                   : 0}
                               </td>
-                              <td rowSpan={group.length}>
-                                {totalDebt
-                                  ? Intl.NumberFormat("ru-RU").format(totalDebt)
-                                  : 0}
-                              </td>
+
                               <td rowSpan={group.length}>
                                 {format(new Date(p.addedDate), "dd.MM.yyyy")}
                               </td>

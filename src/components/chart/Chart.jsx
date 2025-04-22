@@ -172,7 +172,9 @@ const Chart = () => {
             border: "1px solid #ccc",
             backgroundColor: "#fff",
           }}
-          formatter={(value) => new Intl.NumberFormat("ru-RU").format(value)}
+          formatter={(value) =>
+            new Intl.NumberFormat("ru-RU").format(value).replace(/,/g, " ")
+          }
         />
 
         <Legend />

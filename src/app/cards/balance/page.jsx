@@ -92,9 +92,9 @@ export default function Balance() {
                   <td>Тазасын киритиў</td>
                   <td>
                     {purchases.totalPurchases
-                      ? Intl.NumberFormat("ru-RU").format(
-                          purchases.totalPurchases
-                        )
+                      ? Intl.NumberFormat("ru-RU")
+                          .format(purchases.totalPurchases)
+                          .replace(/,/g, " ")
                       : 0}
                   </td>
                   <td>
@@ -109,7 +109,9 @@ export default function Balance() {
                   <td>Сатыў</td>
                   <td>
                     {sells.totalSales
-                      ? Intl.NumberFormat("ru-RU").format(sells.totalSales)
+                      ? Intl.NumberFormat("ru-RU")
+                          .format(sells.totalSales)
+                          .replace(/,/g, " ")
                       : 0}
                   </td>
                   <td>
@@ -124,9 +126,9 @@ export default function Balance() {
                   <td>Расход</td>
                   <td>
                     {outcomes.totalOutcomes
-                      ? Intl.NumberFormat("ru-RU").format(
-                          outcomes.totalOutcomes
-                        )
+                      ? Intl.NumberFormat("ru-RU")
+                          .format(outcomes.totalOutcomes)
+                          .replace(/,/g, " ")
                       : 0}
                   </td>
                   <td>
@@ -141,9 +143,9 @@ export default function Balance() {
                   <td>Баланс толтырыў</td>
                   <td>
                     {deposits.totalDeposits
-                      ? Intl.NumberFormat("ru-RU").format(
-                          deposits.totalDeposits
-                        )
+                      ? Intl.NumberFormat("ru-RU")
+                          .format(deposits.totalDeposits)
+                          .replace(/,/g, " ")
                       : 0}
                   </td>
                   <td>
@@ -158,9 +160,9 @@ export default function Balance() {
                   <td>Баланстан шығарыў</td>
                   <td>
                     {withdraws.totalWithdraws
-                      ? Intl.NumberFormat("ru-RU").format(
-                          withdraws.totalWithdraws
-                        )
+                      ? Intl.NumberFormat("ru-RU")
+                          .format(withdraws.totalWithdraws)
+                          .replace(/,/g, " ")
                       : 0}
                   </td>
                   <td>
@@ -180,7 +182,11 @@ export default function Balance() {
                 >
                   <td>Прибыль</td>
                   <td>
-                    {profit ? Intl.NumberFormat("ru-RU").format(profit) : 0}
+                    {profit
+                      ? Intl.NumberFormat("ru-RU")
+                          .format(profit)
+                          .replace(/,/g, " ")
+                      : 0}
                   </td>
                   <td style={{ padding: "30px" }}></td>
                 </tr>

@@ -143,7 +143,9 @@ export default function SingleSell() {
                 <p>Баҳасы</p>
                 <p>
                   {sell?.price
-                    ? Intl.NumberFormat("ru-RU").format(sell.price)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(sell.price)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -151,7 +153,9 @@ export default function SingleSell() {
                 <p>Сумма</p>
                 <p>
                   {sell?.price
-                    ? Intl.NumberFormat("ru-RU").format(sell.totalPrice)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(sell.totalPrice)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -159,7 +163,9 @@ export default function SingleSell() {
                 <p>Скидка</p>
                 <p>
                   {sell?.discount
-                    ? Intl.NumberFormat("ru-RU").format(sell.discount)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(sell.discount)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -167,7 +173,9 @@ export default function SingleSell() {
                 <p>Қарыз</p>
                 <p>
                   {sell?.debt
-                    ? Intl.NumberFormat("ru-RU").format(sell.debt)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(sell.debt)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -175,7 +183,9 @@ export default function SingleSell() {
                 <p>Төленди</p>
                 <p>
                   {sell?.given
-                    ? Intl.NumberFormat("ru-RU").format(sell.given)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(sell.given)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -266,7 +276,9 @@ export default function SingleSell() {
                     <tr key={repay._id}>
                       <td>
                         {(repay.amount &&
-                          Intl.NumberFormat("ru-RU").format(repay.amount)) ||
+                          Intl.NumberFormat("ru-RU")
+                            .format(repay.amount)
+                            .replace(/,/g, " ")) ||
                           0}
                       </td>
                       <td>

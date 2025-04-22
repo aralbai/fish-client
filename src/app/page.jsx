@@ -93,7 +93,9 @@ export default function Home() {
               <div className={styles.right}>
                 <h2>
                   {totalDebts.totalDebts
-                    ? Intl.NumberFormat("ru-RU").format(totalDebts.totalDebts)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(totalDebts.totalDebts)
+                        .replace(/,/g, " ")
                     : 0}
                 </h2>
                 <p>Қарызлар</p>

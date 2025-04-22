@@ -117,14 +117,20 @@ export default function SingleCustumer() {
               </li>
               <li>
                 <p>Қарызлар</p>
-                <p>{Intl.NumberFormat("ru-RU").format(totalCustumerDebt)}</p>
+                <p>
+                  {Intl.NumberFormat("ru-RU")
+                    .format(totalCustumerDebt)
+                    .replace(/,/g, " ")}
+                </p>
               </li>
               <li>
                 <p>Лимит</p>
                 <p>
                   {custumer.limit === -1
                     ? "Безлимитный"
-                    : Intl.NumberFormat("ru-RU").format(custumer.limit)}
+                    : Intl.NumberFormat("ru-RU")
+                        .format(custumer.limit)
+                        .replace(/,/g, " ")}
                 </p>
               </li>
             </ul>
@@ -220,7 +226,11 @@ export default function SingleCustumer() {
                     <tr key={sell._id}>
                       <td>{sell.product?.title}</td>
                       <td>{sell.amount}</td>
-                      <td>{Intl.NumberFormat("ru-RU").format(sell.debt)}</td>
+                      <td>
+                        {Intl.NumberFormat("ru-RU")
+                          .format(sell.debt)
+                          .replace(/,/g, " ")}
+                      </td>
                       <td>
                         {format(new Date(sell.addedDate), "dd.MM.yyyy HH:mm")}
                       </td>

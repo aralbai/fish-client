@@ -71,7 +71,11 @@ export default function Withdraws() {
             <table ref={tableRef}>
               <thead>
                 <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-                  <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
+                  <td>
+                    {Intl.NumberFormat("ru-RU")
+                      .format(total)
+                      .replace(/,/g, " ")}
+                  </td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -91,7 +95,9 @@ export default function Withdraws() {
                 {withdraws?.map((withdraw) => (
                   <tr key={withdraw._id}>
                     <td>
-                      {Intl.NumberFormat("ru-RU").format(withdraw.amount)}
+                      {Intl.NumberFormat("ru-RU")
+                        .format(withdraw.amount)
+                        .replace(/,/g, " ")}
                     </td>
                     <td>{withdraw.toWhom}</td>
                     <td>{format(withdraw.addedDate, "dd.MM.yyyy HH:mm")}</td>

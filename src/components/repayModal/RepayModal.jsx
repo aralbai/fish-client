@@ -73,9 +73,9 @@ export default function RepayModal({
 
           <p>
             Сумма:{" "}
-            {(repay.amount &&
-              Intl.NumberFormat("ru-RU").format(repay.amount)) ||
-              0}
+            {(
+              repay.amount && Intl.NumberFormat("ru-RU").format(repay.amount)
+            ).replace(/,/g, " ") || 0}
           </p>
 
           <PrimaryBtn type="submit">Сақлаў</PrimaryBtn>

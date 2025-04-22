@@ -72,7 +72,9 @@ export default function AddDeposit() {
                 <p>
                   Сумма:{" "}
                   {deposit?.amount
-                    ? Intl.NumberFormat("ru-RU").format(deposit?.amount)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(deposit?.amount)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </div>

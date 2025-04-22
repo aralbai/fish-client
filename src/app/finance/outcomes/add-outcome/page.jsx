@@ -72,7 +72,9 @@ export default function AddOutcome() {
                 <p>
                   Сумма:{" "}
                   {outcome?.amount
-                    ? Intl.NumberFormat("ru-RU").format(outcome?.amount)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(outcome?.amount)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </div>

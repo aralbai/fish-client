@@ -71,7 +71,11 @@ export default function Deposits() {
             <table ref={tableRef}>
               <thead>
                 <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
-                  <td>{Intl.NumberFormat("ru-RU").format(total)}</td>
+                  <td>
+                    {Intl.NumberFormat("ru-RU")
+                      .format(total)
+                      .replace(/,/g, " ")}
+                  </td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -90,7 +94,11 @@ export default function Deposits() {
               <tbody>
                 {deposites?.map((deposit) => (
                   <tr key={deposit._id}>
-                    <td>{Intl.NumberFormat("ru-RU").format(deposit.amount)}</td>
+                    <td>
+                      {Intl.NumberFormat("ru-RU")
+                        .format(deposit.amount)
+                        .replace(/,/g, " ")}
+                    </td>
                     <td>{deposit.fromWhom}</td>
                     <td>{format(deposit.addedDate, "dd.MM.yyyy HH:mm")}</td>
                     <td>

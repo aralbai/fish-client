@@ -87,7 +87,9 @@ export default function LimitModal({
             Лимит:{" "}
             {unlimited
               ? "Безлимитный"
-              : Intl.NumberFormat("ru-RU").format(custumer.limit)}
+              : Intl.NumberFormat("ru-RU")
+                  .format(custumer.limit)
+                  .replace(/,/g, " ")}
           </p>
 
           <p className={styles.error}>{error}</p>

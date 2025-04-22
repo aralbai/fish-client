@@ -99,24 +99,30 @@ export default function Flow() {
                             </td>
                             <td>
                               {p.price
-                                ? Intl.NumberFormat("ru-RU").format(p.price)
+                                ? Intl.NumberFormat("ru-RU")
+                                    .format(p.price)
+                                    .replace(/,/g, " ")
                                 : 0}
                             </td>
                             <td>
                               {p.totalPrice
-                                ? Intl.NumberFormat("ru-RU").format(
-                                    p.totalPrice
-                                  )
+                                ? Intl.NumberFormat("ru-RU")
+                                    .format(p.totalPrice)
+                                    .replace(/,/g, " ")
                                 : 0}
                             </td>
                             <td>
                               {p.discount
-                                ? Intl.NumberFormat("ru-RU").format(p.discount)
+                                ? Intl.NumberFormat("ru-RU")
+                                    .format(p.discount)
+                                    .replace(/,/g, " ")
                                 : 0}
                             </td>
                             <td>
                               {p.shortage
-                                ? Intl.NumberFormat("ru-RU").format(p.shortage)
+                                ? Intl.NumberFormat("ru-RU")
+                                    .format(p.shortage)
+                                    .replace(/,/g, " ")
                                 : 0}
                             </td>
                             <td>
@@ -130,7 +136,9 @@ export default function Flow() {
                               <>
                                 <td rowSpan={group.length}>
                                   {total
-                                    ? Intl.NumberFormat("ru-RU").format(total)
+                                    ? Intl.NumberFormat("ru-RU")
+                                        .format(total)
+                                        .replace(/,/g, " ")
                                     : 0}
                                 </td>
                                 <td rowSpan={group.length}>

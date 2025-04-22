@@ -79,7 +79,9 @@ export default function EditDeposit() {
                 <p>
                   Сумма:{" "}
                   {changedWithdraw?.amount
-                    ? Intl.NumberFormat("ru-RU").format(changedWithdraw?.amount)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(changedWithdraw?.amount)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </div>

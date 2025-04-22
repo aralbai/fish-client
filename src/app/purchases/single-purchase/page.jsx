@@ -130,7 +130,9 @@ export default function SinglePurchase() {
                 <p>Баҳасы</p>
                 <p>
                   {purchase?.price
-                    ? Intl.NumberFormat("ru-RU").format(purchase?.price)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(purchase?.price)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -138,7 +140,9 @@ export default function SinglePurchase() {
                 <p>Сумма</p>
                 <p>
                   {purchase?.totalPrice
-                    ? Intl.NumberFormat("ru-RU").format(purchase?.totalPrice)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(purchase?.totalPrice)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -146,7 +150,9 @@ export default function SinglePurchase() {
                 <p>Скидка</p>
                 <p>
                   {purchase?.discount
-                    ? Intl.NumberFormat("ru-RU").format(purchase?.discount)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(purchase?.discount)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </li>
@@ -163,14 +169,16 @@ export default function SinglePurchase() {
               <li>
                 <p>Сатылды</p>
                 <p>
-                  {Intl.NumberFormat("uz-UZ")
-                    .format(
-                      (purchase?.amount -
-                        purchase?.remainingAmount -
-                        purchase?.shortage) /
-                        1000
-                    )
-                    .replace(/,/g, " ")}
+                  {purchase.amount
+                    ? Intl.NumberFormat("uz-UZ")
+                        .format(
+                          (purchase?.amount -
+                            purchase?.remainingAmount -
+                            purchase?.shortage) /
+                            1000
+                        )
+                        .replace(/,/g, " ")
+                    : 0}
                 </p>
               </li>
               <li>
@@ -279,7 +287,11 @@ export default function SinglePurchase() {
                           : 0}
                       </td>
                       <td>
-                        {Intl.NumberFormat("ru-RU").format(sell?.totalPrice)}
+                        {sell.totalPrice
+                          ? Intl.NumberFormat("ru-RU")
+                              .format(sell?.totalPrice)
+                              .replace(/,/g, " ")
+                          : 0}
                       </td>
                       <td>
                         {format(new Date(sell?.addedDate), "dd.MM.yyyy HH:mm")}

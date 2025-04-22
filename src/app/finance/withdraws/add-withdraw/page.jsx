@@ -72,7 +72,9 @@ export default function AddWithdraw() {
                 <p>
                   Сумма:{" "}
                   {withdraw?.amount
-                    ? Intl.NumberFormat("ru-RU").format(withdraw?.amount)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(withdraw?.amount)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </div>

@@ -96,19 +96,25 @@ export default function Debts() {
                           </td>
                           <td>
                             {p.totalPrice
-                              ? Intl.NumberFormat("ru-RU").format(p.totalPrice)
+                              ? Intl.NumberFormat("ru-RU")
+                                  .format(p.totalPrice)
+                                  .replace(/,/g, " ")
                               : 0}
                           </td>
                           {index === 0 && (
                             <>
                               <td rowSpan={group.length}>
                                 {total
-                                  ? Intl.NumberFormat("ru-RU").format(total)
+                                  ? Intl.NumberFormat("ru-RU")
+                                      .format(total)
+                                      .replace(/,/g, " ")
                                   : 0}
                               </td>
                               <td rowSpan={group.length}>
                                 {totalDebt
-                                  ? Intl.NumberFormat("ru-RU").format(totalDebt)
+                                  ? Intl.NumberFormat("ru-RU")
+                                      .format(totalDebt)
+                                      .replace(/,/g, " ")
                                   : 0}
                               </td>
                               <td rowSpan={group.length}>

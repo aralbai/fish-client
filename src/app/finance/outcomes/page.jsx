@@ -71,9 +71,9 @@ export default function Outcomes() {
                 <tr style={{ backgroundColor: "#4E5CA0", color: "#fff" }}>
                   <td>
                     {outcomesTotalPrice.totalOutcomes
-                      ? Intl.NumberFormat("ru-RU").format(
-                          outcomesTotalPrice.totalOutcomes
-                        )
+                      ? Intl.NumberFormat("ru-RU")
+                          .format(outcomesTotalPrice.totalOutcomes)
+                          .replace(/,/g, " ")
                       : 0}
                   </td>
                   <td></td>
@@ -94,7 +94,11 @@ export default function Outcomes() {
               <tbody>
                 {outcomes?.map((outcome) => (
                   <tr key={outcome._id}>
-                    <td>{Intl.NumberFormat("ru-RU").format(outcome.amount)}</td>
+                    <td>
+                      {Intl.NumberFormat("ru-RU")
+                        .format(outcome.amount)
+                        .replace(/,/g, " ")}
+                    </td>
                     <td>{outcome.purpose}</td>
                     <td>{format(outcome.addedDate, "dd.MM.yyyy HH:mm")}</td>
                     <td>

@@ -81,7 +81,9 @@ export default function EditOutcome() {
                 <p>
                   Сумма:{" "}
                   {changedOutcome?.amount
-                    ? Intl.NumberFormat("ru-RU").format(changedOutcome?.amount)
+                    ? Intl.NumberFormat("ru-RU")
+                        .format(changedOutcome?.amount)
+                        .replace(/,/g, " ")
                     : 0}
                 </p>
               </div>
