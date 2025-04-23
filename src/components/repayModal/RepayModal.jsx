@@ -11,8 +11,7 @@ import axios from "axios";
 export default function RepayModal({
   isModalOpen,
   setIsModalOpen,
-  sellId,
-  max,
+  custumerId,
 }) {
   const { user } = useContext(AuthContext);
   const [repay, setRepay] = useState({
@@ -24,11 +23,13 @@ export default function RepayModal({
     e.preventDefault();
 
     const data = {
-      ...repay,
-      sellId,
+      amount: parseFloat(repay.amount),
+      addedDate: new Date(repay.addedDate),
+      custumerId,
       addedUserId: user?.id,
     };
 
+    console.log(data);
     await axios
       .post(`${process.env.NEXT_PUBLIC_API_URL}/repays`, data)
       .then((res) => {
@@ -42,6 +43,7 @@ export default function RepayModal({
         });
       })
       .catch((err) => {
+        console.log(err);
         toast.error(err?.response?.data?.message);
       });
   };
@@ -52,7 +54,7 @@ export default function RepayModal({
     <div className={styles.sellModal}>
       <div className={styles.container}>
         <div className={styles.top}>
-          <h2>Оплатить Қарыз</h2>
+          <h2>Қарыз qaytariw</h2>
 
           <button onClick={() => setIsModalOpen(false)}>
             <Close />
@@ -66,7 +68,6 @@ export default function RepayModal({
             placeholder="Сумма"
             value={repay.amount}
             setData={setRepay}
-            max={max}
           />
 
           <DatePick defDate={repay.addedDate} setDate={setRepay} />

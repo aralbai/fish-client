@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import Link from "next/link";
 import {
+  AccountBalance,
+  AccountBalanceWallet,
   ArrowRightAlt,
   Delete,
   Edit,
@@ -17,16 +19,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import LimitModal from "@/components/limitModal/LimitModal";
-import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function SingleCustumer() {
   const { user } = useContext(AuthContext);
   const [custumer, setCustumer] = useState({});
   const [users, setUsers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [limitModal, setLimitModal] = useState(false);
   const [custumerDebts, setCustumedebts] = useState([]);
+  const [repays, setRepays] = useState([]);
+  const [limitModal, setLimitModal] = useState(false);
+  const [repayModal, setRepayModal] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,7 +45,8 @@ export default function SingleCustumer() {
     fetchData(`/custumers/${custumerId}`, setCustumer);
     fetchData(`/users/all`, setUsers);
     fetchData(`/sells/single/debts/${custumerId}`, setCustumedebts);
-  }, [isModalOpen, limitModal]);
+    fetchData(`/repays/${custumerId}`, setRepays);
+  }, [limitModal, repayModal]);
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -98,6 +101,13 @@ export default function SingleCustumer() {
                   }}
                 >
                   <FormatColorReset />
+                </button>
+                <button
+                  onClick={() => {
+                    setRepayModal(true);
+                  }}
+                >
+                  <AccountBalanceWallet />
                 </button>
               </div>
             </div>
@@ -206,8 +216,9 @@ export default function SingleCustumer() {
           </div>
         </div>
 
+        {/* //Qarizlar ushin tablitsa  */}
         <div className={styles.repays}>
-          <h2>Список Қарызов</h2>
+          <h2>Qarizlar</h2>
 
           <div className={styles.tableContainer}>
             <table ref={tableRef}>
@@ -257,9 +268,47 @@ export default function SingleCustumer() {
           )}
         </div>
 
+        {/* //Qaytarilgan qarizlar tablitsasi (tolengen) */}
+        <div className={styles.repays}>
+          <h2>Tolemler</h2>
+
+          <div className={styles.tableContainer}>
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <td>Summa</td>
+                  <td>Kim kiritdi</td>
+                  <td>Сәне</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {repays.length > 0 &&
+                  repays.map((repay) => (
+                    <tr key={repay._id}>
+                      <td>
+                        {Intl.NumberFormat("ru-RU")
+                          .format(repay.amount)
+                          .replace(/,/g, " ")}
+                      </td>
+                      <td>{repay.addedUserId}</td>
+                      <td>
+                        {format(new Date(repay.addedDate), "dd.MM.yyyy HH:mm")}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
+          {repays.length < 1 && (
+            <div className={styles.empty}>Этот раздел пуст.</div>
+          )}
+        </div>
+
         <RepayModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
+          isModalOpen={repayModal}
+          setIsModalOpen={setRepayModal}
           custumerId={custumerId}
         />
 

@@ -22,7 +22,6 @@ export default function AddSell() {
   const [purchases, setPurchases] = useState([]);
   const [custumers, setCustumers] = useState([]);
   const [custumerId, setCustumerId] = useState("");
-  const [custumerDebts, setCustumedebts] = useState([]);
   const [sell, setSell] = useState({
     purchaseId: "Потокти сайлаң",
     product: {
@@ -33,7 +32,6 @@ export default function AddSell() {
       id: "",
       fullname: "Клиентти сайлаң",
     },
-    custumerName: "Белгисиз",
     amount: "",
     price: "",
     discount: "",
@@ -41,24 +39,12 @@ export default function AddSell() {
     addedDate: new Date(),
   });
 
-  const [checkClient, setCheckClient] = useState(false);
   const [isModalOPen, setIsModalOpen] = useState(false);
-  const [checkAmount, setCheckAmount] = useState(9999999999999999999999999999n);
-
-  let totalCustumerDebt = 0;
-  custumerDebts?.forEach((sell) => {
-    totalCustumerDebt += sell?.debt;
-  });
-  const maxDiscount = sell?.price * (sell?.amount / 1000);
-  const maxDebt = sell?.price * (sell?.amount / 1000) - sell?.discount;
 
   useEffect(() => {
     fetchData("/custumers", setCustumers);
 
     fetchData("/purchases/active", setPurchases);
-
-    custumerId &&
-      fetchData(`/sells/single/debts/${custumerId}`, setCustumedebts);
   }, [isModalOPen, sell]);
 
   const pageHandleSubmit = async (e) => {
@@ -66,9 +52,6 @@ export default function AddSell() {
 
     const data = {
       ...sell,
-      custumer: checkClient
-        ? { id: null, fullname: sell.custumerName }
-        : sell.custumer,
       discount: sell.discount === "" ? 0 : sell.discount,
       debt: sell.debt === "" ? 0 : parseFloat(sell.debt),
       addedUserId: user?.id,
@@ -101,8 +84,6 @@ export default function AddSell() {
           title: givenPurchase?.product?.title,
         },
       }));
-
-      setCheckAmount(givenPurchase.remainingAmount);
     }
 
     if (name === "custumer") {
@@ -172,52 +153,28 @@ export default function AddSell() {
             {/* Custumer AddedDate  */}
             <div className={styles.inputGroup}>
               <div className={styles.formInput}>
-                <div className={styles.formInputCheck}>
-                  <CheckBox
-                    id="checkClient"
-                    value={checkClient}
-                    setData={setCheckClient}
-                  />
-                  <label htmlFor="checkClient">Белгисиз</label>
-                </div>
-
-                {checkClient ? (
-                  <div className={styles.client}>
-                    <Input
-                      type="text"
-                      name="custumerName"
-                      placeholder="Имя клиента"
-                      value={sell.custumerName}
-                      setData={setSell}
-                      required={true}
-                    />
-                  </div>
-                ) : (
-                  <div className={styles.client}>
-                    <select
-                      name="custumer"
-                      value={sell.custumer.id}
-                      onChange={(e) => handleChange(e)}
-                      required={true}
+                <select
+                  name="custumer"
+                  value={sell.custumer.id}
+                  onChange={(e) => handleChange(e)}
+                  required={true}
+                >
+                  <option value={sell.custumer.id} hidden>
+                    {sell?.custumer?.fullname}
+                  </option>
+                  {custumers.map((custumer) => (
+                    <option
+                      key={custumer._id}
+                      value={`${custumer?._id}-${custumer.fullname}`}
                     >
-                      <option value={sell.custumer.id} hidden>
-                        {sell?.custumer?.fullname}
-                      </option>
-                      {custumers.map((custumer) => (
-                        <option
-                          key={custumer._id}
-                          value={`${custumer?._id}-${custumer.fullname}`}
-                        >
-                          {custumer?.fullname}
-                        </option>
-                      ))}
-                    </select>
+                      {custumer?.fullname}
+                    </option>
+                  ))}
+                </select>
 
-                    <div onClick={() => setIsModalOpen(true)}>
-                      <PrimaryBtn type="button">+</PrimaryBtn>
-                    </div>
-                  </div>
-                )}
+                <div onClick={() => setIsModalOpen(true)}>
+                  <PrimaryBtn type="button">+</PrimaryBtn>
+                </div>
               </div>
 
               <div className={styles.formInput}>

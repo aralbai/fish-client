@@ -23,44 +23,22 @@ export default function SingleSell() {
   const [sell, setSell] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteRepay, setDeleteRepay] = useState(false);
   const [users, setUsers] = useState([]);
-  const [repays, setRepays] = useState([]);
 
   const searchParams = useSearchParams();
   const sellId = searchParams.get("sellId");
   const router = useRouter();
 
-  const tableRef = useRef();
-
   useEffect(() => {
     fetchData(`/sells/${sellId}`, setSell);
     fetchData(`/users/all`, setUsers);
-    fetchData(`/repays/${sellId}`, setRepays);
-  }, [isModalOpen, deleteRepay]);
-
-  const handleRepayDelete = async (e, repayId) => {
-    e.preventDefault();
-
-    await axios
-      .delete(`${process.env.NEXT_PUBLIC_API_URL}/repays/${sellId}/${repayId}`)
-      .then((res) => {
-        toast.success(res.data);
-
-        setDeleteRepay(!deleteRepay);
-      })
-      .catch((err) => {
-        toast.error(err?.response?.data?.message);
-
-        console.log(err);
-      });
-  };
+  }, [isModalOpen]);
 
   const handleDeleteClick = () => {
     setDeleteModalOpen(true);
   };
 
-  const handleSellDelete = async (e, repayId) => {
+  const handleSellDelete = async (e) => {
     e.preventDefault();
 
     await axios
@@ -111,12 +89,6 @@ export default function SingleSell() {
                 <button onClick={handleDeleteClick}>
                   <Delete />
                 </button>
-
-                {sell?.debt > 0 && (
-                  <button onClick={() => setIsModalOpen(true)}>
-                    <AccountBalanceWallet />
-                  </button>
-                )}
               </div>
             </div>
             <ul>
@@ -255,95 +227,6 @@ export default function SingleSell() {
             </ul>
           </div>
         </div>
-
-        <div className={styles.repays}>
-          <h2>Погашение Қарыза</h2>
-
-          <div className={styles.tableContainer}>
-            <table ref={tableRef}>
-              <thead>
-                <tr>
-                  <td>Сумма</td>
-                  <td>Сәне</td>
-                  <td>Кто принял</td>
-                  <td>Кто изменился</td>
-                  <td></td>
-                </tr>
-              </thead>
-              <tbody>
-                {repays?.length > 0 &&
-                  repays?.map((repay) => (
-                    <tr key={repay._id}>
-                      <td>
-                        {(repay.amount &&
-                          Intl.NumberFormat("ru-RU")
-                            .format(repay.amount)
-                            .replace(/,/g, " ")) ||
-                          0}
-                      </td>
-                      <td>
-                        {repay?.addedDate &&
-                          format(
-                            new Date(repay?.addedDate),
-                            "dd.MM.yyyy HH:mm"
-                          )}
-                      </td>
-                      <td>
-                        {users?.map(
-                          (user) =>
-                            user._id === repay?.addedUserId && (
-                              <Link
-                                href="/users"
-                                key={user._id}
-                                style={{ color: "#1976D2" }}
-                              >
-                                {user?.username}
-                              </Link>
-                            )
-                        )}
-                      </td>
-                      <td>
-                        {users?.map(
-                          (user) =>
-                            user._id === repay?.changedUserId && (
-                              <Link
-                                href="/users"
-                                key={user._id}
-                                style={{ color: "#1976D2" }}
-                              >
-                                {user?.username}
-                              </Link>
-                            )
-                        )}
-                      </td>
-                      <td className={styles.action}>
-                        <Link
-                          href={{
-                            pathname: "/repays/edit-supplier",
-                            query: {
-                              repayId: repay._id,
-                            },
-                          }}
-                        >
-                          <Edit />
-                        </Link>
-
-                        <button
-                          onClick={(e) => handleRepayDelete(e, repay._id)}
-                        >
-                          <Delete />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {sell?.repays?.length < 1 && (
-          <div className={styles.empty}>Этот раздел пуст.</div>
-        )}
 
         <RepayModal
           isModalOpen={isModalOpen}
