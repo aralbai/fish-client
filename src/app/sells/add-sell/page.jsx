@@ -1,27 +1,23 @@
 "use client";
 import styles from "./page.module.scss";
-import { KeyboardBackspace, SellSharp } from "@mui/icons-material";
+import { KeyboardBackspace } from "@mui/icons-material";
 import PrimaryBtn from "@/components/primaryBtn/PrimaryBtn";
 import { useContext, useEffect, useState } from "react";
 import Input from "@/components/input/Input";
 import DatePick from "@/components/datePicker/DatePicker";
 import { fetchData } from "@/utils/fetchData";
-import CheckBox from "@/components/checkBox/CheckBox";
 import CustumerModal from "@/components/custumerModal/CustumerModal";
 import { format } from "date-fns";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 export default function AddSell() {
   const { user } = useContext(AuthContext);
-  const router = useRouter();
   const [purchases, setPurchases] = useState([]);
   const [custumers, setCustumers] = useState([]);
-  const [custumerId, setCustumerId] = useState("");
   const [sell, setSell] = useState({
     purchaseId: "Потокти сайлаң",
     product: {
@@ -61,7 +57,20 @@ export default function AddSell() {
       .post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, data)
       .then((res) => {
         toast.success(res.data);
-        router.push("/sells");
+
+        setSell({
+          ...sell,
+          purchaseId: "Потокти сайлаң",
+          product: {
+            id: "",
+            title: "Продукт сайлаң",
+          },
+          amount: "",
+          price: "",
+          discount: "",
+          debt: "",
+          addedDate: new Date(),
+        })
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
@@ -95,8 +104,6 @@ export default function AddSell() {
         },
         custumerName: "Клиент",
       }));
-
-      setCustumerId(values[0]);
     }
   };
 
