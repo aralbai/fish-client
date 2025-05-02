@@ -67,6 +67,16 @@
         margin-top: 20px;
         border-collapse: collapse;
 
+        thead {
+          tr {
+            td {
+              font-weight: bold;
+              white-space: wrap;
+              text-align: center;
+            }
+          }
+        }
+
         tr {
           td {
             padding: 10px;

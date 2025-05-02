@@ -108,17 +108,20 @@ export default function Sells() {
             <table ref={tableRef}>
               <thead>
                 <tr>
-                  <td>Н</td>
-                  <td>Клиент</td>
-                  <td>Продукт</td>
-                  <td>Муғдары</td>
-                  <td>Баҳасы</td>
+                  <td rowSpan={2}>Н</td>
+                  <td rowSpan={2}>Клиент</td>
+                  <td rowSpan={2}>Продукт</td>
+                  <td rowSpan={2}>Муғдары (кг)</td>
+                  <td rowSpan={2}>Баҳасы (сwм)</td>
+                  <td rowSpan={2}>Сумма (сwм)</td>
+                  <td rowSpan={2}>Скидка (сwм)</td>
+                  <td rowSpan={2}>Қарыз (сwм)</td>
+                  <td colSpan={2}>Итого (сwм)</td>
+                  <td rowSpan={2}>Сәне</td>
+                </tr>
+                <tr>
                   <td>Сумма</td>
-                  <td>Скидка</td>
                   <td>Қарыз</td>
-                  <td>Итого</td>
-                  <td>Сәне</td>
-                  <td></td>
                 </tr>
               </thead>
               <tbody>
@@ -138,7 +141,21 @@ export default function Sells() {
                               </td>
                             </>
                           )}
-                          <td>{p.product.title}</td>
+                          <td>
+                            <Link
+                              href={{
+                                pathname: "/sells/single-sell",
+                                query: { sellId: p._id },
+                              }}
+                              style={{
+                                color: "#1976D2",
+                                display: "block",
+                              }}
+                            >
+                              {" "}
+                              {p.product.title}
+                            </Link>
+                          </td>
                           <td>
                             {p.amount
                               ? Intl.NumberFormat("uz-UZ")
@@ -185,20 +202,18 @@ export default function Sells() {
                               </td>
 
                               <td rowSpan={group.length}>
+                                {total
+                                  ? Intl.NumberFormat("ru-RU")
+                                      .format(totalDebt)
+                                      .replace(/,/g, " ")
+                                  : 0}
+                              </td>
+
+                              <td rowSpan={group.length}>
                                 {format(new Date(p.addedDate), "dd.MM.yyyy")}
                               </td>
                             </>
                           )}
-                          <td className={styles.action}>
-                            <Link
-                              href={{
-                                pathname: "/sells/single-sell",
-                                query: { sellId: p._id },
-                              }}
-                            >
-                              <ArrowRightAlt />
-                            </Link>
-                          </td>
                         </tr>
                       ))}
                     </React.Fragment>

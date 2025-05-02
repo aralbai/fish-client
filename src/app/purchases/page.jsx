@@ -91,25 +91,32 @@ export default function Purchases() {
 
           <div className={styles.tableContainer}>
             <table ref={tableRef}>
-              <thead>
+              <thead style={{ fontWeight: "bold" }}>
                 <tr>
-                  <td>Н</td>
-                  <td>Сатыўшы</td>
-                  <td>Продукт</td>
+                  <td rowSpan={2}>Н</td>
+                  <td rowSpan={2}>Сатыўшы</td>
+                  <td rowSpan={2}>Продукт</td>
+                  <td rowSpan={2}>Муғдары (кг)</td>
+                  <td rowSpan={2}>Баҳасы (сwм)</td>
+                  <td rowSpan={2}>Сумма (сwм)</td>
+                  <td rowSpan={2}>Скидка (сwм)</td>
+                  <td rowSpan={2}>Кемшилик (кг)</td>
+                  <td rowSpan={2}>Қалдық (кг)</td>
+                  <td colSpan={2}>Итого (кг)</td>
+                  <td rowSpan={2}>Сәне</td>
+                </tr>
+                <tr>
                   <td>Муғдары</td>
-                  <td>Баҳасы</td>
-                  <td>Сумма</td>
-                  <td>Скидка</td>
-                  <td>Кемшилик</td>
                   <td>Қалдық</td>
-                  <td>Итого</td>
-                  <td>Сәне</td>
-                  <td></td>
                 </tr>
               </thead>
               <tbody>
                 {rows.map(([key, group], i) => {
-                  const total = group.reduce((sum, p) => sum + p.totalPrice, 0);
+                  const total = group.reduce((sum, p) => sum + p.amount, 0);
+                  const totalRemaining = group.reduce(
+                    (sum, p) => sum + p.remainingAmount,
+                    0
+                  );
 
                   return (
                     <React.Fragment key={key}>
@@ -121,7 +128,20 @@ export default function Purchases() {
                               <td rowSpan={group.length}>{p.supplier.title}</td>
                             </>
                           )}
-                          <td>{p.product.title}</td>
+                          <td>
+                            <Link
+                              href={{
+                                pathname: "/purchases/single-purchase",
+                                query: { purchaseId: p._id },
+                              }}
+                              style={{
+                                color: "#1976D2",
+                                display: "block",
+                              }}
+                            >
+                              {p.product.title}
+                            </Link>
+                          </td>
                           <td>
                             {p.amount
                               ? Intl.NumberFormat("uz-UZ")
@@ -168,8 +188,15 @@ export default function Purchases() {
                             <>
                               <td rowSpan={group.length}>
                                 {total
-                                  ? Intl.NumberFormat("ru-RU")
-                                      .format(total)
+                                  ? Intl.NumberFormat("uz-UZ")
+                                      .format(total / 1000)
+                                      .replace(/,/g, " ")
+                                  : 0}
+                              </td>
+                              <td rowSpan={group.length}>
+                                {totalRemaining
+                                  ? Intl.NumberFormat("uz-UZ")
+                                      .format(totalRemaining / 1000)
                                       .replace(/,/g, " ")
                                   : 0}
                               </td>
@@ -178,16 +205,6 @@ export default function Purchases() {
                               </td>
                             </>
                           )}
-                          <td className={styles.action}>
-                            <Link
-                              href={{
-                                pathname: "/purchases/single-purchase",
-                                query: { purchaseId: p._id },
-                              }}
-                            >
-                              <ArrowRightAlt />
-                            </Link>
-                          </td>
                         </tr>
                       ))}
                     </React.Fragment>
